@@ -1,0 +1,121 @@
+.app-button {
+  appearance: none;
+  border: none;
+  position: relative;
+  border-radius: var(--radius-md);
+  min-height: var(--tap-min);
+  padding: var(--space-12) var(--space-20);
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  font-family: inherit;
+  transition:
+    opacity var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios),
+    filter var(--duration-fast) var(--ease-ios),
+    background var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .app-button--primary:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+
+  .app-button--secondary:hover:not(:disabled) {
+    opacity: var(--press-opacity);
+  }
+
+  .app-button--outline:hover:not(:disabled) {
+    background: var(--color-hover);
+  }
+}
+
+.app-button:active:not(:disabled) {
+  opacity: var(--press-opacity);
+  transform: scale(var(--press-scale));
+}
+
+.app-button:disabled {
+  opacity: 0.5;
+}
+
+.app-button--full-width {
+  width: 100%;
+  display: block;
+}
+
+.app-button--primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.app-button--secondary {
+  background: transparent;
+  color: var(--color-primary);
+  padding: var(--space-12) 0;
+}
+
+.app-button--outline {
+  background: transparent;
+  color: var(--color-text-main);
+  box-shadow: inset 0 0 0 var(--space-1) var(--color-separator);
+}
+
+.app-button--with-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-10);
+}
+
+.app-button--full-width.app-button--with-icon {
+  display: flex;
+}
+
+.app-button-icon {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  flex-shrink: 0;
+}
+
+/* Loading (setButtonLoading): the label fades out, a spinner fades in on the
+   same spot, so the button keeps its size. Not dimmed like :disabled — it is
+   busy, not unavailable. */
+.app-button-label {
+  transition: opacity var(--duration-fast) var(--ease-ios);
+}
+
+.app-button-spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  border-radius: var(--radius-round);
+  border: var(--space-2) solid currentColor;
+  border-right-color: transparent;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-ios);
+  animation: app-button-spin var(--duration-spinner) linear infinite;
+}
+
+.app-button--loading,
+.app-button--loading:disabled {
+  opacity: 1;
+  cursor: progress;
+}
+
+.app-button--loading .app-button-label,
+.app-button--loading .app-button-icon {
+  opacity: 0;
+}
+
+.app-button--loading .app-button-spinner {
+  opacity: 1;
+}
+
+/* A spinner is the one place a linear curve is right: constant rotation. */
+@keyframes app-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

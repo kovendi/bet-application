@@ -1,0 +1,108 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+.login-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-24);
+  padding: var(--space-24);
+}
+
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+
+/* Full emblem, used as-is (brand manual: no recoloring or cropping); 96 px is
+   well above the 72 px minimum size. */
+.login-logo {
+  width: 96px;
+  height: 96px;
+  margin-bottom: var(--space-12);
+}
+
+.login-title {
+  margin: 0;
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.login-subtitle {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  width: 100%;
+  max-width: 340px;
+}
+
+.login-error:empty {
+  display: none;
+}
+
+.login-alt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  max-width: 340px;
+}
+
+.login-or {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  margin: 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.login-or::before,
+.login-or::after {
+  content: "";
+  flex: 1;
+  height: var(--space-1);
+  background: var(--color-separator);
+}
+
+.login-social-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  width: 100%;
+}
+
+.login-portal-button {
+  width: 100%;
+}
+
+.login-guest-hint {
+  margin: 0;
+  font-size: var(--font-size-caption1);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.login-portal-logo {
+  box-sizing: border-box;
+  padding: var(--space-2);
+  border-radius: var(--radius-round);
+  background: var(--color-on-brand);
+}

@@ -1,0 +1,251 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+/* Bottom nav pinning: the content above it fills the remaining height. */
+.product-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+/* --- Header ------------------------------------------------------------- */
+
+.product-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.product-name {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}
+
+.product-price {
+  font-size: var(--font-size-large-title);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-text-main);
+}
+
+.product-change {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  font-size: var(--font-size-callout);
+  font-weight: 600;
+}
+
+.product-change--up {
+  color: var(--color-positive);
+}
+
+.product-change--down {
+  color: var(--color-negative);
+}
+
+.product-change--flat {
+  color: var(--color-text-secondary);
+}
+
+.product-change-note {
+  font-size: var(--font-size-footnote);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.product-feed {
+  margin: 0;
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+/* --- Buy / sell -------------------------------------------------------- */
+
+.product-actions {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.product-actions:empty {
+  display: none;
+}
+
+.product-broker-hint {
+  margin: 0 0 var(--space-8);
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.product-broker-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.product-broker-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  min-height: var(--tap-min);
+  border-bottom: var(--space-1) solid var(--color-separator);
+  font-size: var(--font-size-body);
+  color: var(--color-text-main);
+  text-decoration: none;
+  transition: background var(--duration-fast) var(--ease-ios);
+}
+
+.product-broker-list li:last-child .product-broker-link {
+  border-bottom: none;
+}
+
+.product-broker-link:active {
+  background: var(--color-pressed);
+}
+
+@media (hover: hover) {
+  .product-broker-link:hover {
+    background: var(--color-hover);
+  }
+}
+
+.product-broker-link .icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  color: var(--color-text-secondary);
+}
+
+/* --- Tab panel ----------------------------------------------------------- */
+
+.product-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.product-section-title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.product-facts {
+  margin: 0;
+}
+
+.product-fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+  min-height: var(--tap-min);
+  padding: var(--space-10) 0;
+  border-bottom: var(--space-1) solid var(--color-separator);
+}
+
+.product-fact dt {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+}
+
+.product-fact dd {
+  margin: 0;
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  text-align: right;
+  color: var(--color-text-main);
+}
+
+.product-fact-missing {
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+/* Day range: plain CSS indicator, not a chart (TradingView cannot draw it). */
+.product-range {
+  padding: var(--space-10) 0;
+  border-bottom: var(--space-1) solid var(--color-separator);
+}
+
+.product-range-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-8);
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-main);
+}
+
+.product-range-caption {
+  color: var(--color-text-secondary);
+}
+
+.product-range-track {
+  position: relative;
+  height: var(--space-4);
+  margin: var(--space-12) var(--space-6) var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--color-separator);
+}
+
+.product-range-marker {
+  position: absolute;
+  top: 50%;
+  left: var(--range-position, 50%);
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-round);
+  background: var(--color-primary);
+  transform: translate(-50%, -50%);
+}
+
+.product-performance {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+}
+
+.product-performance-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-8) 0;
+}
+
+.product-performance-label {
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+.product-performance-value {
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+}
+
+/* Skeleton blocks: same footprint as the loaded content */
+.product-skeleton-header {
+  height: 84px;
+}
+
+.product-skeleton-chart {
+  height: 290px;
+}
+
+.product-skeleton-panel {
+  height: 220px;
+}

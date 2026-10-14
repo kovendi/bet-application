@@ -1,0 +1,72 @@
+#screen-content {
+  overflow-x: clip;
+}
+
+.landing-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-12);
+  padding: var(--space-24);
+  text-align: center;
+}
+
+.landing-title {
+  margin: 0;
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.landing-subtitle {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}
+
+.landing-page-list {
+  list-style: none;
+  margin: 0 0 var(--space-16);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  width: 100%;
+  max-width: 320px;
+}
+
+.landing-page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-md);
+  background: var(--color-card-background);
+  box-shadow: var(--shadow-card), inset 0 0 0 var(--space-1) var(--color-card-border);
+  color: var(--color-text-main);
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .landing-page-link:hover {
+    background: color-mix(in srgb, var(--color-text-main) 4%, var(--color-card-background));
+  }
+}
+
+.landing-page-link:active {
+  transform: scale(var(--press-scale));
+}
+
+.landing-version {
+  margin-left: var(--space-6);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}

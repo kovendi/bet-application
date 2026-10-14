@@ -1,0 +1,106 @@
+.menu-list-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+.menu-list-group-title {
+  margin: 0 0 var(--space-8) var(--space-4);
+  font-size: var(--font-size-caption2);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.menu-list-item {
+  appearance: none;
+  border: none;
+  width: 100%;
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  text-align: left;
+  font-family: inherit;
+  background: var(--color-card-background);
+  box-shadow: var(--shadow-card), inset 0 0 0 var(--space-1) var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12) var(--space-14);
+  color: var(--color-text-main);
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .menu-list-item:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-text-main) 4%, var(--color-card-background));
+  }
+}
+
+.menu-list-item:active:not(:disabled) {
+  background: color-mix(in srgb, var(--color-text-main) 8%, var(--color-card-background));
+  transform: scale(0.985);
+}
+
+.menu-list-item:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.menu-list-item--tone-danger .menu-list-item-icon {
+  background: color-mix(in srgb, var(--color-negative) 18%, transparent);
+  color: var(--color-negative);
+}
+
+.menu-list-item--tone-danger .menu-list-item-title {
+  color: var(--color-negative);
+}
+
+.menu-list-item-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.menu-list-item-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  color: var(--color-primary);
+}
+
+.menu-list-item-icon .icon {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+.menu-list-item-info {
+  min-width: 0;
+}
+
+.menu-list-item-title {
+  margin: 0;
+  font-size: var(--font-size-callout);
+  font-weight: 600;
+}
+
+.menu-list-item-description {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}

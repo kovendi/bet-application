@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Widgetek</title>
+  <link rel="stylesheet" href="../../global.css" />
+  <link rel="stylesheet" href="../../modules/iphone-frame/iphone-frame.css" />
+  <link rel="stylesheet" href="../../modules/sparkline/sparkline.css" />
+  <link rel="stylesheet" href="../../modules/motion/motion.css" />
+  <link rel="stylesheet" href="widgets.css" />
+  <script src="../../modules/theme/theme.js"></script>
+  <script>window.theme.initTheme();</script>
+</head>
+<body>
+  <div id="screen-content">
+    <main class="widgets-page">
+      <h1 class="widgets-title" data-i18n="widgets.title"></h1>
+      <p class="widgets-hint" data-i18n="widgets.hint"></p>
+      <div id="widgets-list" class="widgets-list"></div>
+    </main>
+  </div>
+
+  <script src="../../locales/hu.js"></script>
+  <script src="../../modules/i18n/i18n.js"></script>
+  <script src="../../modules/money/money.js"></script>
+  <script src="../../modules/storage/seed-instruments.js"></script>
+  <script src="../../modules/storage/seed-content.js"></script>
+  <script src="../../modules/storage/seed-series.js"></script>
+  <script src="../../modules/storage/storage.js"></script>
+  <script src="../../modules/sparkline/sparkline.js"></script>
+  <script src="../../modules/motion/motion.js"></script>
+  <script src="../../modules/iphone-frame/iphone-frame.js"></script>
+  <script src="widgets.js"></script>
+  <script>
+    if (!window.iphoneFrame.isRealMobileDevice()) {
+      document.body.appendChild(
+        window.iphoneFrame.renderIphoneFrame(document.getElementById("screen-content")),
+      );
+      document.body.classList.add("has-iphone-frame");
+    }
+  </script>
+</body>
+</html>

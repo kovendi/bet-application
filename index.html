@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mockup</title>
+  <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="index.css" />
+  <script src="modules/theme/theme.js"></script>
+  <script>window.theme.initTheme();</script>
+</head>
+<body>
+  <div id="screen-content">
+    <div class="landing-page">
+      <h1 class="landing-title" data-i18n="app.name"></h1>
+      <p class="landing-subtitle" data-i18n="index.subtitle"></p>
+
+      <p class="landing-subtitle" data-i18n="index.group_screens"></p>
+      <ul class="landing-page-list">
+        <li><a class="landing-page-link" href="pages/login/login.html" data-i18n="login.submit_button"></a></li>
+        <li><a class="landing-page-link" href="pages/home/home.html" data-i18n="nav.home"></a></li>
+        <li><a class="landing-page-link" href="pages/market/market.html" data-i18n="nav.market"></a></li>
+        <li><a class="landing-page-link" href="pages/product/product.html?ticker=OTP" data-i18n="index.product_share"></a></li>
+        <li><a class="landing-page-link" href="pages/product/product.html?ticker=BUX" data-i18n="index.product_index"></a></li>
+        <li><a class="landing-page-link" href="pages/product/product.html?ticker=HGB30A" data-i18n="index.product_bond"></a></li>
+        <li><a class="landing-page-link" href="pages/widgets/widgets.html" data-i18n="index.widgets"></a></li>
+        <li><a class="landing-page-link" href="pages/menu/menu.html" data-i18n="menu.title"></a></li>
+      </ul>
+
+      <p class="landing-subtitle" data-i18n="index.group_states"></p>
+      <ul class="landing-page-list">
+        <li><a class="landing-page-link" href="pages/home/home.html?mock=slow" data-i18n="index.state_slow"></a></li>
+        <li><a class="landing-page-link" href="pages/home/home.html?mock=error" data-i18n="index.state_error"></a></li>
+        <li><a class="landing-page-link" href="pages/home/home.html?mock=empty" data-i18n="index.state_empty"></a></li>
+        <li><a class="landing-page-link" href="pages/market/market.html?mock=error" data-i18n="index.state_market_error"></a></li>
+        <li><a class="landing-page-link" href="pages/market/market.html?mock=empty" data-i18n="index.state_market_empty"></a></li>
+        <li><a class="landing-page-link" href="pages/product/product.html?ticker=OTP&mock=error" data-i18n="index.state_product_error"></a></li>
+      </ul>
+
+      <p class="landing-subtitle" data-i18n="index.group_meta"></p>
+      <ul class="landing-page-list">
+        <li><a class="landing-page-link" href="pages/style-guide/style-guide.html" data-i18n="index.style_guide"></a></li>
+        <li>
+          <a class="landing-page-link" href="pages/update-history/update-history.html">
+            <span data-i18n="index.update_history"></span>
+            <span id="landing-version" class="landing-version"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="version.js"></script>
+  <script src="locales/hu.js"></script>
+  <script src="modules/i18n/i18n.js"></script>
+  <script>
+    window.i18n.initI18n();
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      el.textContent = window.i18n.t(el.dataset.i18n);
+    });
+    document.getElementById("landing-version").textContent = window.APP_VERSION;
+  </script>
+</body>
+</html>

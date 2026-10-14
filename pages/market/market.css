@@ -1,0 +1,67 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+/* Bottom nav pinning: the content above it fills the remaining height. */
+.market-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.market-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+.market-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.market-count {
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.market-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.market-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.market-sentinel {
+  height: var(--space-1);
+}
+
+.market-sheet-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.market-sheet-label {
+  margin: 0;
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* Skeleton blocks: same footprint as the loaded rows */
+.market-skeleton-row {
+  height: 56px;
+  margin-bottom: var(--space-4);
+}

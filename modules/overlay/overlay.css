@@ -1,0 +1,45 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  background: var(--color-backdrop);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  backdrop-filter: var(--backdrop-blur);
+  animation: overlay-in var(--duration-base) var(--ease-out);
+}
+
+/* On desktop the overlay lives inside the iPhone frame, not the browser
+   window: inset by the frame padding and clipped to the screen's corners. */
+.overlay--framed {
+  position: absolute;
+  inset: var(--frame-padding);
+  border-radius: var(--frame-screen-radius);
+  overflow: hidden;
+}
+
+.overlay--center {
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-24);
+}
+
+.overlay--bottom {
+  align-items: flex-end;
+}
+
+.overlay--closing {
+  animation: overlay-out var(--duration-base) var(--ease-ios) forwards;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes overlay-out {
+  to {
+    opacity: 0;
+  }
+}

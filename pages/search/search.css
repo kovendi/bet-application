@@ -1,0 +1,30 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+.search-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+.search-results {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The field takes the whole center slot of the app bar. */
+.search-bar-field {
+  flex: 1;
+  min-width: 0;
+}

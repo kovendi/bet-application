@@ -1,0 +1,11 @@
+/* Content arriving (after a skeleton, a swap, an insert) eases up into place. */
+.motion-fade-in {
+  animation: motion-fade-in var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes motion-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-6));
+  }
+}

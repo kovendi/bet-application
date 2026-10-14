@@ -1,0 +1,24 @@
+.market-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.market-status-dot {
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-round);
+  flex-shrink: 0;
+  background: var(--color-text-secondary);
+}
+
+.market-status--open .market-status-dot {
+  background: var(--color-positive);
+}
+
+.market-status-label {
+  font-weight: 700;
+  color: var(--color-text-main);
+}

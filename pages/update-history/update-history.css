@@ -1,0 +1,64 @@
+#screen-content {
+  overflow-x: clip;
+}
+
+.update-history-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--page-gutter);
+}
+
+.update-history-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  font-size: var(--font-size-subheadline);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .update-history-back:hover {
+    opacity: var(--press-opacity);
+  }
+}
+
+.update-history-back:active {
+  opacity: 0.6;
+}
+
+.update-history-title {
+  margin: var(--space-8) 0 var(--space-16);
+  font-size: var(--font-size-title2);
+}
+
+.update-history-version {
+  margin-left: var(--space-6);
+  font-size: var(--font-size-subheadline);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.update-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-subheadline);
+}
+
+.update-history-table th,
+.update-history-table td {
+  padding: var(--space-8);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--space-1) solid var(--color-separator);
+}
+
+.update-history-table th {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.update-history-table td:nth-child(-n + 2) {
+  white-space: nowrap;
+}

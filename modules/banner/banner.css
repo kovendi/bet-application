@@ -1,0 +1,62 @@
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-sm);
+  background: var(--color-card-background);
+  font-size: var(--font-size-caption1);
+  line-height: 1.4;
+}
+
+.banner-icon {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  margin-top: var(--space-1);
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.banner-text {
+  flex: 1;
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+/* The visible label stays compact; the padding + negative margin grow the
+   hit area towards the tap minimum without moving the text. */
+.banner-action {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: var(--space-12) var(--space-8);
+  margin: calc(-1 * var(--space-12)) calc(-1 * var(--space-8));
+  font-family: inherit;
+  font-size: var(--font-size-caption1);
+  font-weight: 700;
+  color: var(--color-primary);
+  border-radius: var(--radius-xs);
+  transition: opacity var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .banner-action:hover {
+    opacity: var(--press-opacity);
+  }
+}
+
+.banner-action:active {
+  opacity: 0.6;
+}
+
+.banner--warning {
+  background: color-mix(in srgb, var(--color-negative) 14%, var(--color-card-background));
+}
+
+.banner--warning .banner-icon {
+  color: var(--color-negative);
+}
+
+.banner--warning .banner-text {
+  color: var(--color-text-main);
+}

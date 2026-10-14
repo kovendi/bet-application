@@ -1,0 +1,149 @@
+.app-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.app-input-label {
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* 17 px text: iOS Safari zooms the page into any field under 16 px. */
+.app-input {
+  appearance: none;
+  min-height: var(--tap-min);
+  border: var(--space-1) solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card-background);
+  color: var(--color-text-main);
+  padding: var(--space-12) var(--space-14);
+  font-size: var(--font-size-body);
+  font-family: inherit;
+  transition: border-color var(--duration-base) var(--ease-ios);
+}
+
+.app-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+@media (hover: hover) {
+  .app-input:hover:not(:focus):not(:disabled) {
+    border-color: var(--color-separator);
+  }
+}
+
+.app-input:focus,
+.app-input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.app-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.app-input[aria-invalid="true"] {
+  border-color: var(--color-negative);
+}
+
+/* Icon variant: leading icon, small label above the value; fields grouped in a
+   stack share one rounded container separated by hairlines. */
+.app-input-stack {
+  border-radius: var(--radius-lg);
+  background: var(--color-card-background);
+  border: var(--space-1) solid var(--color-card-border);
+  overflow: hidden;
+  transition: border-color var(--duration-base) var(--ease-ios);
+}
+
+.app-input-stack:focus-within {
+  border-color: var(--color-primary);
+}
+
+.app-input-stack:has([aria-invalid="true"]) {
+  border-color: var(--color-negative);
+}
+
+.app-input-group--row {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-14);
+  padding: var(--space-10) var(--space-16);
+  min-height: 62px;
+}
+
+.app-input-group--row + .app-input-group--row {
+  border-top: var(--space-1) solid var(--color-separator);
+}
+
+.app-input-icon {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-base) var(--ease-ios);
+}
+
+.app-input-group--row:focus-within .app-input-icon {
+  color: var(--color-primary);
+}
+
+.app-input-group--row:has([aria-invalid="true"]) .app-input-icon {
+  color: var(--color-negative);
+}
+
+.app-input-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.app-input-group--row .app-input-label {
+  font-size: var(--font-size-caption1);
+  font-weight: 500;
+}
+
+.app-input-group--row .app-input {
+  min-height: var(--space-24);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Field-level error (setFieldError): icon + text, never color alone. It
+   slides open under the field instead of popping in. */
+.app-input-error {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.app-input-error--visible {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.app-input-error-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--font-size-footnote);
+  font-weight: 500;
+  color: var(--color-negative);
+}
+
+.app-input-error-inner .icon {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}

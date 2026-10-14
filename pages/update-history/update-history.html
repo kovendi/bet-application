@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Update history</title>
+  <link rel="stylesheet" href="../../global.css" />
+  <link rel="stylesheet" href="update-history.css" />
+  <script src="../../modules/theme/theme.js"></script>
+  <script>window.theme.initTheme();</script>
+</head>
+<body>
+  <div id="screen-content">
+    <main class="update-history-page">
+      <header class="update-history-header">
+        <a class="update-history-back" href="../../index.html" data-i18n="topbar.back"></a>
+        <h1 class="update-history-title">
+          <span data-i18n="update_history.title"></span>
+          <span id="update-history-version" class="update-history-version"></span>
+        </h1>
+      </header>
+
+      <table class="update-history-table">
+        <thead>
+          <tr>
+            <th data-i18n="update_history.col_date"></th>
+            <th data-i18n="update_history.col_version"></th>
+            <th data-i18n="update_history.col_change"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Newest entries go at the top. The Change column stays in English. -->
+          <tr>
+            <td>2026-10-14</td>
+            <td>v0.1.0</td>
+            <td>Initialized reusable mockup framework (generic modules, login, menu, style guide, update history).</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <script src="../../version.js"></script>
+  <script src="../../locales/hu.js"></script>
+  <script src="../../modules/i18n/i18n.js"></script>
+  <script>
+    window.i18n.initI18n();
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      el.textContent = window.i18n.t(el.dataset.i18n);
+    });
+    document.getElementById("update-history-version").textContent = window.APP_VERSION;
+  </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.price-row-main {
+  appearance: none;
+  border: none;
+  background: transparent;
+  min-height: var(--tap-min);
+  padding: var(--space-10) var(--space-8);
+  margin: 0 calc(-1 * var(--space-8));
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  a.price-row-main:hover,
+  button.price-row-main:hover {
+    background: var(--color-hover);
+  }
+}
+
+a.price-row-main:active,
+button.price-row-main:active {
+  background: var(--color-pressed);
+  transform: scale(0.99);
+}
+
+div.price-row-main {
+  cursor: default;
+}
+
+/* The list re-sorts in place (toplist segments): rows fade up into place. */
+.price-row--enter {
+  animation: price-row-in var(--duration-base) var(--ease-out) both;
+}
+
+@keyframes price-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-4));
+  }
+}
+
+.price-row-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.price-row-ticker {
+  font-size: var(--font-size-subheadline);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.price-row-sub {
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price-row-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.price-row-price {
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+.price-row-change {
+  font-size: var(--font-size-caption1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.price-row-change--up {
+  color: var(--color-positive);
+}
+
+.price-row-change--down {
+  color: var(--color-negative);
+}
+
+.price-row-change--flat {
+  color: var(--color-text-secondary);
+}
+
+.price-row-star {
+  appearance: none;
+  border: none;
+  background: transparent;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin-right: calc(-1 * var(--space-10));
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition:
+    color var(--duration-base) var(--ease-ios),
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .price-row-star:hover {
+    background: var(--color-hover);
+  }
+}
+
+.price-row-star:active {
+  transform: scale(0.88);
+}
+
+.price-row-star .icon {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+.price-row-star--on {
+  color: var(--color-highlight);
+}
+
+/* Instant toggle feedback: the star pops when it flips. */
+.price-row-star--pop .icon {
+  animation: price-row-star-pop var(--duration-slow) var(--ease-ios);
+}
+
+@keyframes price-row-star-pop {
+  40% {
+    transform: scale(1.3);
+  }
+}

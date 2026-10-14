@@ -1,0 +1,294 @@
+/* Color tokens — BÉT brand palette, see CLAUDE.md "Color Palette". Both themes
+   are first-class and every token exists in both. Dark is the base; light
+   applies when the device prefers it, unless the user picked a theme by hand
+   (modules/theme sets data-theme="dark" | "light" on <html>; no attribute
+   means "follow the device"). The light block is therefore written twice —
+   once behind the media query, once for the manual override. */
+:root {
+  color-scheme: dark;
+  --color-background: #090814;
+  --color-card-background: #1a193d;
+  --color-text-main: #f4f4f7;
+  --color-text-secondary: #a7a6b9;
+  --color-primary: #6697cc;
+  --color-accent: #ba8c5d;
+  --color-on-accent: #121129;
+  --color-highlight: #d6ba96;
+  --color-positive: #61aa89;
+  --color-negative: #ed6b6a;
+  --color-brand-surface: #232157;
+  --color-on-brand: #f4f4f7;
+
+  /* Chart set (electronic surfaces manual p. 35–37). Series 1 is a lighter
+     blue step in dark mode: the brand blue #0051AA is too dark on the card. */
+  --chart-1: #6697cc;
+  --chart-2: #99b9dd;
+  --chart-3: #ba8c5d;
+  --chart-4: #0f809a;
+  --chart-5: #ed6b6a;
+  --chart-6: #bbc761;
+  --chart-7: #00b1b9;
+  --chart-8: #a04863;
+  --chart-9: #3a956c;
+  --chart-grid: rgba(167, 166, 185, 0.18);
+
+  /* Surface + feedback colors (see CLAUDE.md "Color Palette") */
+  --color-on-primary: #121129;
+  --color-on-negative: #121129;
+  --color-separator: rgba(167, 166, 185, 0.18);
+  --color-card-border: rgba(244, 244, 247, 0.06);
+  --color-hover: rgba(244, 244, 247, 0.05);
+  --color-pressed: rgba(244, 244, 247, 0.09);
+  --color-skeleton: rgba(167, 166, 185, 0.14);
+  --color-skeleton-shine: rgba(244, 244, 247, 0.08);
+  --color-backdrop: rgba(4, 3, 12, 0.55);
+  --color-toast-background: rgba(38, 37, 82, 0.92);
+  --color-knob: #ffffff;
+
+  /* Shadows: tinted with the background navy, never pure black */
+  --shadow-card: 0 1px 2px rgba(4, 3, 12, 0.4);
+  --shadow-popover: 0 12px 32px rgba(4, 3, 12, 0.6);
+
+  /* Device frame chrome (desktop only, theme-independent) */
+  --frame-desk-background: #2b2f31;
+  --frame-body: #000000;
+  --frame-edge: #3a3d3f;
+  --frame-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --frame-padding: 14px;
+  --frame-screen-radius: 40px;
+  /* toast/overlay offset below the notch inside the frame */
+  --frame-content-top: 60px;
+
+  /* Typography: system stack, iOS type scale (see CLAUDE.md "Apple HIG") */
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: ui-monospace, Menlo, monospace;
+  --font-size-large-title: 34px;
+  --font-size-title2: 22px;
+  --font-size-title3: 20px;
+  --font-size-headline: 17px;
+  --font-size-body: 17px;
+  --font-size-callout: 16px;
+  --font-size-subheadline: 15px;
+  --font-size-footnote: 13px;
+  --font-size-caption1: 12px;
+  --font-size-caption2: 11px;
+
+  /* Spacing: the number is the pixel value; only these steps exist */
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --page-gutter: var(--space-16);
+
+  /* Radii */
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
+  /* Icon sizes */
+  --icon-xs: 14px;
+  --icon-sm: 16px;
+  --icon-md: 18px;
+  --icon-lg: 20px;
+  --icon-xl: 22px;
+  --icon-2xl: 28px;
+
+  /* Stacking */
+  --z-sticky: 10;
+  --z-overlay: 100;
+  --z-toast: 200;
+  --z-popover: 1000;
+
+  /* Motion + touch tokens (Apple HIG, see CLAUDE.md "Apple HIG") */
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 300ms;
+  --duration-skeleton: 1400ms;
+  --duration-spinner: 700ms;
+  --duration-toast-visible: 2800ms;
+  --press-scale: 0.97;
+  --press-opacity: 0.8;
+  --backdrop-blur: blur(12px) saturate(140%);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --tap-min: 44px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --color-background: #f4f4f7;
+    --color-card-background: #ffffff;
+    --color-text-main: #121129;
+    --color-text-secondary: #4f4d74;
+    --color-primary: #232157;
+    --color-highlight: #8b6946;
+    --color-positive: #2c7051;
+    --color-negative: #b25050;
+    --chart-1: #0051aa;
+    --chart-2: #3374bb;
+    --color-on-primary: #f4f4f7;
+    --color-on-negative: #f4f4f7;
+    --color-separator: rgba(79, 77, 116, 0.16);
+    --color-card-border: rgba(18, 17, 41, 0.06);
+    --color-hover: rgba(18, 17, 41, 0.04);
+    --color-pressed: rgba(18, 17, 41, 0.08);
+    --color-skeleton: rgba(79, 77, 116, 0.1);
+    --color-skeleton-shine: rgba(255, 255, 255, 0.6);
+    --color-backdrop: rgba(18, 17, 41, 0.3);
+    --color-toast-background: rgba(18, 17, 41, 0.9);
+    --shadow-card: 0 1px 2px rgba(18, 17, 41, 0.06), 0 2px 8px rgba(18, 17, 41, 0.04);
+    --shadow-popover: 0 12px 32px rgba(18, 17, 41, 0.16);
+    --chart-grid: rgba(79, 77, 116, 0.16);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-background: #f4f4f7;
+  --color-card-background: #ffffff;
+  --color-text-main: #121129;
+  --color-text-secondary: #4f4d74;
+  --color-primary: #232157;
+  --color-highlight: #8b6946;
+  --color-positive: #2c7051;
+  --color-negative: #b25050;
+  --chart-1: #0051aa;
+  --chart-2: #3374bb;
+  --color-on-primary: #f4f4f7;
+  --color-on-negative: #f4f4f7;
+  --color-separator: rgba(79, 77, 116, 0.16);
+  --color-card-border: rgba(18, 17, 41, 0.06);
+  --color-hover: rgba(18, 17, 41, 0.04);
+  --color-pressed: rgba(18, 17, 41, 0.08);
+  --color-skeleton: rgba(79, 77, 116, 0.1);
+  --color-skeleton-shine: rgba(255, 255, 255, 0.6);
+  --color-backdrop: rgba(18, 17, 41, 0.3);
+  --color-toast-background: rgba(18, 17, 41, 0.9);
+  --shadow-card: 0 1px 2px rgba(18, 17, 41, 0.06), 0 2px 8px rgba(18, 17, 41, 0.04);
+  --shadow-popover: 0 12px 32px rgba(18, 17, 41, 0.16);
+  --chart-grid: rgba(79, 77, 116, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+#screen-content {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Every page renders top-appbar/bottom-nav/action-bar into a page-specific
+   `<div id="<page>-top-appbar">`-style wrapper (see page templates). A snug
+   wrapper that shrink-wraps to its sticky child's own height leaves the
+   child no room to move within its containing block, so `position: sticky`
+   never visibly activates — the element just scrolls with the page. Making
+   the wrapper `display: contents` removes its box so the sticky child
+   becomes a direct flex item of the page's full-height flex column instead,
+   which gives it room to stick. Harmless on the nested action-bar/bottom-nav
+   wrappers inside a combined bottom bar (e.g. `.calendar-bottom-bar`), where
+   the inner elements are already forced to `position: static`. */
+[id$="-top-appbar"],
+[id$="-bottom-nav"],
+[id$="-action-bar"] {
+  display: contents;
+}
+
+#screen-content::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  -webkit-font-smoothing: antialiased;
+  color: var(--color-text-main);
+  background: var(--color-background);
+}
+
+/* Interaction baseline: every clickable element shows a pointer, no grey
+   WebKit tap flash (each component has its own :active press state instead)
+   and a visible keyboard focus ring. Components may restyle the ring. */
+a,
+button,
+label[for],
+summary,
+[role="button"] {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-primary);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Top inset (status bar / notch). Never padding on a scroll container or body:
+   sticky elements stick at the padding edge, so content would scroll visibly
+   in the strip above the app bar. Instead the app bar absorbs the inset into
+   its own (opaque) box; pages without an app bar get it on #screen-content. */
+:root {
+  --screen-inset-top: calc(env(safe-area-inset-top) + var(--space-8));
+}
+
+#screen-content:not(:has(.top-appbar)) {
+  padding-top: var(--screen-inset-top);
+}
+
+/* No motion for people who asked the OS to reduce it. Durations are cut to
+   almost zero rather than removed, so transitionend / animationend still
+   fire and JS that waits for them (modules/motion) keeps working. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Visually hidden, still read by screen readers (labels of icon-only fields) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

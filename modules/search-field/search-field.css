@@ -1,0 +1,94 @@
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-field-icon {
+  position: absolute;
+  left: var(--space-12);
+  width: var(--icon-md);
+  height: var(--icon-md);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+/* 17 px text: iOS Safari zooms the page into any field under 16 px. */
+.search-field-input {
+  width: 100%;
+  min-height: var(--tap-min);
+  appearance: none;
+  border: var(--space-1) solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card-background);
+  color: var(--color-text-main);
+  font-family: inherit;
+  font-size: var(--font-size-body);
+  padding: var(--space-10) var(--tap-min) var(--space-10) calc(var(--space-12) + var(--icon-md) + var(--space-8));
+  transition: border-color var(--duration-base) var(--ease-ios);
+}
+
+.search-field-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+@media (hover: hover) {
+  .search-field-input:hover:not(:focus) {
+    border-color: var(--color-separator);
+  }
+}
+
+.search-field-input:focus,
+.search-field-input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* The browser's own clear "x" would duplicate ours. */
+.search-field-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search-field-clear {
+  position: absolute;
+  right: 0;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  animation: search-field-clear-in var(--duration-fast) var(--ease-out);
+  transition:
+    color var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@keyframes search-field-clear-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@media (hover: hover) {
+  .search-field-clear:hover {
+    color: var(--color-text-main);
+  }
+}
+
+.search-field-clear:active {
+  transform: scale(0.88);
+}
+
+.search-field-clear[hidden] {
+  display: none;
+}
+
+.search-field-clear .icon {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}

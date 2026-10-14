@@ -1,0 +1,199 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+/* iOS widget sizes (pt) — fixed component dimensions. */
+.widgets-page {
+  --widget-small-size: 158px;
+  --widget-medium-width: 338px;
+  --widget-large-height: 354px;
+  --widget-radius: 22px;
+  padding: 0 var(--page-gutter) var(--space-24);
+}
+
+.widgets-title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--font-size-large-title);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.widgets-hint {
+  margin: 0 0 var(--space-16);
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.widgets-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+.widgets-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.widgets-label {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.widget {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: 100%;
+  padding: var(--space-12);
+  border-radius: var(--widget-radius);
+  background: var(--color-card-background);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-card);
+  color: var(--color-text-main);
+  text-decoration: none;
+  transition: transform var(--duration-fast) var(--ease-ios);
+}
+
+.widget:active {
+  transform: scale(var(--press-scale));
+}
+
+.widget:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.widget--small {
+  width: var(--widget-small-size);
+  height: var(--widget-small-size);
+}
+
+.widget--medium {
+  width: var(--widget-medium-width);
+  height: var(--widget-small-size);
+}
+
+.widget--large {
+  width: var(--widget-medium-width);
+  height: var(--widget-large-height);
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.widget-logo {
+  width: var(--space-20);
+  height: var(--space-20);
+  box-sizing: border-box;
+  padding: var(--space-1);
+  border-radius: var(--radius-round);
+  background: var(--color-on-brand);
+}
+
+.widget-delayed {
+  font-size: var(--font-size-caption2);
+  color: var(--color-text-secondary);
+}
+
+.widget-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  gap: var(--space-8);
+}
+
+.widget--small .widget-body {
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.widget--medium .widget-body {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  column-gap: var(--space-16);
+}
+
+.widget--large .widget-body {
+  grid-template-rows: repeat(8, 1fr);
+  gap: var(--space-4);
+}
+
+.widget-quote {
+  display: grid;
+  align-items: center;
+  column-gap: var(--space-8);
+  min-width: 0;
+}
+
+/* small / medium: ticker + change on the first line, price + curve below */
+.widget-quote--small,
+.widget-quote--medium {
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "ticker change" "price spark";
+}
+
+/* large: one row per instrument */
+.widget-quote--large {
+  grid-template-columns: 1fr auto auto auto;
+  grid-template-areas: "ticker spark price change";
+}
+
+.widget-ticker {
+  grid-area: ticker;
+  font-size: var(--font-size-footnote);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.widget-price {
+  grid-area: price;
+  font-size: var(--font-size-footnote);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.widget-quote--large .widget-price {
+  min-width: 72px;
+  text-align: right;
+}
+
+.widget-quote .sparkline {
+  grid-area: spark;
+}
+
+.widget-change {
+  grid-area: change;
+  font-size: var(--font-size-caption1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.widget-quote--large .widget-change {
+  min-width: 56px;
+}
+
+.widget-change--up {
+  color: var(--color-positive);
+}
+
+.widget-change--down {
+  color: var(--color-negative);
+}
+
+.widget-change--flat {
+  color: var(--color-text-secondary);
+}

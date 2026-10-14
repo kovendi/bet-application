@@ -1,0 +1,125 @@
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.chart-readout {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  min-height: var(--icon-xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-readout-main {
+  font-size: var(--font-size-subheadline);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.chart-readout-main--up {
+  color: var(--color-positive);
+}
+
+.chart-readout-main--down {
+  color: var(--color-negative);
+}
+
+.chart-readout-main--flat {
+  color: var(--color-text-secondary);
+}
+
+.chart-readout-sub {
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+.chart-plot {
+  width: 100%;
+}
+
+.chart-svg {
+  display: block;
+  /* vertical page scroll stays native; horizontal drags scrub the crosshair */
+  touch-action: pan-y;
+  user-select: none;
+  overflow: visible;
+}
+
+.chart-grid {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.chart-axis {
+  fill: var(--color-text-secondary);
+  font-size: var(--font-size-caption2);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--chart-1);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-fill-top {
+  stop-color: var(--chart-1);
+  stop-opacity: 0.28;
+}
+
+.chart-fill-bottom {
+  stop-color: var(--chart-1);
+  stop-opacity: 0;
+}
+
+.chart-candle--up {
+  stroke: var(--color-positive);
+  fill: var(--color-positive);
+}
+
+.chart-candle--down {
+  stroke: var(--color-negative);
+  fill: var(--color-negative);
+}
+
+.chart-wick {
+  stroke-width: 1;
+}
+
+.chart-body {
+  stroke-width: 0;
+}
+
+.chart-cross {
+  stroke: var(--color-text-secondary);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.chart-dot {
+  fill: var(--chart-1);
+  stroke: var(--color-card-background);
+  stroke-width: 2;
+}
+
+.chart-controls {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.chart-controls > :first-child {
+  flex: 1;
+}
+
+.chart-controls > :last-child {
+  flex: 0 0 auto;
+}
+
+.chart-controls > :last-child .chips-item {
+  padding: var(--space-6) var(--space-10);
+}

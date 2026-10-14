@@ -1,0 +1,27 @@
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-skeleton);
+}
+
+/* A soft light sweep; under reduced motion it runs once and stays still. */
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--color-skeleton-shine), transparent);
+  animation: skeleton-shimmer var(--duration-skeleton) ease-in-out infinite;
+}
+
+.skeleton--text {
+  height: var(--space-12);
+  border-radius: var(--radius-pill);
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}

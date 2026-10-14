@@ -1,0 +1,71 @@
+.app-card {
+  background: var(--color-card-background);
+  border-radius: var(--radius-lg);
+  padding: var(--space-14) var(--space-16);
+  box-shadow: var(--shadow-card), inset 0 0 0 var(--space-1) var(--color-card-border);
+}
+
+.app-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.app-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  color: var(--color-text-secondary);
+}
+
+.app-card-header-icon {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  flex-shrink: 0;
+}
+
+.app-card-header-title {
+  font-size: var(--font-size-caption1);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-card-header-right {
+  flex-shrink: 0;
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+}
+
+.app-card-header-link {
+  display: inline-block;
+  padding: var(--space-12) var(--space-8);
+  margin: calc(-1 * var(--space-12)) calc(-1 * var(--space-8));
+  border-radius: var(--radius-xs);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .app-card-header-link:hover {
+    opacity: var(--press-opacity);
+  }
+}
+
+.app-card-header-link:active {
+  opacity: 0.6;
+}
+
+.app-card-header-badge {
+  color: var(--color-text-secondary);
+}
+
+.app-card-body {
+  margin-top: var(--space-10);
+}

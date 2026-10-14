@@ -1,0 +1,145 @@
+#screen-content {
+  overflow-x: clip;
+}
+
+.style-guide-page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--page-gutter);
+}
+
+.style-guide-header {
+  margin-bottom: var(--space-16);
+}
+
+.style-guide-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  font-size: var(--font-size-subheadline);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .style-guide-back:hover {
+    opacity: var(--press-opacity);
+  }
+}
+
+.style-guide-back:active {
+  opacity: 0.6;
+}
+
+.style-guide-title {
+  margin: var(--space-8) 0 var(--space-2);
+  font-size: var(--font-size-title2);
+}
+
+.style-guide-subtitle {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}
+
+.style-guide-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.style-guide-section-title {
+  margin: 0 0 var(--space-8);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.style-guide-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* Sticky bars would otherwise stick to the viewport while scrolling the guide. */
+.style-guide-demo > .top-appbar,
+.style-guide-demo > .bottom-nav,
+.style-guide-demo > .action-bar {
+  position: static;
+}
+
+/* The demo bar isn't at the top of the screen, so no status-bar inset. */
+.style-guide-demo > .top-appbar {
+  --screen-inset-top: 0px;
+}
+
+.style-guide-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-8);
+}
+
+.style-guide-icon-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.style-guide-icon-cell .icon {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+}
+
+.style-guide-caption {
+  font-size: var(--font-size-caption2);
+  color: var(--color-text-secondary);
+}
+
+.style-guide-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.style-guide-swatch {
+  width: var(--space-32);
+  height: var(--space-32);
+  border-radius: var(--radius-round);
+}
+
+.style-guide-list {
+  margin: 0;
+  padding: 0 0 0 var(--space-20);
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-main);
+}
+
+.style-guide-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.style-guide-skeleton-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-14) var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--color-card-background);
+}
+
+.style-guide-skeleton-title {
+  width: 40%;
+  height: var(--space-16);
+}
+
+.style-guide-skeleton-line {
+  width: 85%;
+}
+
+.style-guide-skeleton-line--short {
+  width: 60%;
+}

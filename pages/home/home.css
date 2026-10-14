@@ -1,0 +1,243 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+/* Bottom nav pinning: the content above it fills the remaining height. */
+.home-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+.home-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+/* The simplified logo is navy, unreadable on the dark background and not to be
+   recolored, so it sits on a plain light tile. */
+.home-logo {
+  width: var(--space-32);
+  height: var(--space-32);
+  box-sizing: border-box;
+  padding: var(--space-2);
+  border-radius: var(--radius-round);
+  background: var(--color-on-brand);
+}
+
+.home-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.home-section-title {
+  margin: 0;
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.home-change {
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.home-change--up {
+  color: var(--color-positive);
+}
+
+.home-change--down {
+  color: var(--color-negative);
+}
+
+.home-change--flat {
+  color: var(--color-text-secondary);
+}
+
+.home-main-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  padding: var(--space-14) var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--color-card-background);
+  box-shadow: var(--shadow-card), inset 0 0 0 var(--space-1) var(--color-card-border);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform var(--duration-fast) var(--ease-ios),
+    background var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .home-main-card:hover {
+    background: color-mix(in srgb, var(--color-text-main) 3%, var(--color-card-background));
+  }
+}
+
+.home-main-card:active {
+  transform: scale(0.985);
+}
+
+.home-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.home-main-name {
+  font-size: var(--font-size-headline);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.home-main-sub {
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+.home-main-price {
+  margin-top: var(--space-6);
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-small-strip {
+  display: flex;
+  gap: var(--space-8);
+  margin: var(--space-8) calc(-1 * var(--page-gutter)) 0;
+  padding: var(--space-2) var(--page-gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.home-small-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.home-small-card {
+  appearance: none;
+  border: none;
+  flex: 0 0 auto;
+  min-width: 104px;
+  min-height: var(--tap-min);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--radius-md);
+  background: var(--color-card-background);
+  box-shadow: inset 0 0 0 var(--space-1) var(--color-card-border);
+  font-family: inherit;
+  text-align: left;
+  transition:
+    transform var(--duration-fast) var(--ease-ios),
+    background var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .home-small-card:hover {
+    background: color-mix(in srgb, var(--color-text-main) 4%, var(--color-card-background));
+  }
+}
+
+.home-small-card:active {
+  transform: scale(0.96);
+}
+
+.home-small-name {
+  font-size: var(--font-size-footnote);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.home-small-price {
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-disclosure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-10) var(--space-8);
+  margin: 0 calc(-1 * var(--space-8));
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--duration-fast) var(--ease-ios);
+}
+
+.home-disclosure + .home-disclosure {
+  box-shadow: inset 0 var(--space-1) 0 var(--color-separator);
+}
+
+@media (hover: hover) {
+  .home-disclosure:hover {
+    background: var(--color-hover);
+  }
+}
+
+.home-disclosure:active {
+  background: var(--color-pressed);
+}
+
+.home-disclosure-head,
+.home-disclosure-date {
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+.home-disclosure-title {
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+/* Skeleton blocks: same footprint as the loaded content */
+.home-skeleton-main {
+  height: 112px;
+  border-radius: var(--radius-lg);
+}
+
+.home-skeleton-small {
+  flex: 0 0 104px;
+  height: 72px;
+}
+
+.home-skeleton-carousel {
+  height: 134px;
+  border-radius: var(--radius-lg);
+}
+
+.home-skeleton-segmented {
+  height: 34px;
+  border-radius: var(--radius-sm);
+}
+
+.home-skeleton-row {
+  height: 48px;
+}
+
+.home-skeleton-disclosure {
+  height: 60px;
+}

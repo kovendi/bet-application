@@ -1,0 +1,57 @@
+/* Only applied when JS has confirmed we're on desktop and added the frame.
+   Device chrome only — the dimensions below model the physical phone, so
+   they are not design-system spacing. */
+body.has-iphone-frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--frame-desk-background);
+}
+
+.iphone-frame {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  max-width: 100vw;
+  max-height: 100vh;
+  background: var(--frame-body);
+  border-radius: 55px;
+  padding: var(--frame-padding);
+  box-shadow:
+    0 0 0 var(--space-2) var(--frame-edge),
+    var(--frame-shadow);
+}
+
+.iphone-notch {
+  position: absolute;
+  top: var(--space-20);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: var(--space-32);
+  background: var(--frame-body);
+  border-radius: var(--radius-xl);
+  z-index: 2;
+}
+
+.iphone-screen {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  border-radius: var(--frame-screen-radius);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* notch bottom (20px top + 32px height, minus the frame's 14px padding) + 8px gap;
+     consumed by the app bar / #screen-content, not as padding here (see global.css) */
+  --screen-inset-top: 46px;
+}
+
+.iphone-screen::-webkit-scrollbar {
+  display: none;
+}

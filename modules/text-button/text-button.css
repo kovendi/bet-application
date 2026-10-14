@@ -1,0 +1,33 @@
+.app-text-button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--color-text-secondary);
+  transition:
+    opacity var(--duration-fast) var(--ease-ios),
+    color var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .app-text-button:hover {
+    color: var(--color-text-main);
+  }
+}
+
+.app-text-button:active {
+  opacity: 0.6;
+}
+
+.app-text-button .icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}

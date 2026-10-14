@@ -1,0 +1,103 @@
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: var(--radius-lg);
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  box-sizing: border-box;
+  min-height: 120px;
+  padding: var(--space-14) var(--space-16);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-12);
+  text-decoration: none;
+  color: var(--color-on-brand);
+  background: linear-gradient(135deg, var(--color-brand-surface), var(--slide-end, var(--color-brand-surface)));
+  transition: filter var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .carousel-slide:hover {
+    filter: brightness(1.08);
+  }
+}
+
+.carousel-slide:active {
+  filter: brightness(0.9);
+}
+
+.carousel-slide:focus-visible {
+  outline-offset: calc(-1 * var(--focus-ring-width) * 2);
+  outline-color: var(--color-on-brand);
+}
+
+.carousel-slide--navy-gold {
+  --slide-end: color-mix(in srgb, var(--color-accent) 45%, var(--color-brand-surface));
+}
+
+.carousel-slide--blue-teal {
+  --slide-end: color-mix(in srgb, var(--chart-4) 55%, var(--color-brand-surface));
+}
+
+.carousel-slide--gold-navy {
+  --slide-end: color-mix(in srgb, var(--chart-1) 40%, var(--color-brand-surface));
+}
+
+.carousel-slide--teal-navy {
+  --slide-end: color-mix(in srgb, var(--chart-7) 40%, var(--color-brand-surface));
+}
+
+.carousel-tag {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-caption1);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--color-on-brand) 18%, transparent);
+}
+
+.carousel-title {
+  font-size: var(--font-size-headline);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-6);
+}
+
+.carousel-dot {
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--color-text-secondary);
+  opacity: 0.4;
+  transition:
+    opacity var(--duration-base) var(--ease-ios),
+    width var(--duration-base) var(--ease-ios),
+    background var(--duration-base) var(--ease-ios);
+}
+
+.carousel-dot--active {
+  width: var(--space-16);
+  background: var(--color-primary);
+  opacity: 1;
+}

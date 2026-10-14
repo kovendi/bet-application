@@ -1,0 +1,112 @@
+.confirm-dialog {
+  width: 100%;
+  max-width: 300px;
+  background: var(--color-card-background);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-popover);
+  padding: var(--space-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  text-align: center;
+  animation: confirm-dialog-in var(--duration-slow) var(--ease-ios);
+}
+
+.overlay--closing .confirm-dialog {
+  animation: confirm-dialog-out var(--duration-base) var(--ease-ios) forwards;
+}
+
+@keyframes confirm-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes confirm-dialog-out {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.confirm-dialog-title {
+  margin: 0;
+  font-size: var(--font-size-headline);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.confirm-dialog-message {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  gap: var(--space-10);
+  margin-top: var(--space-14);
+}
+
+.confirm-dialog-button {
+  appearance: none;
+  border: none;
+  flex: 1;
+  min-height: var(--tap-min);
+  border-radius: var(--radius-md);
+  padding: var(--space-10) var(--space-16);
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  font-family: inherit;
+  transition:
+    opacity var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios),
+    filter var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .confirm-dialog-button:hover {
+    filter: brightness(1.06);
+  }
+}
+
+.confirm-dialog-button:active {
+  opacity: var(--press-opacity);
+  transform: scale(var(--press-scale));
+}
+
+.confirm-dialog-button--cancel {
+  background: var(--color-background);
+  color: var(--color-text-main);
+}
+
+.confirm-dialog-button--danger {
+  background: var(--color-negative);
+  color: var(--color-on-negative);
+}
+
+.confirm-dialog-button--default {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.confirm-dialog-actions--stacked {
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.confirm-dialog-button--danger-soft {
+  background: color-mix(in srgb, var(--color-negative) 16%, transparent);
+  color: var(--color-negative);
+}
+
+.confirm-dialog-button--default-soft {
+  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+  color: var(--color-primary);
+}
+
+.confirm-dialog-button--accent {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}

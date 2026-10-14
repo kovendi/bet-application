@@ -1,0 +1,94 @@
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  min-height: var(--tap-min);
+  padding: var(--space-8) 0;
+}
+
+.toggle-row-info {
+  min-width: 0;
+}
+
+.toggle-row-label {
+  display: block;
+  font-size: var(--font-size-callout);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.toggle-row-description {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+/* iOS switch: 51×31 */
+.toggle-switch {
+  display: inline-block;
+  position: relative;
+  flex-shrink: 0;
+  width: 51px;
+  height: 31px;
+  cursor: pointer;
+}
+
+.toggle-switch-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.toggle-switch-track {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-text-secondary) 35%, transparent);
+  transition: background var(--duration-base) var(--ease-ios);
+}
+
+.toggle-switch-track::before {
+  content: "";
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  width: 27px;
+  height: 27px;
+  border-radius: var(--radius-pill);
+  background: var(--color-knob);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform var(--duration-base) var(--ease-ios),
+    width var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .toggle-switch:hover .toggle-switch-input:not(:checked) + .toggle-switch-track {
+    background: color-mix(in srgb, var(--color-text-secondary) 45%, transparent);
+  }
+}
+
+/* Press: the knob stretches like on iOS */
+.toggle-switch:active .toggle-switch-track::before {
+  width: 33px;
+}
+
+.toggle-switch-input:checked + .toggle-switch-track {
+  background: var(--color-primary);
+}
+
+.toggle-switch-input:checked + .toggle-switch-track::before {
+  transform: translateX(20px);
+}
+
+.toggle-switch:active .toggle-switch-input:checked + .toggle-switch-track::before {
+  transform: translateX(14px);
+}
+
+.toggle-switch-input:focus-visible + .toggle-switch-track {
+  outline: var(--focus-ring-width) solid var(--color-primary);
+  outline-offset: var(--focus-ring-offset);
+}

@@ -1,0 +1,126 @@
+.top-appbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  box-sizing: border-box;
+  min-height: calc(52px + var(--screen-inset-top));
+  padding: calc(var(--screen-inset-top) + var(--space-4)) var(--page-gutter) var(--space-4);
+  background: var(--color-background);
+}
+
+.top-appbar-slot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.top-appbar-slot--left {
+  flex: 0 1 auto;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+.top-appbar-slot--center {
+  flex: 1;
+  justify-content: flex-start;
+  font-size: var(--font-size-headline);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.top-appbar-slot--right {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+/* Shared look for icon-only buttons in the bar (menu, back, actions):
+   44 px hit area, the negative margin keeps the icon optically aligned with
+   the page gutter. Pages reuse this class for their own bar buttons. */
+.top-appbar-icon-button,
+.top-appbar-menu-button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin: 0 calc(-1 * var(--space-10));
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-main);
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .top-appbar-icon-button:hover,
+  .top-appbar-menu-button:hover {
+    background: var(--color-hover);
+  }
+}
+
+.top-appbar-icon-button:active,
+.top-appbar-menu-button:active {
+  background: var(--color-pressed);
+  transform: scale(0.92);
+}
+
+.top-appbar-icon-button .icon,
+.top-appbar-menu-button .icon {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+}
+
+.top-appbar-title {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.top-appbar-back-button {
+  appearance: none;
+  border: none;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--color-card-background);
+  box-shadow: inset 0 0 0 var(--space-1) var(--color-separator);
+  color: var(--color-text-main);
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .top-appbar-back-button:hover {
+    background: var(--color-hover);
+  }
+}
+
+.top-appbar-back-button:active {
+  background: var(--color-pressed);
+  transform: scale(0.92);
+}
+
+.top-appbar-back-button .icon {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}

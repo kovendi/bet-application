@@ -1,0 +1,76 @@
+.toast-region {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + var(--space-8));
+  left: var(--page-gutter);
+  right: var(--page-gutter);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  pointer-events: none;
+}
+
+.toast-region--framed {
+  position: absolute;
+  top: var(--frame-content-top);
+  left: calc(var(--frame-padding) + var(--page-gutter));
+  right: calc(var(--frame-padding) + var(--page-gutter));
+}
+
+.toast {
+  pointer-events: auto;
+  cursor: pointer;
+  max-width: 100%;
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-20);
+  border-radius: var(--radius-pill);
+  background: var(--color-toast-background);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  backdrop-filter: var(--backdrop-blur);
+  box-shadow: var(--shadow-popover);
+  color: var(--color-on-brand);
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  animation: toast-in var(--duration-slow) var(--ease-ios) both;
+}
+
+/* Stays for --duration-toast-visible, then slides away by itself. */
+.toast--auto-leave {
+  animation:
+    toast-in var(--duration-slow) var(--ease-ios) both,
+    toast-out var(--duration-base) var(--ease-ios) var(--duration-toast-visible) forwards;
+}
+
+.toast--leaving {
+  animation: toast-leave var(--duration-base) var(--ease-ios) forwards;
+}
+
+.toast-icon {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-120%) scale(0.96);
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(-120%) scale(0.96);
+  }
+}
+
+@keyframes toast-leave {
+  to {
+    opacity: 0;
+    transform: translateY(-120%) scale(0.96);
+  }
+}

@@ -1,0 +1,98 @@
+/* Floating pill menu: the nav only positions it, the bar is the visible pill. */
+.bottom-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-sticky);
+  padding: 0 var(--space-12) calc(env(safe-area-inset-bottom) + var(--space-8));
+  pointer-events: none;
+}
+
+.bottom-nav-bar {
+  --bottom-nav-pad: var(--space-4);
+  position: relative;
+  display: flex;
+  padding: var(--bottom-nav-pad);
+  border-radius: var(--radius-pill);
+  background: var(--color-card-background);
+  border: var(--space-1) solid var(--color-card-border);
+  pointer-events: auto;
+}
+
+/* Sliding highlight: exactly one item wide, moved with translateX(index * 100%). */
+.bottom-nav-indicator {
+  position: absolute;
+  top: var(--bottom-nav-pad);
+  bottom: var(--bottom-nav-pad);
+  left: var(--bottom-nav-pad);
+  width: calc((100% - 2 * var(--bottom-nav-pad)) / var(--bottom-nav-count));
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  transition: transform var(--duration-slow) var(--ease-ios);
+  will-change: transform;
+}
+
+.bottom-nav-bar--static .bottom-nav-indicator,
+.bottom-nav-bar--static .bottom-nav-item {
+  transition: none;
+}
+
+.bottom-nav-item {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: var(--space-6) var(--space-2);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color var(--duration-base) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .bottom-nav-item:hover {
+    color: var(--color-text-main);
+  }
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.94);
+}
+
+.bottom-nav-item-icon {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+}
+
+/* Filled icon only on the active item, outline icon on the rest. */
+.bottom-nav-item-icon--active,
+.bottom-nav-item--active .bottom-nav-item-icon--inactive {
+  display: none;
+}
+
+.bottom-nav-item--active .bottom-nav-item-icon--active {
+  display: block;
+}
+
+.bottom-nav-item-label {
+  font-size: var(--font-size-caption2);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.bottom-nav-item--active,
+.bottom-nav-item--active:hover {
+  color: var(--color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-indicator {
+    transition: none;
+  }
+}
