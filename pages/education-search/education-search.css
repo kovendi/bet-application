@@ -1,0 +1,29 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+.education-search-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.education-search-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+.education-search-results {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The field takes the whole center slot of the app bar. */
+.education-search-field {
+  flex: 1;
+  min-width: 0;
+}

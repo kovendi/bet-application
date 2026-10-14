@@ -1,0 +1,522 @@
+/* Chat messages: user bubbles, AI answers, rich blocks, actions. */
+
+.assist-msg {
+  display: flex;
+  gap: var(--space-10);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.assist-date {
+  align-self: center;
+  font-size: var(--font-size-caption1);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* --- User ----------------------------------------------------------------------- */
+
+.assist-msg--user {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.assist-bubble {
+  appearance: none;
+  max-width: 86%;
+  padding: var(--space-10) var(--space-14);
+  border: none;
+  border-radius: var(--radius-xl) var(--radius-xl) var(--radius-xs) var(--radius-xl);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: inherit;
+  font-size: var(--font-size-callout);
+  line-height: 1.35;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  transition: transform var(--duration-fast) var(--ease-ios);
+}
+
+.assist-bubble:active {
+  transform: scale(0.985);
+}
+
+/* Time + actions fold open under the bubble on tap. */
+.assist-meta {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--duration-base) var(--ease-ios),
+    opacity var(--duration-base) var(--ease-ios);
+}
+
+.assist-msg--open .assist-meta {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.assist-meta-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+}
+
+.assist-meta .assist-action {
+  margin-block: 0;
+}
+
+.assist-edit {
+  display: none;
+}
+
+.assist-msg--editable .assist-edit {
+  display: flex;
+}
+
+/* --- AI -------------------------------------------------------------------------- */
+
+.assist-avatar {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  background: var(--color-brand-surface);
+  color: var(--color-accent);
+}
+
+.assist-avatar .icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+
+.assist-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.assist-text {
+  padding-top: var(--space-2);
+  font-size: var(--font-size-callout);
+  line-height: 1.45;
+  color: var(--color-text-main);
+  overflow-wrap: anywhere;
+}
+
+.assist-text strong {
+  font-weight: 650;
+}
+
+.assist-paragraph {
+  margin: 0 0 var(--space-8);
+}
+
+.assist-list {
+  margin: 0 0 var(--space-8);
+  padding-left: var(--space-16);
+}
+
+.assist-list li {
+  margin-bottom: var(--space-4);
+}
+
+.assist-list li::marker {
+  color: var(--color-accent);
+}
+
+.assist-text > :last-child {
+  margin-bottom: 0;
+}
+
+.assist-hidden {
+  display: none;
+}
+
+/* Typing caret: a soft pulsing dot after the last revealed character. */
+.assist-caret::after {
+  content: "";
+  display: inline-block;
+  width: var(--space-8);
+  height: var(--space-8);
+  margin-left: var(--space-4);
+  border-radius: var(--radius-round);
+  background: var(--color-primary);
+  vertical-align: middle;
+  animation: assist-pulse 900ms var(--ease-ios) infinite;
+}
+
+@keyframes assist-pulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+/* Extras (cards, disclaimer, actions, follow-ups) rise in one after another. */
+.assist-extras--enter > * {
+  animation: assist-rise var(--duration-slow) var(--ease-out) both;
+}
+
+.assist-extras--enter > :nth-child(2) {
+  animation-delay: calc(var(--duration-fast) * 0.5);
+}
+
+.assist-extras--enter > :nth-child(3) {
+  animation-delay: var(--duration-fast);
+}
+
+.assist-extras--enter > :nth-child(4) {
+  animation-delay: calc(var(--duration-fast) * 1.5);
+}
+
+.assist-extras--enter > :nth-child(5) {
+  animation-delay: calc(var(--duration-fast) * 2);
+}
+
+.assist-stopped {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-4) 0 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.assist-stopped .icon {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}
+
+.assist-disclaimer {
+  margin: var(--space-8) 0 0;
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+/* --- Rich blocks ---------------------------------------------------------------------- */
+
+.assist-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.assist-rich {
+  background: var(--color-card-background);
+  border: var(--space-1) solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: 0 var(--space-12);
+}
+
+.assist-rich--rows > * + * {
+  border-top: var(--space-1) solid var(--color-separator);
+}
+
+.assist-rich--rows .price-row-main {
+  margin: 0 calc(-1 * var(--space-8));
+}
+
+.assist-rich--chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--space-12);
+}
+
+.assist-link-chip,
+.assist-chip {
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-height: 36px;
+  max-width: 100%;
+  padding: var(--space-6) var(--space-12);
+  border: var(--space-1) solid var(--color-separator);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-primary);
+  font-family: inherit;
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+  text-decoration: none;
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+/* Hit area grows to the 44 px minimum without growing the pill. */
+.assist-link-chip::after,
+.assist-chip::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--space-4)) 0;
+}
+
+@media (hover: hover) {
+  .assist-link-chip:hover,
+  .assist-chip:hover {
+    background: var(--color-hover);
+  }
+}
+
+.assist-link-chip:active,
+.assist-chip:active {
+  background: var(--color-pressed);
+  transform: scale(var(--press-scale));
+}
+
+.assist-link-chip-icon {
+  flex: none;
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}
+
+.assist-edu {
+  appearance: none;
+  width: 100%;
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-10) var(--space-8);
+  margin: 0 calc(-1 * var(--space-8));
+  width: calc(100% + var(--space-16));
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-main);
+  font-family: inherit;
+  text-align: left;
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+.assist-edu:active {
+  background: var(--color-pressed);
+  transform: scale(0.99);
+}
+
+.assist-edu-icon {
+  flex: none;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  color: var(--color-accent);
+}
+
+.assist-edu-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.assist-edu-title {
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.assist-edu-meta {
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+.assist-edu-chevron {
+  flex: none;
+  width: var(--icon-md);
+  height: var(--icon-md);
+  color: var(--color-text-secondary);
+}
+
+/* --- Actions ----------------------------------------------------------------------------- */
+
+.assist-actions {
+  display: flex;
+  align-items: center;
+  margin: var(--space-4) 0 calc(-1 * var(--space-6)) calc(-1 * var(--space-14));
+}
+
+.assist-actions .assist-time {
+  margin-left: auto;
+}
+
+.assist-time {
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+.assist-action {
+  appearance: none;
+  flex: none;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin-block: calc(-1 * var(--space-6));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-round);
+  background: transparent;
+  color: var(--color-text-secondary);
+  transition:
+    color var(--duration-fast) var(--ease-ios),
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+.assist-action .icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+
+@media (hover: hover) {
+  .assist-action:hover {
+    color: var(--color-text-main);
+    background: var(--color-hover);
+  }
+}
+
+.assist-action:active {
+  transform: scale(0.88);
+}
+
+.assist-action--on,
+.assist-action--on:hover {
+  color: var(--color-primary);
+}
+
+.assist-action--pop {
+  animation: assist-pop var(--duration-slow) var(--ease-out);
+}
+
+@keyframes assist-pop {
+  40% {
+    transform: scale(1.35);
+  }
+}
+
+/* Follow-up questions */
+.assist-followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+
+/* --- Typing indicator --------------------------------------------------------------------- */
+
+.assist-main--typing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-height: 28px;
+}
+
+.assist-dots {
+  display: inline-flex;
+  gap: var(--space-4);
+}
+
+.assist-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-round);
+  background: var(--color-text-secondary);
+  animation: assist-bounce 1s var(--ease-ios) infinite;
+}
+
+.assist-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.assist-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes assist-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+.assist-thinking {
+  font-size: var(--font-size-footnote);
+  background: linear-gradient(90deg, var(--color-text-secondary) 30%, var(--color-text-main) 50%, var(--color-text-secondary) 70%) 0 0 / 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: assist-shimmer 1.6s linear infinite;
+}
+
+@keyframes assist-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* --- Error -------------------------------------------------------------------------------------- */
+
+.assist-error-title {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-callout);
+  font-weight: 600;
+  color: var(--color-negative);
+}
+
+.assist-error-text {
+  margin: var(--space-4) 0 var(--space-8);
+  font-size: var(--font-size-subheadline);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+.assist-retry {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-height: var(--tap-min);
+  padding: var(--space-8) var(--space-16);
+  border: var(--space-1) solid var(--color-separator);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-primary);
+  font-family: inherit;
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+.assist-retry:active {
+  background: var(--color-pressed);
+  transform: scale(var(--press-scale));
+}
+
+.assist-retry .icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}

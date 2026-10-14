@@ -38,7 +38,8 @@ const iconGrid = document.createElement("div");
 iconGrid.className = "style-guide-icon-grid";
 ["home", "calendar", "profile", "bell", "search", "plus", "back", "filter", "edit", "check",
   "refresh", "menu", "trash", "logout", "users", "shield", "chat", "send", "close", "link",
-  "book", "mail", "star", "star-filled", "chart-line", "chart-candle", "info", "chevron-right", "chevron-down", "lock"].forEach((name) => {
+  "book", "mail", "star", "star-filled", "chart-line", "chart-candle", "info", "chevron-right", "chevron-down", "lock",
+  "sparkles", "arrow-up", "arrow-down", "stop", "copy", "thumbs-up", "thumbs-down", "mic", "clock"].forEach((name) => {
   const cell = document.createElement("div");
   cell.className = "style-guide-icon-cell";
   cell.appendChild(window.iconModule.renderIcon(name));

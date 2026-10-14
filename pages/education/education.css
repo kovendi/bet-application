@@ -1,0 +1,35 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+/* Bottom nav pinning: the content above it fills the remaining height. */
+.education-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.education-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+.education-count {
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.education-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.education-skeleton-row {
+  height: 64px;
+  margin-bottom: var(--space-4);
+}

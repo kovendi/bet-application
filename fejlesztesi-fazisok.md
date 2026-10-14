@@ -39,7 +39,7 @@ Cél: egy bemutatható, végigkattintható mag.
   - [x] Vendégként tovább gomb (regisztráció nélkül is használható)
   - [x] E-mail + jelszó, Google, Apple, BÉT Portál belépés
   - [x] Hibás belépésnél nem derül ki, melyik adat rossz (FK_0071)
-  - [x] Demo belépés: `demouser` / `123456`
+  - [x] Demo belépés: `demo@example.com` / `12345678`
 - [x] **Home / nyitófelület** (NYÁ, NYC, NYT, NYK, PS)
   - [x] Piaci státusz: nyitva/zárva, hátralévő idő, zárva esetén a következő nyitás (PS_001–PS_005)
   - [x] Árfolyam-áttekintő: nagy fő kártya + vízszintesen csúsztatható kis kártyák, alapból BUX, CETOP NTR, BUMIX és 4 blue chip, max. 8 elem (NYÁ_001–NYÁ_005)
@@ -54,8 +54,8 @@ Cél: egy bemutatható, végigkattintható mag.
   - Fejléc, árfolyamgrafikon (gyertya/vonal, idősáv), legjobb vételi/eladási ár, forgalom, day range, teljesítménymutatók
   - Vétel / eladás gomb: bróker lista (a bet.hu kereskedőcégek oldala alapján)
   - Fülek: Kereskedés, Pénzügyi adatok, Értékelés, Kibocsátó, Közzétételek, Elemzés (a fülek tartalma a 2. fázisban)
-- [ ] **Bet assist AI** (AI_000–AI_007): chat, első használatkor disclaimer elfogadása, javasolt kérdések, kérdésszám-korlát jelzése, kamu válaszok
-- [ ] **Edukáció** (EF_001–EF_005): kategorizált és kereshető tudástár (téma, szint), beágyazott videó, kvíz visszajelzéssel, átvitel a Részvényfutam alkalmazásba
+- [x] **Bet assist AI** (AI_000–AI_007): chat, első használatkor disclaimer elfogadása, javasolt kérdések, kérdésszám-korlát jelzése, kamu válaszok
+- [x] **Edukáció** (EF_001–EF_005): kategorizált és kereshető tudástár (téma, szint), beágyazott videó, kvíz visszajelzéssel, átvitel a Részvényfutam alkalmazásba
 - [ ] **Alsó navigáció**: Home, Piactér, Bet assist AI, Edukáció (az AI helye: alsó menüsor, javaslat az AI_000-re)
 
 ## 2. fázis: Termékadatlapok teljesen

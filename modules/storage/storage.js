@@ -17,9 +17,11 @@ window.storage = (function () {
   // inside the same JSON blob as the seeded db.
   const SESSION_KEY = "appSession";
 
+  const DEMO_USER = { id: "demouser", username: "demo@example.com", password: "12345678", name: "Demo" };
+
   function defaultDb() {
     return {
-      users: [{ id: "demouser", username: "demouser", password: "123456", name: "Demo" }],
+      users: [{ ...DEMO_USER }],
       // userId -> ordered list of tickers
       favorites: {},
     };
@@ -32,7 +34,14 @@ window.storage = (function () {
       saveDb(db);
       return db;
     }
-    return JSON.parse(raw);
+    const db = JSON.parse(raw);
+    // Older databases stored the demo user with different credentials.
+    const demo = db.users.find((u) => u.id === DEMO_USER.id);
+    if (demo && (demo.username !== DEMO_USER.username || demo.password !== DEMO_USER.password)) {
+      Object.assign(demo, DEMO_USER);
+      saveDb(db);
+    }
+    return db;
   }
 
   function saveDb(db) {
@@ -67,6 +76,14 @@ window.storage = (function () {
     return user;
   }
 
+  function deleteUser(id) {
+    const db = getDb();
+    db.users = db.users.filter((u) => u.id !== id);
+    delete db.favorites[id];
+    if (db.assist) delete db.assist[id];
+    saveDb(db);
+  }
+
   // Instruments (mock market data). category: share | index | etf | bond |
   // certificate | other — see seed-instruments.js.
   function getInstruments(category) {
@@ -99,6 +116,12 @@ window.storage = (function () {
 
   function getEducation() {
     return window.SEED_CONTENT.education.slice();
+  }
+
+  // List entry merged with its body (blocks / video / questions) from seed-education.js.
+  function getEducationItem(id) {
+    const item = window.SEED_CONTENT.education.find((entry) => entry.id === id);
+    return item ? Object.assign({}, item, window.SEED_EDUCATION[id]) : null;
   }
 
   function getBrokers() {
@@ -167,6 +190,7 @@ window.storage = (function () {
     findUserByUsername,
     findUserById,
     updateUser,
+    deleteUser,
     getInstruments,
     getInstrument,
     getChangePercent,
@@ -174,6 +198,7 @@ window.storage = (function () {
     getDisclosures,
     getCarouselItems,
     getEducation,
+    getEducationItem,
     getBrokers,
     getMarketHours,
     getFavorites,

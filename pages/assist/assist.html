@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Bet assist AI</title>
+  <link rel="stylesheet" href="../../global.css" />
+  <link rel="stylesheet" href="../../modules/iphone-frame/iphone-frame.css" />
+  <link rel="stylesheet" href="../../modules/icon/icon.css" />
+  <link rel="stylesheet" href="../../modules/top-appbar/top-appbar.css" />
+  <link rel="stylesheet" href="../../modules/banner/banner.css" />
+  <link rel="stylesheet" href="../../modules/chips/chips.css" />
+  <link rel="stylesheet" href="../../modules/price-row/price-row.css" />
+  <link rel="stylesheet" href="../../modules/sparkline/sparkline.css" />
+  <link rel="stylesheet" href="../../modules/button/button.css" />
+  <link rel="stylesheet" href="../../modules/overlay/overlay.css" />
+  <link rel="stylesheet" href="../../modules/bottom-sheet/bottom-sheet.css" />
+  <link rel="stylesheet" href="../../modules/confirm-dialog/confirm-dialog.css" />
+  <link rel="stylesheet" href="../../modules/toast/toast.css" />
+  <link rel="stylesheet" href="../../modules/motion/motion.css" />
+  <link rel="stylesheet" href="../../modules/state-view/state-view.css" />
+  <link rel="stylesheet" href="assist.css" />
+  <link rel="stylesheet" href="assist-message.css" />
+  <link rel="stylesheet" href="assist-composer.css" />
+  <script src="../../modules/theme/theme.js"></script>
+  <script>window.theme.initTheme();</script>
+</head>
+<body>
+  <div id="screen-content">
+    <div class="assist-page">
+      <div id="assist-top-appbar"></div>
+      <main class="assist-content">
+        <div id="assist-messages" class="assist-messages" aria-live="polite"></div>
+        <div id="assist-anchor" class="assist-anchor"></div>
+      </main>
+      <div id="assist-bottom" class="assist-bottom">
+        <button id="assist-fab" class="assist-fab" type="button"></button>
+        <div id="assist-quota-slot" class="assist-quota-slot"></div>
+        <div id="assist-composer-slot"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../locales/hu.js"></script>
+  <script src="../../modules/i18n/i18n.js"></script>
+  <script src="../../modules/icon/icon.js"></script>
+  <script src="../../modules/money/money.js"></script>
+  <script src="../../modules/storage/seed-instruments.js"></script>
+  <script src="../../modules/storage/seed-content.js"></script>
+  <script src="../../modules/storage/seed-series.js"></script>
+  <script src="../../modules/storage/seed-assist.js"></script>
+  <script src="../../modules/storage/storage.js"></script>
+  <script src="../../modules/motion/motion.js"></script>
+  <script src="../../modules/top-appbar/top-appbar.js"></script>
+  <script src="../../modules/banner/banner.js"></script>
+  <script src="../../modules/chips/chips.js"></script>
+  <script src="../../modules/sparkline/sparkline.js"></script>
+  <script src="../../modules/price-row/price-row.js"></script>
+  <script src="../../modules/button/button.js"></script>
+  <script src="../../modules/overlay/overlay.js"></script>
+  <script src="../../modules/bottom-sheet/bottom-sheet.js"></script>
+  <script src="../../modules/confirm-dialog/confirm-dialog.js"></script>
+  <script src="../../modules/toast/toast.js"></script>
+  <script src="../../modules/state-view/state-view.js"></script>
+  <script src="../../modules/market-status/market-status.js"></script>
+  <script src="../../modules/mock-network/mock-network.js"></script>
+  <script src="../../modules/iphone-frame/iphone-frame.js"></script>
+  <script src="assist-reply.js"></script>
+  <script src="assist-render.js"></script>
+  <script src="assist-composer.js"></script>
+  <script src="assist.js"></script>
+</body>
+</html>

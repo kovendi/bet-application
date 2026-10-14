@@ -68,10 +68,10 @@ Pages/modules must render text via `t('some.key')`, never hardcoded strings. Thi
 
 No backend, so `localStorage` simulates a database. `modules/storage/storage.js` exposes `window.storage` over a single `localStorage` key `appDb`, whose value is a JSON object with one property per "table" (e.g. `users: []`). The logged-in user's id is kept separately under `appSession`.
 
-- `getDb()` / `saveDb(db)` — read/write the whole object; `getDb()` auto-initializes `{ users: [{ id: "demouser", username: "demouser", password: "123456", name: "Demo" }] }` on first use.
+- `getDb()` / `saveDb(db)` — read/write the whole object; `getDb()` auto-initializes `{ users: [{ id: "demouser", username: "demo@example.com", password: "12345678", name: "Demo" }] }` on first use.
 - Per-entity helpers (e.g. `getUsers()`, `addUser(user)`, `findUserByUsername(username)`) and session helpers (`setCurrentUser(id)`, `getCurrentUser()`, `logout()`) live alongside the generic ones — add more as new entities are introduced, don't call `getDb()`/`saveDb()` directly from pages.
 - Don't store `File`/`Blob` objects (not JSON-serializable) — convert to a base64 data URL via `FileReader.readAsDataURL` first.
-- Static mock reference data (instruments, disclosures, carousel, education, brokers, price history) lives in `modules/storage/seed-*.js` and is read-only through `getInstruments()`, `getInstrument()`, `getChangePercent()`, `getPriceSeries()`, `getDisclosures()`, `getCarouselItems()`, `getEducation()`, `getBrokers()`; favorites (`getFavorites/isFavorite/toggleFavorite`) are user state in the db. Pages using them link `seed-instruments.js`, `seed-content.js`, `seed-series.js` before `storage.js`.
+- Static mock reference data (instruments, disclosures, carousel, education, brokers, price history) lives in `modules/storage/seed-*.js` and is read-only through `getInstruments()`, `getInstrument()`, `getChangePercent()`, `getPriceSeries()`, `getDisclosures()`, `getCarouselItems()`, `getEducation()`, `getEducationItem(id)` (list entry + body from `seed-education.js`), `getBrokers()`; favorites (`getFavorites/isFavorite/toggleFavorite`) are user state in the db. Pages using them link `seed-instruments.js`, `seed-content.js`, `seed-series.js` (and `seed-education.js` for education bodies) before `storage.js`.
 - Any page reading/writing data must link `modules/storage/storage.js` (no paired CSS — logic-only, same exception as `i18n.js`).
 
 ## Modules (reusable components)

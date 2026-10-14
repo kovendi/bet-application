@@ -1,0 +1,386 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+/* Bottom nav pinning: the content above the bottom bar fills the remaining height. */
+.assist-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.assist-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--page-gutter);
+}
+
+.assist-messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-8) 0 var(--space-16);
+}
+
+.assist-anchor {
+  height: 0;
+}
+
+.assist-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* Composer + main menu stick together at the bottom. */
+.assist-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-sticky);
+  background: var(--color-background);
+}
+
+.assist-bottom::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: var(--space-16);
+  background: linear-gradient(to bottom, transparent, var(--color-background));
+  pointer-events: none;
+}
+
+.assist-quota-slot:not(:empty) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--page-gutter) 0;
+}
+
+.assist-quota-slot .assist-quota {
+  align-self: flex-end;
+}
+
+/* Scroll-to-bottom button */
+.assist-fab {
+  appearance: none;
+  position: absolute;
+  right: var(--page-gutter);
+  bottom: calc(100% + var(--space-8));
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--space-1) solid var(--color-card-border);
+  border-radius: var(--radius-round);
+  background: var(--color-card-background);
+  color: var(--color-text-main);
+  box-shadow: var(--shadow-popover);
+  opacity: 0;
+  transform: translateY(var(--space-8)) scale(0.9);
+  pointer-events: none;
+  transition:
+    opacity var(--duration-base) var(--ease-ios),
+    transform var(--duration-base) var(--ease-ios);
+}
+
+.assist-fab--visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.assist-fab--visible:active {
+  transform: scale(0.92);
+}
+
+/* Welcome */
+.assist-welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  text-align: center;
+  padding-top: var(--space-16);
+}
+
+.assist-hero {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  background: var(--color-brand-surface);
+  color: var(--color-accent);
+  box-shadow: 0 0 0 var(--space-6) color-mix(in srgb, var(--color-accent) 16%, transparent);
+  animation: assist-hero-glow 3.2s var(--ease-ios) infinite;
+}
+
+.assist-hero .icon {
+  width: 30px;
+  height: 30px;
+}
+
+@keyframes assist-hero-glow {
+  50% {
+    box-shadow: 0 0 0 var(--space-12) color-mix(in srgb, var(--color-accent) 6%, transparent);
+  }
+}
+
+.assist-welcome-title {
+  margin: var(--space-8) 0 0;
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.assist-welcome-subtitle {
+  margin: 0;
+  max-width: 280px;
+  font-size: var(--font-size-subheadline);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+.assist-welcome-label {
+  align-self: flex-start;
+  margin: var(--space-16) 0 0;
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.assist-suggestions {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.assist-suggestion {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  min-height: 52px;
+  padding: var(--space-10) var(--space-14);
+  border: var(--space-1) solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card-background);
+  color: var(--color-text-main);
+  font-family: inherit;
+  font-size: var(--font-size-subheadline);
+  text-align: left;
+  animation: assist-rise var(--duration-slow) var(--ease-out) both;
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+.assist-suggestion:nth-child(2) {
+  animation-delay: calc(var(--duration-fast) * 0.4);
+}
+
+.assist-suggestion:nth-child(3) {
+  animation-delay: calc(var(--duration-fast) * 0.8);
+}
+
+.assist-suggestion:nth-child(4) {
+  animation-delay: calc(var(--duration-fast) * 1.2);
+}
+
+@media (hover: hover) {
+  .assist-suggestion:hover {
+    background: var(--color-hover);
+  }
+}
+
+.assist-suggestion:active {
+  transform: scale(var(--press-scale));
+}
+
+.assist-suggestion-icon {
+  flex: none;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  color: var(--color-accent);
+}
+
+.assist-suggestion-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.assist-suggestion-go {
+  flex: none;
+  width: var(--icon-md);
+  height: var(--icon-md);
+  color: var(--color-text-secondary);
+  transform: rotate(45deg);
+}
+
+@keyframes assist-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-8));
+  }
+}
+
+/* Disclaimer gate (first use) */
+.assist-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-12);
+}
+
+.assist-gate-hero {
+  align-self: center;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  background: var(--color-brand-surface);
+  color: var(--color-accent);
+}
+
+.assist-gate-hero .icon {
+  width: var(--icon-2xl);
+  height: var(--icon-2xl);
+}
+
+.assist-gate-intro {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+.assist-gate-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.assist-gate-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-10);
+  font-size: var(--font-size-subheadline);
+  line-height: 1.4;
+  color: var(--color-text-main);
+}
+
+.assist-gate-points .icon {
+  flex: none;
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  color: var(--color-positive);
+}
+
+/* Feedback sheet */
+.assist-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+/* History sheet */
+.assist-history-list {
+  margin-top: var(--space-8);
+}
+
+.assist-history-row {
+  display: flex;
+  align-items: center;
+  border-bottom: var(--space-1) solid var(--color-separator);
+}
+
+.assist-history-row:last-child {
+  border-bottom: none;
+}
+
+.assist-history-open {
+  appearance: none;
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap-min);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-10) var(--space-8);
+  margin-left: calc(-1 * var(--space-8));
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-main);
+  font-family: inherit;
+  text-align: left;
+  transition: background var(--duration-fast) var(--ease-ios);
+}
+
+.assist-history-open:active {
+  background: var(--color-pressed);
+}
+
+.assist-history-open--active .assist-history-title {
+  color: var(--color-primary);
+}
+
+.assist-history-title {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+}
+
+.assist-history-meta {
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.assist-history-delete {
+  appearance: none;
+  flex: none;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-round);
+  background: transparent;
+  color: var(--color-text-secondary);
+  transition:
+    background var(--duration-fast) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
+}
+
+.assist-history-delete:active {
+  background: var(--color-pressed);
+  transform: scale(0.92);
+}
+
+.assist-welcome-note {
+  margin: var(--space-8) 0 0;
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}

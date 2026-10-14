@@ -1,0 +1,63 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+.profile-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  padding: var(--space-4) var(--page-gutter) var(--space-32);
+}
+
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  padding: var(--space-8) var(--space-4);
+}
+
+.profile-avatar {
+  flex: none;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-brand-surface);
+  color: var(--color-on-brand);
+  font-size: var(--font-size-title2);
+  font-weight: 600;
+}
+
+.profile-summary-text {
+  min-width: 0;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: var(--font-size-title3);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.profile-email {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.profile-theme-hint {
+  margin: var(--space-8) var(--space-4) 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}

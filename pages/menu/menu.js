@@ -36,9 +36,9 @@ function renderMenu() {
           icon: "profile",
           title: window.i18n.t("menu.profile_title"),
           description: window.i18n.t("menu.profile_description"),
-          // No profile screen yet: say so instead of doing nothing.
-          onSelect: () =>
-            window.toastModule.showToast({ message: window.i18n.t("menu.coming_soon"), icon: "info" }),
+          onSelect: () => {
+            window.location.href = "../profile/profile.html";
+          },
         },
         {
           icon: "logout",

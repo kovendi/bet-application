@@ -120,12 +120,14 @@
   --duration-skeleton: 1400ms;
   --duration-spinner: 700ms;
   --duration-toast-visible: 2800ms;
+  --duration-video-demo: 6000ms;
   --press-scale: 0.97;
   --press-opacity: 0.8;
   --backdrop-blur: blur(12px) saturate(140%);
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
   --tap-min: 44px;
+  --avatar-size: 56px;
 }
 
 @media (prefers-color-scheme: light) {

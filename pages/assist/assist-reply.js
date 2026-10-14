@@ -93,9 +93,9 @@ window.assistReply = (function () {
       .getInstruments("share")
       .sort((a, b) => window.storage.getChangePercent(b) - window.storage.getChangePercent(a));
     const picked = (direction === "down" ? sorted.reverse() : sorted).slice(0, MAX_CARDS);
-    const label = direction === "down" ? "legnagyobb vesztesei" : "legnagyobb nyertesei";
+    const label = direction === "down" ? "vesztesei" : "nyertesei";
     return {
-      text: `A mai nap **részvény-${label}** a késleltetett árfolyamok alapján:\n\nA lista a Főoldalon is megtalálható, ott forgalom szerint is rendezheted. Az árfolyamok késleltetettek, a változás az előző záráshoz viszonyított.`,
+      text: `A mai nap **legnagyobb részvény-${label}** a késleltetett árfolyamok alapján:\n\nA lista a Főoldalon is megtalálható, ott forgalom szerint is rendezheted. Az árfolyamok késleltetettek, a változás az előző záráshoz viszonyított.`,
       blocks: [{ type: "instruments", tickers: picked.map((instrument) => instrument.ticker) }],
       followups: direction === "down" ? ["Melyek ma a legnagyobb nyertesek?"] : ["Melyek ma a legnagyobb vesztesek?", "Mi az a P/E mutató?"],
     };
@@ -150,7 +150,9 @@ window.assistReply = (function () {
       };
     }
 
-    const topic = seed.topics.find((candidate) => matchesAny(normalized, candidate.keys));
+    // "Hogyan vásárolhatok részvényt?" is about buying, not about what a share is.
+    const ordered = seed.topics.filter((c) => c.id === "howto-buy").concat(seed.topics.filter((c) => c.id !== "howto-buy"));
+    const topic = ordered.find((candidate) => matchesAny(normalized, candidate.keys));
     if (topic && !(instruments.length === 1 && containsPhrase(normalized, instruments[0].ticker) && topic.id === "index")) {
       return topicReply(topic, instruments);
     }
