@@ -21,6 +21,7 @@
 //       .then(render)
 //       .catch(showError);
 //     await window.mockNetwork.delay(); // plain wait, e.g. a mock submit
+//     const cancel = window.mockNetwork.countdown(60, (left) => {...}, () => {...}); // 1 s ticks
 //   </script>
 
 window.mockNetwork = (function () {
@@ -50,5 +51,23 @@ window.mockNetwork = (function () {
     });
   }
 
-  return { delay, request, getMockState, isEmptyMock };
+  // One-second ticks for UI countdowns (resend code, login lock). Like delay(), the
+  // timer lives here so pages never touch setInterval. Calls onTick(secondsLeft)
+  // right away and every second, then onDone(); returns a function that cancels it.
+  function countdown(seconds, onTick, onDone) {
+    let left = seconds;
+    onTick(left);
+    const timer = setInterval(() => {
+      left -= 1;
+      if (left > 0) {
+        onTick(left);
+        return;
+      }
+      clearInterval(timer);
+      onDone();
+    }, 1000);
+    return () => clearInterval(timer);
+  }
+
+  return { delay, request, countdown, getMockState, isEmptyMock };
 })();

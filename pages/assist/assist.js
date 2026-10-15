@@ -53,7 +53,7 @@ function dayLabel(ts) {
   const diffDays = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(ts).setHours(0, 0, 0, 0)) / 86400000);
   if (diffDays === 0) return t("assist.today");
   if (diffDays === 1) return t("assist.yesterday");
-  return date.toLocaleDateString("hu-HU", { month: "long", day: "numeric" });
+  return date.toLocaleDateString(window.i18n.getLanguage() === "en" ? "en-GB" : "hu-HU", { month: "long", day: "numeric" });
 }
 
 // Daily question meter: a small pill in the app bar.
@@ -184,7 +184,7 @@ function renderAll() {
     messagesEl.appendChild(
       window.assistRender.renderWelcome({
         name: user ? user.name : "",
-        suggestions: window.SEED_ASSIST.suggestions,
+        suggestions: window.assistReply.getSuggestions(),
         onPick: sendQuestion,
       }),
     );

@@ -7,9 +7,103 @@
 //   blocks,     // [{ type: 'instruments', tickers } | { type: 'brokers' } | { type: 'education', ids }]
 //   followups,  // suggested next questions
 // }
+// window.assistReply.getSuggestions() -> starter questions in the app language.
 
 window.assistReply = (function () {
-  const seed = window.SEED_ASSIST;
+  const HU_MARKET_HOURS_KEYS = ["nyitva", "nyitvatartas", "mikor nyit", "mikor zar", "zarva", "kereskedesi ido", "nyitas"];
+  const HU_GAINERS_KEYS = ["nyertes", "legjobban emelked", "legtobbet emelked", "emelked"];
+  const HU_LOSERS_KEYS = ["vesztes", "legjobban esett", "legtobbet esett", "esett", "csokken"];
+
+  // UI-ish sentences of the dynamic answers, per language.
+  const STRINGS = {
+    hu: {
+      rose: "emelkedett",
+      fell: "csökkent",
+      unchanged: "nem változott",
+      priceLine: (name, ticker, price, direction, change) =>
+        `**${name}** (${ticker}) árfolyama jelenleg **${price}**. Az előző záráshoz képest ${direction}: **${change}**.`,
+      dayRange: "Napi sáv",
+      turnover: "Forgalom",
+      data: "Adat",
+      delayed: "késleltetett árfolyam",
+      realtime: "valós idejű árfolyam",
+      compareIntro: "Itt a két termék legfontosabb adatai egymás mellett:",
+      compareRow: (ticker, price, change, turnover) => `- **${ticker}:** ${price} (${change}), forgalom ${turnover}`,
+      compareOutro: "A számok önmagukban nem döntik el, melyik „jobb”: más a kockázatuk, az iparáguk és a hozamprofiljuk.",
+      isOpen: "A tőzsde **jelenleg nyitva van**.",
+      isClosed: "A tőzsde **jelenleg zárva van**.",
+      hoursText: (open, close) =>
+        `A folyamatos kereskedés **hétfőtől péntekig ${open}–${close}** között zajlik (budapesti idő szerint). Hétvégén és ünnepnapokon a piac zárva tart.\n\nA főoldalon a piaci státusz mindig mutatja a hátralévő időt vagy a következő nyitást.`,
+      hoursFollowups: ["Melyek ma a legnagyobb nyertesek?", "Mi az a részvény?", "Hogyan vásárolhatok részvényt?"],
+      moversText: (label) =>
+        `A mai nap **legnagyobb részvény-${label}** a késleltetett árfolyamok alapján:\n\nA lista a Főoldalon is megtalálható, ott forgalom szerint is rendezheted. Az árfolyamok késleltetettek, a változás az előző záráshoz viszonyított.`,
+      winners: "nyertesei",
+      losers: "vesztesei",
+      upFollowups: ["Melyek ma a legnagyobb vesztesek?", "Mi az a P/E mutató?"],
+      downFollowups: ["Melyek ma a legnagyobb nyertesek?"],
+      notes: {
+        index: "\n\nAz index egy kosár teljesítményét összegzi, ezért közvetlenül nem vásárolható, de ETF-en keresztül követhető.",
+        bond: "\n\nA kötvény árfolyama a névérték százalékában szerepel.",
+        certificate: "\n\nA certifikátok tőkeáttételes termékek lehetnek, a veszteség gyorsan nőhet.",
+      },
+      instrumentFollowups: ["Hogyan vásárolhatok részvényt?", "Mi az a P/E mutató?", "Mi az az osztalék?"],
+      compareFollowups: ["Mi az a P/E mutató?", "Mi az az osztalék?", "Mi a diverzifikáció?"],
+    },
+    en: {
+      rose: "risen",
+      fell: "fallen",
+      unchanged: "not changed",
+      priceLine: (name, ticker, price, direction, change) =>
+        `The price of **${name}** (${ticker}) is currently **${price}**. Compared with the previous close it has ${direction}: **${change}**.`,
+      dayRange: "Daily range",
+      turnover: "Turnover",
+      data: "Data",
+      delayed: "delayed price",
+      realtime: "real-time price",
+      compareIntro: "Here are the key data of the two products side by side:",
+      compareRow: (ticker, price, change, turnover) => `- **${ticker}:** ${price} (${change}), turnover ${turnover}`,
+      compareOutro: "The numbers alone do not decide which one is “better”: their risk, industry and return profile differ.",
+      isOpen: "The exchange is **currently open**.",
+      isClosed: "The exchange is **currently closed**.",
+      hoursText: (open, close) =>
+        `Continuous trading takes place **Monday to Friday, ${open}–${close}** (Budapest time). The market is closed on weekends and public holidays.\n\nOn the home screen the market status always shows the time left or the next opening.`,
+      hoursFollowups: ["What are today's biggest gainers?", "What is a share?", "How do I buy shares?"],
+      moversText: (label) =>
+        `Today's **biggest share ${label}** based on delayed prices:\n\nThe list is also on the Home screen, where you can sort it by turnover too. Prices are delayed, and the change is relative to the previous close.`,
+      winners: "gainers",
+      losers: "losers",
+      upFollowups: ["What are today's biggest losers?", "What is the P/E ratio?"],
+      downFollowups: ["What are today's biggest gainers?"],
+      notes: {
+        index: "\n\nAn index summarizes the performance of a basket, so it cannot be bought directly, but it can be followed through an ETF.",
+        bond: "\n\nA bond's price is shown as a percentage of its nominal value.",
+        certificate: "\n\nCertificates can be leveraged products, and losses can grow quickly.",
+      },
+      instrumentFollowups: ["How do I buy shares?", "What is the P/E ratio?", "What is a dividend?"],
+      compareFollowups: ["What is the P/E ratio?", "What is a dividend?", "What is diversification?"],
+    },
+  };
+
+  const isEnglish = () => window.i18n.getLanguage() === "en";
+  const str = () => (isEnglish() ? STRINGS.en : STRINGS.hu);
+
+  // Hungarian seed, with the English texts laid over it in English mode. The
+  // Hungarian keys stay active so a question in either language is understood.
+  function getSeed() {
+    const hu = window.SEED_ASSIST;
+    const en = window.SEED_ASSIST_EN;
+    if (!isEnglish() || !en) return hu;
+    const topics = hu.topics.map((topic) => {
+      const own = en.topics[topic.id];
+      return own ? Object.assign({}, topic, own, { keys: topic.keys.concat(own.keys) }) : topic;
+    });
+    return Object.assign({}, hu, en, {
+      topics,
+      adviceKeys: hu.adviceKeys.concat(en.adviceKeys),
+      greetingKeys: hu.greetingKeys.concat(en.greetingKeys),
+      thanksKeys: hu.thanksKeys.concat(en.thanksKeys),
+    });
+  }
   // Name words that never identify a company on their own.
   const GENERIC_WORDS = ["magyar", "nyrt", "zrt", "holding", "index", "bux", "etf", "allamkotveny", "jelzalogkotveny"];
   const MAX_CARDS = 3;
@@ -56,13 +150,14 @@ window.assistReply = (function () {
     const price = money.formatPrice(instrument.price, instrument.unit);
     const low = money.formatPrice(instrument.dayLow, instrument.unit);
     const high = money.formatPrice(instrument.dayHigh, instrument.unit);
-    const direction = change > 0 ? "emelkedett" : change < 0 ? "csökkent" : "nem változott";
+    const words = str();
+    const direction = change > 0 ? words.rose : change < 0 ? words.fell : words.unchanged;
     const lines = [
-      `**${instrument.name}** (${instrument.ticker}) árfolyama jelenleg **${price}**. Az előző záráshoz képest ${direction}: **${money.formatPercent(change)}**.`,
-      `- **Napi sáv:** ${low} – ${high}`,
+      words.priceLine(instrument.name, instrument.ticker, price, direction, money.formatPercent(change)),
+      `- **${words.dayRange}:** ${low} – ${high}`,
     ];
-    if (instrument.turnover > 0) lines.push(`- **Forgalom:** ${money.formatCompactMoney(instrument.turnover)}`);
-    lines.push(instrument.delayed ? "- **Adat:** késleltetett árfolyam" : "- **Adat:** valós idejű árfolyam");
+    if (instrument.turnover > 0) lines.push(`- **${words.turnover}:** ${money.formatCompactMoney(instrument.turnover)}`);
+    lines.push(`- **${words.data}:** ${instrument.delayed ? words.delayed : words.realtime}`);
     return lines.join("\n");
   }
 
@@ -70,9 +165,9 @@ window.assistReply = (function () {
     const money = window.moneyModule;
     const rows = list.map((instrument) => {
       const change = window.storage.getChangePercent(instrument);
-      return `- **${instrument.ticker}:** ${money.formatPrice(instrument.price, instrument.unit)} (${money.formatPercent(change)}), forgalom ${money.formatCompactMoney(instrument.turnover)}`;
+      return str().compareRow(instrument.ticker, money.formatPrice(instrument.price, instrument.unit), money.formatPercent(change), money.formatCompactMoney(instrument.turnover));
     });
-    return "Itt a két termék legfontosabb adatai egymás mellett:\n\n" + rows.join("\n") + "\n\nA számok önmagukban nem döntik el, melyik „jobb”: más a kockázatuk, az iparáguk és a hozamprofiljuk.";
+    return str().compareIntro + "\n\n" + rows.join("\n") + "\n\n" + str().compareOutro;
   }
 
   // --- Dynamic topics ----------------------------------------------------------
@@ -80,11 +175,12 @@ window.assistReply = (function () {
   function marketHoursReply() {
     const hours = window.storage.getMarketHours();
     const status = window.marketStatusModule ? window.marketStatusModule.getStatus() : null;
-    const now = status ? (status.open ? "A tőzsde **jelenleg nyitva van**." : "A tőzsde **jelenleg zárva van**.") : "";
+    const words = str();
+    const now = status ? (status.open ? words.isOpen : words.isClosed) : "";
     return {
-      text: `${now}\n\nA folyamatos kereskedés **hétfőtől péntekig ${hours.open}–${hours.close}** között zajlik (budapesti idő szerint). Hétvégén és ünnepnapokon a piac zárva tart.\n\nA főoldalon a piaci státusz mindig mutatja a hátralévő időt vagy a következő nyitást.`,
+      text: `${now}\n\n${words.hoursText(hours.open, hours.close)}`,
       blocks: [],
-      followups: ["Melyek ma a legnagyobb nyertesek?", "Mi az a részvény?", "Hogyan vásárolhatok részvényt?"],
+      followups: words.hoursFollowups,
     };
   }
 
@@ -93,11 +189,12 @@ window.assistReply = (function () {
       .getInstruments("share")
       .sort((a, b) => window.storage.getChangePercent(b) - window.storage.getChangePercent(a));
     const picked = (direction === "down" ? sorted.reverse() : sorted).slice(0, MAX_CARDS);
-    const label = direction === "down" ? "vesztesei" : "nyertesei";
+    const words = str();
+    const label = direction === "down" ? words.losers : words.winners;
     return {
-      text: `A mai nap **legnagyobb részvény-${label}** a késleltetett árfolyamok alapján:\n\nA lista a Főoldalon is megtalálható, ott forgalom szerint is rendezheted. Az árfolyamok késleltetettek, a változás az előző záráshoz viszonyított.`,
+      text: words.moversText(label),
       blocks: [{ type: "instruments", tickers: picked.map((instrument) => instrument.ticker) }],
-      followups: direction === "down" ? ["Melyek ma a legnagyobb nyertesek?"] : ["Melyek ma a legnagyobb vesztesek?", "Mi az a P/E mutató?"],
+      followups: direction === "down" ? words.downFollowups : words.upFollowups,
     };
   }
 
@@ -114,44 +211,42 @@ window.assistReply = (function () {
 
   function instrumentReply(instruments) {
     const main = instruments[0];
-    const categoryNote = {
-      index: "\n\nAz index egy kosár teljesítményét összegzi, ezért közvetlenül nem vásárolható, de ETF-en keresztül követhető.",
-      bond: "\n\nA kötvény árfolyama a névérték százalékában szerepel.",
-      certificate: "\n\nA certifikátok tőkeáttételes termékek lehetnek, a veszteség gyorsan nőhet.",
-    }[main.category] || "";
+    const categoryNote = str().notes[main.category] || "";
     return {
       text: describeInstrument(main) + categoryNote,
       blocks: [{ type: "instruments", tickers: instruments.slice(0, MAX_CARDS).map((i) => i.ticker) }],
-      followups: ["Hogyan vásárolhatok részvényt?", "Mi az a P/E mutató?", "Mi az az osztalék?"],
+      followups: str().instrumentFollowups,
     };
   }
 
   function buildReply(question) {
+    const seed = getSeed();
     const normalized = normalize(question);
     const instruments = findInstruments(normalized);
 
     if (matchesAny(normalized, seed.adviceKeys)) {
       return { text: seed.adviceText, blocks: [], followups: seed.adviceFollowups };
     }
-    if (matchesAny(normalized, ["nyitva", "nyitvatartas", "mikor nyit", "mikor zar", "zarva", "kereskedesi ido", "nyitas"])) {
+    if (matchesAny(normalized, HU_MARKET_HOURS_KEYS.concat(seed.marketHoursKeys || []))) {
       return marketHoursReply();
     }
-    if (matchesAny(normalized, ["nyertes", "legjobban emelked", "legtobbet emelked", "emelked"])) {
+    if (matchesAny(normalized, HU_GAINERS_KEYS.concat(seed.gainersKeys || []))) {
       return topMoversReply("up");
     }
-    if (matchesAny(normalized, ["vesztes", "legjobban esett", "legtobbet esett", "esett", "csokken"])) {
+    if (matchesAny(normalized, HU_LOSERS_KEYS.concat(seed.losersKeys || []))) {
       return topMoversReply("down");
     }
     if (instruments.length >= 2) {
       return {
         text: compareInstruments(instruments.slice(0, MAX_CARDS)),
         blocks: [{ type: "instruments", tickers: instruments.slice(0, MAX_CARDS).map((i) => i.ticker) }],
-        followups: ["Mi az a P/E mutató?", "Mi az az osztalék?", "Mi a diverzifikáció?"],
+        followups: str().compareFollowups,
       };
     }
 
     // "Hogyan vásárolhatok részvényt?" is about buying, not about what a share is.
-    const ordered = seed.topics.filter((c) => c.id === "howto-buy").concat(seed.topics.filter((c) => c.id !== "howto-buy"));
+    const first = seed.priority || ["howto-buy"];
+    const ordered = first.map((id) => seed.topics.find((c) => c.id === id)).filter(Boolean).concat(seed.topics.filter((c) => !first.includes(c.id)));
     const topic = ordered.find((candidate) => matchesAny(normalized, candidate.keys));
     if (topic && !(instruments.length === 1 && containsPhrase(normalized, instruments[0].ticker) && topic.id === "index")) {
       return topicReply(topic, instruments);
@@ -171,5 +266,7 @@ window.assistReply = (function () {
       .slice(0, 8);
   }
 
-  return { buildReply, searchInstruments, normalize };
+  const getSuggestions = () => getSeed().suggestions;
+
+  return { buildReply, searchInstruments, normalize, getSuggestions };
 })();

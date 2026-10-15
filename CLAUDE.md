@@ -50,9 +50,9 @@ Never put `padding-top` on `body`, `.iphone-screen` or any scroll container that
 
 ## i18n
 
-Language: hu only, for now. Translations live in `locales/hu.js`, which assigns a flat, dot-notation object to `window.LOCALES.hu` (e.g. `window.LOCALES.hu = { "nav.home": "...", "login.submit_button": "..." }`), never full sentences as keys. Plain `.js` (not `.json`) because `file://` pages can't `fetch()` JSON.
+Languages: hu (default) and en. Translations live in `locales/hu.js`, which assigns a flat, dot-notation object to `window.LOCALES.hu` (e.g. `window.LOCALES.hu = { "nav.home": "...", "login.submit_button": "..." }`), never full sentences as keys. Plain `.js` (not `.json`) because `file://` pages can't `fetch()` JSON.
 
-The table is split by area: `locales/hu.js` holds the shared keys (nav, dates, states, common modules) and `hu-assist.js`, `hu-education.js`, `hu-product.js`, `hu-market.js`, `hu-account.js`, `hu-meta.js` extend it with `Object.assign(window.LOCALES.hu, {...})`. A new key goes into the file of the area it belongs to (`hu.js` only if several areas share it); a new area gets its own `hu-<area>.js`. Every page must include `locales/hu.js` first, then all the `hu-*.js` files, before `modules/i18n/i18n.js`. A new language repeats the same file set (`en.js`, `en-assist.js`, ...).
+The table is split by area: `locales/hu.js` holds the shared keys (nav, dates, states, common modules) and `hu-assist.js`, `hu-education.js`, `hu-product.js`, `hu-market.js`, `hu-account.js`, `hu-meta.js` extend it with `Object.assign(window.LOCALES.hu, {...})`. A new key goes into the file of the area it belongs to (`hu.js` only if several areas share it); a new area gets its own `hu-<area>.js`. Every page must include `locales/hu.js` first, then all the `hu-*.js` files, before `modules/i18n/i18n.js`. English is the same file set under `locales/en*.js` (`en.js`, `en-assist.js`, ...), loaded by every page right after the `hu-*.js` files. Every key must exist in both languages: add it to `hu-<area>.js` and `en-<area>.js` together.
 
 The system (`modules/i18n/i18n.js`, `t()`, `window.LOCALES`) is built to support more languages later — adding one should only require dropping in a new `locales/<code>.js` file and linking it from pages, no logic changes. Don't hardcode `hu` outside of `locales/hu.js` and the default-language fallback in `i18n.js`.
 
@@ -60,7 +60,9 @@ The system (`modules/i18n/i18n.js`, `t()`, `window.LOCALES`) is built to support
 
 - `initI18n()` — call once on page load
 - `t(key)` — returns the translated string for the current language
-- `setLanguage(code)` / `getLanguage()` — switch/read current language, persisted in `localStorage`
+- `setLanguage(code)` / `getLanguage()` — switch/read current language, persisted in `localStorage`. `initI18n()` also sets `<html lang>` and the page `<title>` (`<title data-i18n="key">`)
+
+Mock content (seeds) stays Hungarian in `modules/storage/seed-*.js`. `modules/storage/seed-en.js` holds its English text (an exact-string dictionary plus a few pattern rules) and `storage.js` passes everything it returns through `window.SEED_EN.localize()`; a new mock string in a seed needs an entry there. The Bet assist answers have their own English file, `seed-assist-en.js` (merged by `pages/assist/assist-reply.js`, with English keywords). Number formatting follows the language in `modules/money`.
 
 Pages/modules must render text via `t('some.key')`, never hardcoded strings. This module has no paired CSS (logic-only, exception to the module js+css pairing rule).
 

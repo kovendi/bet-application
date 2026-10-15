@@ -3,18 +3,27 @@ const t = window.i18n.t;
 
 const contentEl = document.getElementById("pers-content");
 const user = window.storage.getCurrentUser();
-const MAX = window.storage.HOME_CARDS_LIMIT;
+
+// Without ?target the home overview is edited; ?target=small|medium|large edits that widget (ÁF_0033).
+const target = new URLSearchParams(window.location.search).get("target");
+const widgetSize = target in window.storage.WIDGET_LIMITS ? target : null;
+const MAX = widgetSize ? window.storage.WIDGET_LIMITS[widgetSize] : window.storage.HOME_CARDS_LIMIT;
+const keyPrefix = widgetSize ? "home_edit.widget_" : "home_edit.";
 
 const fill = (key, values) => Object.keys(values).reduce((text, name) => text.replace(`{${name}}`, values[name]), t(key));
 
 document.getElementById("pers-top-appbar").appendChild(
-  window.topAppbarModule.renderTopAppbar({ title: t("home_edit.title"), onBack: () => window.pageTransition.back() }),
+  window.topAppbarModule.renderTopAppbar({ title: widgetSize ? fill("home_edit.widget_title", { size: t("widgets." + widgetSize) }) : t("home_edit.title"), onBack: () => window.pageTransition.back() }),
 );
 
-let tickers = user ? window.storage.getHomeCards(user.id) : [];
+const loadTickers = () => (widgetSize ? window.storage.getWidgetTickers(user.id, widgetSize) : window.storage.getHomeCards(user.id));
+const saveTickers = (list) => (widgetSize ? window.storage.setWidgetTickers(user.id, widgetSize, list) : window.storage.setHomeCards(user.id, list));
+const defaultTickers = () => (widgetSize ? window.storage.DEFAULT_WIDGETS[widgetSize] : window.storage.DEFAULT_HOME_CARDS);
+
+let tickers = user ? loadTickers() : [];
 
 function commit() {
-  window.storage.setHomeCards(user.id, tickers);
+  saveTickers(tickers);
   render();
 }
 
@@ -55,7 +64,7 @@ function renderCurrent() {
     name.textContent = instrument.ticker;
     const sub = document.createElement("span");
     sub.className = "hedit-sub";
-    sub.textContent = index === 0 ? t("home_edit.main_card") : instrument.name;
+    sub.textContent = index === 0 && !widgetSize ? t("home_edit.main_card") : instrument.name;
     const text = document.createElement("span");
     text.className = "hedit-text";
     text.append(name, sub);
@@ -121,18 +130,18 @@ function renderCandidates() {
 function render() {
   const title = document.createElement("h2");
   title.className = "pers-section-title";
-  title.textContent = `${t("home_edit.current_title")} · ${fill("home_edit.counter", { count: tickers.length, max: MAX })}`;
+  title.textContent = `${widgetSize ? t("widgets." + widgetSize) : t("home_edit.current_title")} · ${fill(keyPrefix + "counter", { count: tickers.length, max: MAX })}`;
 
   const hint = document.createElement("p");
   hint.className = "pers-note";
-  hint.textContent = tickers.length >= MAX ? fill("home_edit.full", { max: MAX }) : t("home_edit.hint");
+  hint.textContent = tickers.length >= MAX ? fill(keyPrefix + "full", { max: MAX }) : t(keyPrefix + "hint");
 
   const reset = window.buttonModule.renderButton({
     label: t("home_edit.reset"),
     variant: "outline",
     onClick: () => {
-      tickers = window.storage.DEFAULT_HOME_CARDS.slice();
-      window.storage.setHomeCards(user.id, null);
+      tickers = defaultTickers().slice();
+      saveTickers(null);
       window.toastModule.showToast({ message: t("home_edit.reset_done"), icon: "check" });
       render();
     },

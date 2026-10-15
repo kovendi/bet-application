@@ -36,7 +36,7 @@ window.assistRender = (function () {
   }
 
   function formatTime(ts) {
-    return new Date(ts).toLocaleTimeString("hu-HU", { hour: "2-digit", minute: "2-digit" });
+    return new Date(ts).toLocaleTimeString(window.i18n.getLanguage() === "en" ? "en-GB" : "hu-HU", { hour: "2-digit", minute: "2-digit" });
   }
 
   // --- Markup -> DOM --------------------------------------------------------------

@@ -21,6 +21,12 @@
 //   </script>
 
 window.moneyModule = (function () {
+  // Number grouping/decimal separators follow the app language (hu: "1 234,5", en: "1,234.5").
+  const NUMBER_LOCALES = { hu: "hu-HU", en: "en-GB" };
+  function numberLocale() {
+    return NUMBER_LOCALES[window.i18n ? window.i18n.getLanguage() : "hu"] || NUMBER_LOCALES.hu;
+  }
+
   // huf: integer number of forints. Negative values are supported (formatted
   // with a proper minus sign "−", not a hyphen) unless `sign` overrides the
   // prefix.
@@ -31,7 +37,7 @@ window.moneyModule = (function () {
   // options.withCurrency: set false to omit the trailing " Ft".
   function formatMoney(huf, options = {}) {
     const { sign, withCurrency = true } = options;
-    const formatted = Math.abs(huf).toLocaleString("hu-HU", {
+    const formatted = Math.abs(huf).toLocaleString(numberLocale(), {
       maximumFractionDigits: 0,
     });
     const prefix = sign !== undefined ? sign : huf < 0 ? "−" : "";
@@ -47,7 +53,7 @@ window.moneyModule = (function () {
   // Non-money numbers shown next to prices: index points, bond prices in % of
   // par, turnover in millions. Fixed decimals, Hungarian grouping/comma.
   function formatNumber(value, decimals = 2) {
-    return Math.abs(value).toLocaleString("hu-HU", {
+    return Math.abs(value).toLocaleString(numberLocale(), {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
@@ -63,7 +69,8 @@ window.moneyModule = (function () {
 
   // Large turnover figures in short form: "8,24 Mrd Ft", "512 M Ft".
   function formatCompactMoney(huf) {
-    if (huf >= 1e9) return `${formatNumber(huf / 1e9, 2)} Mrd Ft`;
+    const billion = window.i18n && window.i18n.getLanguage() === "en" ? "bn" : "Mrd";
+    if (huf >= 1e9) return `${formatNumber(huf / 1e9, 2)} ${billion} Ft`;
     if (huf >= 1e6) return `${formatNumber(huf / 1e6, 0)} M Ft`;
     return formatMoney(huf);
   }

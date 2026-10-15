@@ -6,6 +6,8 @@ Object.assign(window.LOCALES.hu, {
   "edu.search_hint_title": "Keress az anyagok között",
   "edu.search_hint_message": "Írj be legalább 2 karaktert a címből vagy a témából.",
   "edu.search_empty_message": "Ehhez a kereséshez nem tartozik anyag. Próbálj másik szót.",
+  "edu.search_title": "Edukáció keresés",
+  "edu.detail_title": "Edukációs anyag",
   "edu.topics": "Téma",
   "edu.topic_all": "Mind",
   "edu.levels": "Szint",

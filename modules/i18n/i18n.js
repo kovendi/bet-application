@@ -20,6 +20,9 @@ window.i18n = (function () {
   function initI18n() {
     const stored = localStorage.getItem(STORAGE_KEY);
     currentLang = stored && window.LOCALES[stored] ? stored : DEFAULT_LANG;
+    document.documentElement.lang = currentLang;
+    const titleEl = document.querySelector("title[data-i18n]");
+    if (titleEl) document.title = t(titleEl.getAttribute("data-i18n"));
   }
 
   function t(key) {

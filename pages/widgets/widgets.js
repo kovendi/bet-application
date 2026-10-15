@@ -6,13 +6,10 @@ document.querySelectorAll("[data-i18n]").forEach((el) => {
   el.textContent = t(el.dataset.i18n);
 });
 
-// Default order from the tender (ÁF_001): BUX, CETOP NTR, BUMIX, then OTP, MOL, Richter, Telekom.
-// Proposed instrument count per widget size (ÁF_001–ÁF_0021): small 2, medium 4, large 8.
-const WIDGETS = [
-  { size: "small", tickers: ["BUX", "CETOP NTR"] },
-  { size: "medium", tickers: ["BUX", "CETOP NTR", "BUMIX", "OTP"] },
-  { size: "large", tickers: ["BUX", "CETOP NTR", "BUMIX", "OTP", "MOL", "RICHTER", "MTELEKOM", "OPUS"] },
-];
+const user = window.storage.getCurrentUser();
+// Default order from the tender (ÁF_001) and the per-size counts live in storage;
+// a registered user can customize each size (ÁF_0033).
+const SIZES = ["small", "medium", "large"];
 
 function directionOf(change) {
   return change > 0 ? "up" : change < 0 ? "down" : "flat";
@@ -72,13 +69,21 @@ function renderWidget({ size, tickers }) {
 }
 
 const list = document.getElementById("widgets-list");
-WIDGETS.forEach((config) => {
+SIZES.map((size) => ({ size, tickers: window.storage.getWidgetTickers(user && user.id, size) })).forEach((config) => {
   const section = document.createElement("section");
   section.className = "widgets-item";
-  section.append(
+  const head = document.createElement("div");
+  head.className = "widgets-head";
+  const editLink = document.createElement("a");
+  editLink.className = "widgets-edit";
+  editLink.href = `../home-edit/home-edit.html?target=${config.size}`;
+  editLink.textContent = t("widgets.edit");
+  editLink.setAttribute("aria-label", `${t("widgets.edit")} – ${t("widgets." + config.size)}`);
+  head.append(
     renderText("h2", "widgets-label", `${t("widgets." + config.size)} · ${config.tickers.length} ${t("widgets.instruments")}`),
-    renderWidget(config),
+    editLink,
   );
+  section.append(head, renderWidget(config));
   list.appendChild(section);
   window.motion.fadeIn(section);
 });

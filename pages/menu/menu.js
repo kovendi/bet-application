@@ -53,6 +53,12 @@ function renderMenu() {
           },
         },
         {
+          icon: "sliders",
+          title: window.i18n.t("menu.settings_title"),
+          description: window.i18n.t("menu.settings_description"),
+          onSelect: go("../settings/settings.html"),
+        },
+        {
           icon: "logout",
           title: window.i18n.t("menu.logout_title"),
           description: window.i18n.t("menu.logout_description"),

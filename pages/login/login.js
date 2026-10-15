@@ -57,7 +57,7 @@ function providerLogo(provider) {
     onClick: () => {
       window.buttonModule.setButtonLoading(button, true);
       window.mockNetwork.delay().then(() => {
-        window.storage.setCurrentUser("demouser");
+        window.storage.setCurrentUser("demouser", provider);
         goHome();
       });
     },
@@ -78,6 +78,42 @@ document.getElementById("login-guest-button").appendChild(
     },
   }),
 );
+
+document.getElementById("login-forgot").appendChild(
+  window.textButtonModule.renderTextButton({
+    label: window.i18n.t("login.forgot"),
+    onClick: () => window.pageTransition.go("../forgot-password/forgot-password.html"),
+  }),
+);
+
+const registerPrompt = document.createElement("span");
+registerPrompt.className = "login-register-prompt";
+registerPrompt.textContent = window.i18n.t("login.register_prompt");
+document.getElementById("login-register").append(
+  registerPrompt,
+  window.textButtonModule.renderTextButton({
+    label: window.i18n.t("login.register"),
+    onClick: () => window.pageTransition.go("../register/register.html"),
+  }),
+);
+
+// Biometric login (FK_005) is offered once a user turned it on after registering.
+const biometricUser = window.storage.getUsers().find((user) => user.biometric);
+if (biometricUser) {
+  const biometricButton = window.buttonModule.renderButton({
+    label: window.i18n.t("login.biometric"),
+    variant: "outline",
+    iconNode: window.iconModule.renderIcon("shield"),
+    onClick: () => {
+      window.buttonModule.setButtonLoading(biometricButton, true);
+      window.mockNetwork.delay().then(() => {
+        window.storage.setCurrentUser(biometricUser.id);
+        goHome();
+      });
+    },
+  });
+  document.getElementById("login-biometric").appendChild(biometricButton);
+}
 
 // Validation runs in JS (the form is `novalidate`): empty fields get an inline
 // message; a wrong password shows a banner above the button and keeps
@@ -115,6 +151,30 @@ function showLoginError(messageKey) {
   passwordInput.select();
 }
 
+// After five failed attempts the button locks for 5, 10, 30, then 60 seconds (FK_0072).
+// The banner counts down; the lock lives in storage, so a reload does not skip it.
+function showLock(seconds) {
+  submitButton.disabled = true;
+  const banner = window.bannerModule.renderBanner({ text: "", variant: "warning", icon: "clock" });
+  errorSlot.replaceChildren(banner);
+  window.mockNetwork.countdown(
+    seconds,
+    (left) => {
+      banner.querySelector(".banner-text").textContent = window.i18n.t("login.locked").replace("{seconds}", left);
+    },
+    () => {
+      submitButton.disabled = false;
+      errorSlot.replaceChildren();
+    },
+  );
+}
+
+function applyExistingLock() {
+  const seconds = window.storage.getLoginLockSeconds();
+  if (seconds > 0) showLock(seconds);
+}
+applyExistingLock();
+
 function signIn(username, password) {
   return window.mockNetwork.request("login", () => {
     const user = window.storage.findUserByUsername(username);
@@ -125,15 +185,23 @@ function signIn(username, password) {
 document.getElementById("login-form").addEventListener("submit", (event) => {
   event.preventDefault();
   errorSlot.replaceChildren();
+  if (window.storage.getLoginLockSeconds() > 0) return applyExistingLock();
   if (!validateFields()) return;
 
   window.buttonModule.setButtonLoading(submitButton, true);
   signIn(usernameInput.value.trim(), passwordInput.value)
     .then((user) => {
       if (!user) {
-        showLoginError("login.error");
+        const lockSeconds = window.storage.registerLoginFailure();
+        if (lockSeconds > 0) {
+          window.buttonModule.setButtonLoading(submitButton, false);
+          showLock(lockSeconds);
+        } else {
+          showLoginError("login.error");
+        }
         return;
       }
+      window.storage.clearLoginFailures();
       window.storage.setCurrentUser(user.id);
       goHome();
     })

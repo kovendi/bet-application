@@ -3,8 +3,16 @@ window.i18n.initI18n();
 const t = window.i18n.t;
 const user = window.storage.getCurrentUser();
 
-function comingSoon() {
-  window.toastModule.showToast({ message: t("menu.coming_soon"), icon: "info" });
+// FK_0096: the privacy notice lives on bet.hu, the app only redirects there.
+const PRIVACY_URL = "https://bet.hu";
+
+function openPrivacy() {
+  window.toastModule.showToast({ message: t("profile.privacy_opened"), icon: "info" });
+  window.open(PRIVACY_URL, "_blank", "noopener");
+}
+
+function openAccountFlow(flow) {
+  window.pageTransition.go("../account-change/account-change.html?flow=" + flow);
 }
 
 // Account actions need a registered user; guests get the registration sheet.
@@ -93,12 +101,14 @@ function confirmDelete() {
     message: t("profile.delete_confirm_message"),
     confirmLabel: t("profile.delete_confirm_button"),
     variant: "danger",
-    onConfirm: () => {
-      window.storage.deleteUser(user.id);
-      window.storage.logout();
-      window.location.href = "../login/login.html";
-    },
+    onConfirm: () => openAccountFlow("delete"),
   });
+}
+
+// FK_0092: hidden for Google / Apple / Portal logins without a separate app password.
+function passwordItems() {
+  if (user && !window.storage.canChangePassword()) return [];
+  return [{ icon: "lock", title: t("profile.change_password_title"), onSelect: requireUser(() => openAccountFlow("password")) }];
 }
 
 function renderMenuGroups() {
@@ -128,9 +138,9 @@ function renderMenuGroups() {
     {
       title: t("profile.group_account"),
       items: [
-        { icon: "mail", title: t("profile.change_email_title"), onSelect: requireUser(comingSoon) },
-        { icon: "lock", title: t("profile.change_password_title"), onSelect: requireUser(comingSoon) },
-        { icon: "shield", title: t("profile.privacy_title"), onSelect: comingSoon },
+        { icon: "mail", title: t("profile.change_email_title"), onSelect: requireUser(() => openAccountFlow("email")) },
+        ...passwordItems(),
+        { icon: "shield", title: t("profile.privacy_title"), onSelect: openPrivacy },
       ],
     },
     {

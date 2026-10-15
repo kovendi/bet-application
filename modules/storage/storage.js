@@ -16,6 +16,7 @@ window.storage = (function () {
   // currently logged in), not a "table" of app data, so it shouldn't live
   // inside the same JSON blob as the seeded db.
   const SESSION_KEY = "appSession";
+  const PROVIDER_KEY = "appSessionProvider";
 
   const DEMO_USER = { id: "demouser", username: "demo@example.com", password: "12345678", name: "Demo" };
 
@@ -313,6 +314,67 @@ window.storage = (function () {
     saveDb(db);
   }
 
+  // Registration in progress (FK_0064: an abandoned registration can be continued) — one per
+  // device, kept until the e-mail code is confirmed or the user starts over.
+  function getPendingRegistration() {
+    return getDb().pendingRegistration || null;
+  }
+
+  function setPendingRegistration(pending) {
+    const db = getDb();
+    if (pending) db.pendingRegistration = pending;
+    else delete db.pendingRegistration;
+    saveDb(db);
+  }
+
+  // Login lock (FK_0072): from the 5th failed attempt on the user waits 5, 10, 30, then 60 s.
+  const LOGIN_FREE_ATTEMPTS = 5;
+  const LOGIN_LOCK_SECONDS = [5, 10, 30, 60];
+
+  function getLoginLockSeconds() {
+    const lock = getDb().loginLock;
+    return lock && lock.until > Date.now() ? Math.ceil((lock.until - Date.now()) / 1000) : 0;
+  }
+
+  function registerLoginFailure() {
+    const db = getDb();
+    const failures = ((db.loginLock && db.loginLock.failures) || 0) + 1;
+    const step = Math.min(failures - LOGIN_FREE_ATTEMPTS, LOGIN_LOCK_SECONDS.length - 1);
+    const until = failures >= LOGIN_FREE_ATTEMPTS ? Date.now() + LOGIN_LOCK_SECONDS[step] * 1000 : 0;
+    db.loginLock = { failures, until };
+    saveDb(db);
+    return getLoginLockSeconds();
+  }
+
+  function clearLoginFailures() {
+    const db = getDb();
+    delete db.loginLock;
+    saveDb(db);
+  }
+
+  // Widgets (ÁF_0033): ordered tickers per widget size. Defaults come from the developers
+  // (ÁF_001); the instrument count per size is fixed (small 2, medium 4, large 8).
+  const WIDGET_LIMITS = { small: 2, medium: 4, large: 8 };
+  const DEFAULT_WIDGETS = {
+    small: ["BUX", "CETOP NTR"],
+    medium: ["BUX", "CETOP NTR", "BUMIX", "OTP"],
+    large: ["BUX", "CETOP NTR", "BUMIX", "OTP", "MOL", "RICHTER", "MTELEKOM", "OPUS"],
+  };
+
+  function getWidgetTickers(userId, size) {
+    const saved = userId ? ((getDb().widgets || {})[userId] || {})[size] : null;
+    return (saved || DEFAULT_WIDGETS[size]).slice();
+  }
+
+  function setWidgetTickers(userId, size, tickers) {
+    const db = getDb();
+    db.widgets = db.widgets || {};
+    db.widgets[userId] = db.widgets[userId] || {};
+    if (tickers) db.widgets[userId][size] = tickers.slice();
+    else delete db.widgets[userId][size];
+    saveDb(db);
+  }
+
   // Bet assist AI chat state per registered user: accepted disclaimer, the
   // conversations and the daily question counter (AI_000–AI_007).
   function getAssist(userId) {
@@ -327,8 +389,24 @@ window.storage = (function () {
     saveDb(db);
   }
 
-  function setCurrentUser(id) {
+  // provider: "google" | "apple" | "bet_portal" for a social / Portal login,
+  // omitted for e-mail + password and biometric logins.
+  function setCurrentUser(id, provider) {
     localStorage.setItem(SESSION_KEY, id);
+    if (provider) localStorage.setItem(PROVIDER_KEY, provider);
+    else localStorage.removeItem(PROVIDER_KEY);
+  }
+
+  function getLoginProvider() {
+    return localStorage.getItem(PROVIDER_KEY);
+  }
+
+  // FK_0092: a Google / Apple login may change the password only if the user also
+  // set a separate password in the app (user.ownPassword). The BÉT Portal login is
+  // a separate account, so the same rule applies.
+  function canChangePassword() {
+    const user = getCurrentUser();
+    return Boolean(user) && (!getLoginProvider() || Boolean(user.ownPassword));
   }
 
   function getCurrentUser() {
@@ -338,7 +416,11 @@ window.storage = (function () {
 
   function logout() {
     localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(PROVIDER_KEY);
   }
+
+  // Mock content comes from Hungarian seeds; in English mode seed-en.js swaps the text.
+  const localize = (value) => (window.SEED_EN ? window.SEED_EN.localize(value) : value);
 
   return {
     getDb,
@@ -349,19 +431,19 @@ window.storage = (function () {
     findUserById,
     updateUser,
     deleteUser,
-    getInstruments,
-    getInstrument,
+    getInstruments: (category) => localize(getInstruments(category)),
+    getInstrument: (ticker) => localize(getInstrument(ticker)),
     getChangePercent,
     getPriceSeries,
     getDayCurve,
-    getDisclosures,
-    getProductDetail,
+    getDisclosures: (ticker) => localize(getDisclosures(ticker)),
+    getProductDetail: (ticker) => localize(getProductDetail(ticker)),
     getProductMarkers,
-    getProductDisclosures,
+    getProductDisclosures: (ticker) => localize(getProductDisclosures(ticker)),
     logBrokerClick,
-    getCarouselItems,
-    getEducation,
-    getEducationItem,
+    getCarouselItems: () => localize(getCarouselItems()),
+    getEducation: () => localize(getEducation()),
+    getEducationItem: (id) => localize(getEducationItem(id)),
     getBrokers,
     getMarketHours,
     getFavorites,
@@ -374,16 +456,27 @@ window.storage = (function () {
     getAlerts,
     addAlert,
     removeAlert,
-    getNotifications,
+    getNotifications: (userId) => localize(getNotifications(userId)),
     markNotificationRead,
     markAllNotificationsRead,
     DEFAULT_HOME_CARDS,
     HOME_CARDS_LIMIT,
     getHomeCards,
     setHomeCards,
+    getPendingRegistration,
+    setPendingRegistration,
+    getLoginLockSeconds,
+    registerLoginFailure,
+    clearLoginFailures,
+    WIDGET_LIMITS,
+    DEFAULT_WIDGETS,
+    getWidgetTickers,
+    setWidgetTickers,
     getAssist,
     saveAssist,
     setCurrentUser,
+    getLoginProvider,
+    canChangePassword,
     getCurrentUser,
     logout,
   };

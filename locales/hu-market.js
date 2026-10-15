@@ -40,5 +40,6 @@ Object.assign(window.LOCALES.hu, {
   "widgets.medium": "Közepes",
   "widgets.large": "Nagy",
   "widgets.instruments": "instrumentum",
+  "widgets.edit": "Szerkesztés",
   "widgets.delayed": "Késleltetett",
 });

@@ -144,3 +144,25 @@
   border-radius: var(--radius-round);
   background: var(--color-on-brand);
 }
+
+.login-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+}
+
+.login-link-row:empty,
+.login-biometric:empty {
+  display: none;
+}
+
+.login-biometric {
+  width: 100%;
+  max-width: 340px;
+}
+
+.login-register-prompt {
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}

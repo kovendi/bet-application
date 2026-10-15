@@ -15,6 +15,7 @@
 //       name: 'username',
 //       required: true,
 //       autofocus: false,
+//       multiline: false, // true -> textarea (rows, maxLength options)
 //       icon: 'mail', // optional leading icon (needs modules/icon): compact row style,
 //                     // label small above the value — meant for renderInputStack
 //     }));
@@ -38,6 +39,9 @@ window.inputModule = (function () {
     required = false,
     autofocus = false,
     icon,
+    multiline = false,
+    maxLength,
+    rows = 5,
   } = {}) {
     const wrapper = document.createElement("div");
     wrapper.className = "app-input-group";
@@ -47,10 +51,13 @@ window.inputModule = (function () {
     labelEl.setAttribute("for", id);
     labelEl.textContent = label;
 
-    const inputEl = document.createElement("input");
-    inputEl.className = "app-input";
+    // multiline: a textarea with the same look (feedback text); maxLength caps it.
+    const inputEl = document.createElement(multiline ? "textarea" : "input");
+    inputEl.className = multiline ? "app-input app-input--multiline" : "app-input";
     inputEl.id = id;
-    inputEl.type = type;
+    if (multiline) inputEl.rows = rows;
+    else inputEl.type = type;
+    if (maxLength) inputEl.maxLength = maxLength;
     inputEl.placeholder = placeholder;
     inputEl.name = name || id;
     inputEl.required = required;

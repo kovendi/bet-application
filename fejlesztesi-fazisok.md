@@ -9,7 +9,7 @@ A mockup célja a tender 5.1 pontja szerint a főbb felületek látványterve, h
 - Mobil nézet elsődleges, asztali böngészőben iPhone-keretben jelenik meg (lásd CLAUDE.md). Tablet elrendezés nem kell
 - Dark és light mód mindenhol (B_001), alapértelmezetten az eszköz beállítása. Minden oldalt mindkét módban ellenőrzünk
 - Arculat: `docs/arculat`, színek és logó szabályai a CLAUDE.md "Brand / Arculat" és "Color Palette" részében
-- Nyelv: egyelőre magyar. A magyar/angol váltás (B_002) az 5. fázisban jön, de a szövegek mindig `t()`-n keresztül mennek. A jogi és tartalmi szövegeket a BÉT adja élesítés előtt, a mockupban helykitöltők
+- Nyelv: magyar és angol, a váltás a Beállításokban van (B_002). A szövegek mindig `t()`-n keresztül mennek. A jogi és tartalmi szövegeket a BÉT adja élesítés előtt, a mockupban helykitöltők
 - Az indexek kivételével minden árfolyam késleltetett, ezért mindenhol megjelenik a disclaimer (TK_009, TA_001, K_002, ÁF_003, NYÁ_0021, NYT_003, ÁR_001)
 - Vendég módban a regisztrált funkciók (kedvencek, riasztás, AI chat, visszajelzés küldése) egy "Regisztráció szükséges" ablakot mutatnak, benne a regisztrációra vivő gombbal (K_000, ÁR_000, AI_001, B_004)
 - A mock adatok a `storage` modulban vannak, nincs backend és nincs valódi adat. A kategóriák és szűrők a valóságban adatból jönnek (TK_005), ezért nem égetjük be őket
@@ -84,24 +84,28 @@ Megjegyzések a 2. fázishoz: új `bar-chart` modul (sima CSS oszlopok, negatív
 - [x] **Kedvencek** (K_000–K_005): a hozzáadás a keresőre visz (K_001), új elem a lista végére kerül, húzással rendezhető (K_0011). Lista: ticker, árfolyam, napi változás, napi forgalom (K_002). Kibocsátói közzététel értesítés beállítása: egy kibocsátó, opcionális többes típusválasztás (K_003)
 - [x] **Árfolyamriasztás** (ÁR_000–ÁR_0053): max. 10 riasztás, egy instrumentum / riasztás, árszint átlépése felfelé és lefelé, teljesülés után eltűnik, törölhető (módosítás nem kell), késleltetett árfolyam disclaimer
 - [x] Kezdőlap szerkesztése: kártyák törlése, hozzáadása és átrendezése (NYÁ_004), kedvencekkel is
-- [ ] Widget testreszabása, kedvencekkel is (ÁF_0033): a widgetek oldal még csak az alapértelmezett listát mutatja
+- [x] Widget testreszabása, kedvencekkel is (ÁF_0033): a widgetek oldalon mérethez tartozó "Szerkesztés" link a kezdőlap-szerkesztőt nyitja `?target=small|medium|large` paraméterrel, a lista mérete fix (2 / 4 / 8)
 - [x] Értesítések (appon belüli lista, olvasatlan jelzés a Home harangján; a push csak a tervekben): push és appon belüli (riasztás, kibocsátói közzététel). Megnyitáskor az adott közzététel vagy instrumentum nyílik (K_005)
 
 Megjegyzések a 3. fázishoz: új oldalak a `favorites`, `favorite-notify`, `alerts`, `alert-new`, `notifications`, `home-edit` (kulcsok: `locales/hu-personal.js`). A Menü oldalon a Személyes csoport, a termékadatlapon harang gomb a riasztáshoz. A termékadatlap mostantól kezeli a `?tab=` és `&doc=` paramétert (korábban a Home linkje a `tab`-ot figyelmen kívül hagyta). A kedvencek sorrendje húzással és nyíl billentyűkkel is módosítható.
 
 ## 4. fázis: Fiók és beállítások
 
-- [ ] **Regisztráció** (FK_004–FK_0065): e-mail, jelszó (12–32 karakter, kis- és nagybetű, szám, speciális karakter is lehet), megerősítés, kötelező nyilatkozatok, hírlevél (opcionális jelölőnégyzet), hatjegyű kód megerősítés, kód újraküldés 1 perc után, félbehagyott regisztráció folytatása
-- [ ] **Elfelejtett jelszó** (FK_008–FK_0081), biometrikus belépés (FK_005), fiók zárolás hibás belépés után növekvő várakozással: 5, 10, 30, 60 mp (FK_0072)
-- [ ] **Profil** (FK_009–FK_0096)
+- [x] **Regisztráció** (FK_004–FK_0065): e-mail, jelszó (12–32 karakter, kis- és nagybetű, szám, speciális karakter is lehet), megerősítés, kötelező nyilatkozatok, hírlevél (opcionális jelölőnégyzet), hatjegyű kód megerősítés, kód újraküldés 1 perc után, félbehagyott regisztráció folytatása
+- [x] **Elfelejtett jelszó** (FK_008–FK_0081), biometrikus belépés (FK_005), fiók zárolás hibás belépés után növekvő várakozással: 5, 10, 30, 60 mp (FK_0072)
+
+Megjegyzések: új oldalak `register`, `forgot-password`; új modulok `code-step` (hatjegyű kód, újraküldés 1 perc után, demó kód 123456) és `validators`; a visszaszámlálás a `mock-network.countdown`-ban van. A belépés oldalon zárolás, "Elfelejtett jelszó" és "Regisztráció" link, biometrikus gomb. Böngészőben még nem volt kipróbálva.
+
+Új oldalak: `account-change`, `settings`, `about`, `feedback`. A `input` modul új `multiline` / `maxLength` opciót kapott (textarea), új `sliders` ikon a Beállításokhoz.
+- [x] **Profil** (FK_009–FK_0096)
   - [x] Megjelenés (téma: rendszer / világos / sötét), hírlevél kapcsoló, fiók törlése megerősítő dialógussal, adatkezelési tájékoztató sor
-  - [ ] E-mail és jelszó módosítás saját képernyőn (most "hamarosan" toast), fiók törlése megerősítő kóddal, az adatkezelési tájékoztató a bet.hu-ra visz
-- [ ] **Beállítások** (B_001–B_004): nyelv, Névjegy / Jogi információk, visszajelzés küldése (300 karakter, köszönő pop-up). A téma már a Profilban van
-- [ ] Menü oldal teljes tartalommal (most: profil és kijelentkezés)
+  - [x] E-mail módosítás (FK_0091: új cím, hatjegyű kód az új címre), jelszó módosítás (FK_0092: jelenlegi + új + megerősítés), fiók törlése megerősítő kóddal (FK_0095): az `account-change` oldal, `?flow=email|password|delete`. Az adatkezelési tájékoztató a bet.hu-ra visz (FK_0096). Google/Apple/Portál belépésnél a jelszómódosítás rejtve van (FK_0092), ha nincs külön app jelszó (`storage.canChangePassword()`, a belépés szolgáltatója a munkamenet mellett tárolódik)
+- [x] **Beállítások** (B_001–B_004): nyelv (magyar / angol váltó), Névjegy / Jogi információk (`about`: impresszum, jogi nyilatkozat, felelősségkizárás helykitöltővel, adatkezelési tájékoztató és ÁSZF a bet.hu-ra visz), visszajelzés küldése (`feedback`: 300 karakter, vendégnek regisztráció szükséges, köszönő pop-up). A téma a Profilban van
+- [x] Menü oldal teljes tartalommal: Személyes csoport, Fiók (Profil, Beállítások, Kijelentkezés)
 
 ## 5. fázis: Angol nyelv és állapotok
 
-- [ ] Angol nyelv (`locales/en.js`), nyelvváltó a beállításokban (B_002). A rendszer erre már fel van készítve
+- [x] Angol nyelv (`locales/en*.js`, a mock tartalom angol változata a `modules/storage/seed-en.js` és `seed-assist-en.js` fájlokban), nyelvváltó a beállításokban (B_002)
 - [ ] Betöltés, üres és hiba állapot (`?mock=slow|empty|error`) a még hiányzó oldalakon. Kész: Home, Piactér, Edukáció, termékadatlap, Bet assist
 - [ ] "Piac zárva" és "nincs adat" állapotok végigvezetése. A BÉT csak kereskedési napokon 8–18 óra között vállal rendelkezésre állást, ezért a hibaállapot (Újra gomb) mindenhol legyen meg
 
@@ -127,8 +131,8 @@ Az eddig elkészült részek átnézésén talált eltérések és ellenőrizend
 - [x] Hiányzó termékadat (`–`): a teljesítménysor `–` értéke nem kapott "Nincs adat" címkét, javítva (közös `valueNode`). A többi típus és a P/E a 2. fázissal jön, akkor újra ellenőrizni
 
 **2–4. fázis (nyitott részek):**
-- [ ] Profil: az e-mail és jelszó módosítás, az adatkezelési tájékoztató most csak "hamarosan" toast. Cél: saját képernyő, illetve átirányítás a bet.hu-ra (FK_0096)
-- [ ] Menü oldal: most csak profil és kijelentkezés, a Beállítások és Névjegy / Jogi információk hiányzik
+- [x] Profil: e-mail és jelszó módosítás saját képernyőn, adatkezelési tájékoztató átirányít a bet.hu-ra (FK_0096)
+- [x] Menü oldal: Beállítások (azon belül Névjegy / Jogi információk) bekötve
 - [x] Belépés: a Google, Apple és Portál gomb nem üres, a demo felhasználóval belép (szimulált várakozás után), toast nem kell
 
 **Minden fázisra, átadás előtt:**

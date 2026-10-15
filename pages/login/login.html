@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Bejelentkezés</title>
+  <title data-i18n="login.submit_button">Bejelentkezés</title>
   <link rel="stylesheet" href="../../global.css" />
   <link rel="stylesheet" href="../../modules/iphone-frame/iphone-frame.css" />
   <link rel="stylesheet" href="../../modules/icon/icon.css" />
@@ -32,7 +32,9 @@
         <div id="login-fields"></div>
         <div id="login-error" class="login-error"></div>
         <div id="login-submit-button"></div>
+        <div id="login-forgot" class="login-link-row"></div>
       </form>
+      <div id="login-biometric" class="login-biometric"></div>
 
       <div class="login-alt">
         <p class="login-or" data-i18n="login.or"></p>
@@ -40,6 +42,7 @@
         <div id="login-portal-button" class="login-portal-button"></div>
         <div id="login-guest-button"></div>
         <p class="login-guest-hint" data-i18n="login.guest_hint"></p>
+        <div id="login-register" class="login-link-row"></div>
       </div>
     </div>
   </div>
@@ -52,6 +55,14 @@
   <script src="../../locales/hu-account.js"></script>
   <script src="../../locales/hu-personal.js"></script>
   <script src="../../locales/hu-meta.js"></script>
+  <script src="../../locales/en.js"></script>
+  <script src="../../locales/en-assist.js"></script>
+  <script src="../../locales/en-education.js"></script>
+  <script src="../../locales/en-product.js"></script>
+  <script src="../../locales/en-market.js"></script>
+  <script src="../../locales/en-account.js"></script>
+  <script src="../../locales/en-personal.js"></script>
+  <script src="../../locales/en-meta.js"></script>
   <script src="../../modules/i18n/i18n.js"></script>
   <script src="../../modules/icon/icon.js"></script>
   <script src="../../modules/input/input.js"></script>
@@ -61,6 +72,7 @@
   <script src="../../modules/motion/motion.js"></script>
   <script src="../../modules/mock-network/mock-network.js"></script>
   <script src="../../modules/iphone-frame/iphone-frame.js"></script>
+  <script src="../../modules/storage/seed-en.js"></script>
   <script src="../../modules/storage/storage.js"></script>
   <script src="login.js"></script>
 </body>

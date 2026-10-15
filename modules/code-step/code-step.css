@@ -1,0 +1,82 @@
+.code-step {
+  --code-box-height: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.code-step-lead {
+  margin: 0;
+  font-size: var(--font-size-body);
+  color: var(--color-text-main);
+}
+
+.code-step-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.code-step-label {
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.code-step-boxes {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-8);
+}
+
+.code-step-box {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: var(--code-box-height);
+  padding: 0;
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card-background);
+  font-family: inherit;
+  font-size: var(--font-size-title2);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--color-text-main);
+  caret-color: var(--color-primary);
+  transition:
+    border-color var(--duration-fast) var(--ease-ios),
+    background var(--duration-fast) var(--ease-ios);
+}
+
+.code-step-box:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.code-step-box--error {
+  border-color: var(--color-negative);
+}
+
+.code-step-error {
+  display: none;
+  margin: 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-negative);
+}
+
+.code-step-error--visible {
+  display: block;
+}
+
+.code-step-resend {
+  display: flex;
+  justify-content: center;
+}
+
+.code-step-wait {
+  margin: 0;
+  padding: var(--space-12) 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}

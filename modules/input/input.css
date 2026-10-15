@@ -147,3 +147,7 @@
   width: var(--icon-xs);
   height: var(--icon-xs);
 }
+
+.app-input--multiline {
+  resize: none;
+}
