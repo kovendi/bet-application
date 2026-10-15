@@ -12,6 +12,8 @@
 //   - injects the <head> tags a PWA needs (manifest, theme-color, iOS
 //     meta tags, apple-touch-icon) on every page, so the app can be added to
 //     the home screen from any screen, not only the first one
+//   - keeps the status bar color (theme-color) in step with the top of the
+//     page: the app bar's background if there is one, else the body's
 //   - registers the service worker (https / localhost only, skipped on file://)
 //   - captures Chrome/Android's `beforeinstallprompt` so the install can start
 //     from an own button; fires `pwa:installable` and `pwa:installed` on window
@@ -24,6 +26,7 @@
 //
 //   window.pwaModule.getPlatform(); // { os, isMobile, isStandalone, isIosSafari }
 //   window.pwaModule.canPromptInstall(); // Android: native install dialog available
+//   window.pwaModule.syncThemeColor(); // after the top of the page changed color
 //   window.pwaModule.promptInstall(); // -> Promise<'accepted' | 'dismissed' | 'unavailable'>
 
 window.pwaModule = (function () {
@@ -34,7 +37,8 @@ window.pwaModule = (function () {
   const MANIFEST_PATH = "manifest.webmanifest";
   const SERVICE_WORKER_PATH = "sw.js";
   const TOUCH_ICON_PATH = "assets/apple-touch-icon.png";
-  const THEME_COLOR = "#232157"; // keep in sync with theme_color in the manifest
+  const THEME_COLOR = "#232157"; // keep in sync with theme_color in the manifest (start value)
+  const TOP_BAR_SELECTOR = ".top-appbar"; // element whose background the status bar matches
   const APP_TITLE = "BÉT"; // home screen label on iOS; keep in sync with short_name in the manifest
   const IOS_NON_SAFARI = /CriOS|FxiOS|EdgiOS|OPiOS|GSA\/|FBAN|FBAV|Instagram|Line\/|MicroMessenger/;
 
@@ -72,8 +76,31 @@ window.pwaModule = (function () {
     addHeadTag("meta", { name: "theme-color", content: THEME_COLOR });
     addHeadTag("meta", { name: "mobile-web-app-capable", content: "yes" });
     addHeadTag("meta", { name: "apple-mobile-web-app-capable", content: "yes" });
-    addHeadTag("meta", { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" });
+    // Not black-translucent: on iOS 26 that measures the viewport short by the
+    // top inset (a gap under fixed/sticky bottom bars) and lays a frosted band
+    // over the page top. With "default" the page starts below an opaque status
+    // bar, tinted from theme-color.
+    addHeadTag("meta", { name: "apple-mobile-web-app-status-bar-style", content: "default" });
     addHeadTag("meta", { name: "apple-mobile-web-app-title", content: APP_TITLE });
+  }
+
+  function isTransparent(color) {
+    return !color || color === "transparent" || /rgba\(.*,\s*0\)$/.test(color);
+  }
+
+  function syncThemeColor() {
+    const topBar = document.querySelector(TOP_BAR_SELECTOR);
+    const topColor = topBar ? getComputedStyle(topBar).backgroundColor : "";
+    const color = isTransparent(topColor) ? getComputedStyle(document.body).backgroundColor : topColor;
+    const meta = document.head.querySelector('meta[name="theme-color"]');
+    if (meta && !isTransparent(color)) meta.setAttribute("content", color);
+  }
+
+  function watchThemeColor() {
+    // Page scripts render the app bar at the end of <body>, before DOMContentLoaded.
+    document.addEventListener("DOMContentLoaded", syncThemeColor);
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeColor);
+    new MutationObserver(syncThemeColor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
 
   function registerServiceWorker() {
@@ -112,9 +139,10 @@ window.pwaModule = (function () {
     if (initialized) return;
     initialized = true;
     injectHeadTags();
+    watchThemeColor();
     listenForInstall();
     registerServiceWorker();
   }
 
-  return { init, getPlatform, canPromptInstall, promptInstall };
+  return { init, getPlatform, canPromptInstall, promptInstall, syncThemeColor };
 })();
