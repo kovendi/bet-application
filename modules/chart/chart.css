@@ -38,6 +38,12 @@
 .chart-plot {
   width: 100%;
   border-radius: var(--radius-sm);
+  /* the pointer handlers live on this element: vertical drags scroll the page,
+     horizontal ones are delivered to the chart instead of being claimed by the browser */
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .chart-plot--scrollable {
@@ -104,6 +110,7 @@
   display: block;
   /* vertical page scroll stays native; horizontal drags scrub the crosshair */
   touch-action: pan-y;
+  -webkit-user-select: none;
   user-select: none;
   overflow: visible;
 }

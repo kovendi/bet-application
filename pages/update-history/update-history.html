@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="update-history.css" />
   <script src="../../modules/theme/theme.js"></script>
   <script>window.theme.initTheme();</script>
+  <script src="../../modules/pwa/pwa.js"></script>
+  <script>window.pwaModule.init();</script>
 </head>
 <body>
   <div id="screen-content">
@@ -30,6 +32,11 @@
         </thead>
         <tbody>
           <!-- Newest entries go at the top. The Change column stays in English. -->
+          <tr>
+            <td>2026-10-15 17:22</td>
+            <td>v0.8.0</td>
+            <td>PWA: generic, copyable install setup. New modules/pwa (pwa.js core: platform detection, head-tag injection for manifest/theme-color/iOS meta/apple-touch-icon, service worker registration, beforeinstallprompt capture; pwa-install.js: install card on index.html with Android one-tap install, iOS Safari 3-step bottom sheet, copy-link hint for other iOS browsers, "Continue in browser" with 7-day cooldown; pwa.css). Added manifest.webmanifest, network-first sw.js (offline fallback only), icons generated from the BET logo (192, 512, maskable, apple-touch-icon) and icons share, add-to-home, download. pwa.js is loaded and init() called in the head of every page. Locale files hu-pwa.js and en-pwa.js, style guide "pwa" section, CLAUDE.md PWA chapter.</td>
+          </tr>
           <tr>
             <td>2026-10-15 17:13</td>
             <td>v0.7.0</td>

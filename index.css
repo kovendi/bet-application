@@ -172,3 +172,7 @@
 .landing-cta:active {
   transform: scale(var(--press-scale));
 }
+
+.landing-pwa:empty {
+  display: none;
+}

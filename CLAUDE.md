@@ -87,7 +87,7 @@ When the user says an element is repeating and should be a "common module" (e.g.
 - Before building any element, check if a matching module already exists — if so, reuse/import it instead of recreating it.
 - Do not duplicate/reimplement an existing module's markup on a new page — import it.
 
-Current modules: action-bar, banner, bar-chart, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, money, motion, overlay, page-transition, price-row, progress-bar, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network.
+Current modules: action-bar, banner, bar-chart, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, money, motion, overlay, page-transition, price-row, progress-bar, pwa, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network (`pwa/pwa.js` is logic-only too; its install card has `pwa.css`).
 
 ## Rules
 
@@ -255,6 +255,15 @@ The git repository root is **this `mockup/` folder**, not its parent `bet-applic
 ### App version
 
 `version.js` (project root) assigns `window.APP_VERSION` (e.g. `"v1.0.0"`), loaded via classic `<script>` before any script that reads it. `index.html` shows it next to the Update History link, and `update-history.html` shows it near its header. Bump it on every push, together with the update-history row.
+
+## PWA (installable app)
+
+The app is a PWA, built generically so the same files can be copied into another static project: `modules/pwa/` (`pwa.js` core, `pwa-install.js` install card, `pwa.css`), `manifest.webmanifest` and `sw.js` in the root, the icons `assets/icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, and the `pwa.*` keys in `locales/hu-pwa.js` / `en-pwa.js`. Per project change only: `name`/`short_name`/colors in the manifest, `THEME_COLOR` and `APP_TITLE` in `pwa.js`, the icons, `CACHE_NAME` in `sw.js` when the cache must be dropped.
+
+- **Every page** loads `modules/pwa/pwa.js` in `<head>` (right after `theme.js`) and calls `window.pwaModule.init()`. It injects the manifest / theme-color / iOS meta tags / apple-touch-icon (so the app can be added from any screen) and registers `sw.js` (https or localhost only, silently skipped on `file://`; the manifest and worker are loaded by the browser, not `fetch`, so the file:// rules are untouched). The paths resolve from the script's own URL, so the app also works under a sub-path (GitHub Pages).
+- **Service worker** is network-first: online always serves the fresh deploy, the cache is only the offline fallback. No version-bumping needed for updates.
+- **Install offer:** `index.html` calls `pwaInstallModule.renderInstallCard(...)`. Shown only on a phone/tablet browser, not when already installed (standalone), and not for 7 days after "Folytatás böngészőben". Android: one-tap native install (`beforeinstallprompt`). iOS Safari: bottom sheet with the Share → Home Screen steps. Other iOS browsers: asks to open the page in Safari (copy-link button). To offer it on another screen, add a container and call the same function (load the CSS/JS listed in the file header). `resetDismissal()` brings the card back.
+- Standalone on iOS uses `black-translucent`, so content reaches under the status bar; the safe-area inset (`--screen-inset-top`) already handles it.
 
 ## Charts / TradingView
 

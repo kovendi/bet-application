@@ -401,5 +401,10 @@ addSection(
   window.toplistModule.renderToplist({ instruments: window.storage.getInstruments("share"), sparkline: true }),
 );
 
+// pwa (the install card only shows on a phone browser; preview forces the iOS Safari variant)
+const pwaDemo = document.createElement("div");
+window.pwaInstallModule.renderInstallCard(pwaDemo, { preview: true });
+addSection("pwa", pwaDemo);
+
 // iphone-frame (wraps whole app pages, can't be demoed inline here)
 addSection("iphone-frame", textEl(t("style_guide.demo_iphone_frame"), "style-guide-caption"));

@@ -5,9 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Mockup</title>
   <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="modules/icon/icon.css" />
+  <link rel="stylesheet" href="modules/button/button.css" />
+  <link rel="stylesheet" href="modules/text-button/text-button.css" />
+  <link rel="stylesheet" href="modules/motion/motion.css" />
+  <link rel="stylesheet" href="modules/overlay/overlay.css" />
+  <link rel="stylesheet" href="modules/bottom-sheet/bottom-sheet.css" />
+  <link rel="stylesheet" href="modules/toast/toast.css" />
+  <link rel="stylesheet" href="modules/pwa/pwa.css" />
   <link rel="stylesheet" href="index.css" />
   <script src="modules/theme/theme.js"></script>
   <script>window.theme.initTheme();</script>
+  <script src="modules/pwa/pwa.js"></script>
+  <script>window.pwaModule.init();</script>
 </head>
 <body>
   <div id="screen-content">
@@ -17,6 +27,8 @@
         <p class="landing-subtitle"><span data-i18n="index.subtitle"></span> <span id="landing-version" class="landing-version"></span></p>
         <a class="landing-cta" href="pages/login/login.html" data-i18n="index.try_app"></a>
       </header>
+
+      <div id="pwa-install" class="landing-pwa"></div>
 
       <section class="landing-section">
         <h2 class="landing-section-title" data-i18n="index.group_start"></h2>
@@ -164,6 +176,7 @@
   <script src="locales/hu-account.js"></script>
   <script src="locales/hu-personal.js"></script>
   <script src="locales/hu-meta.js"></script>
+  <script src="locales/hu-pwa.js"></script>
   <script src="locales/en.js"></script>
   <script src="locales/en-assist.js"></script>
   <script src="locales/en-education.js"></script>
@@ -172,13 +185,23 @@
   <script src="locales/en-account.js"></script>
   <script src="locales/en-personal.js"></script>
   <script src="locales/en-meta.js"></script>
+  <script src="locales/en-pwa.js"></script>
   <script src="modules/i18n/i18n.js"></script>
+  <script src="modules/icon/icon.js"></script>
+  <script src="modules/motion/motion.js"></script>
+  <script src="modules/overlay/overlay.js"></script>
+  <script src="modules/button/button.js"></script>
+  <script src="modules/text-button/text-button.js"></script>
+  <script src="modules/toast/toast.js"></script>
+  <script src="modules/bottom-sheet/bottom-sheet.js"></script>
+  <script src="modules/pwa/pwa-install.js"></script>
   <script>
     window.i18n.initI18n();
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       el.textContent = window.i18n.t(el.dataset.i18n);
     });
     document.getElementById("landing-version").textContent = window.APP_VERSION;
+    window.pwaInstallModule.renderInstallCard(document.getElementById("pwa-install"));
   </script>
 </body>
 </html>
