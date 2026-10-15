@@ -244,6 +244,14 @@ Never guess the time: read the local date and time with the `date` shell command
 
 The page has a back button that always navigates to `index.html` (not `history.back()`).
 
+### Git repository and GitHub user
+
+The git repository root is **this `mockup/` folder**, not its parent `bet-application/` (the parent has no `.git`, so `git` there fails with "not a git repository"). Always run git commands from `mockup/`. Don't conclude "no repo" from the parent folder or the environment's "Is a git repository: false" note.
+
+- Remote: `origin` = `git@github.com:kovendi/bet-application.git` (SSH), branch `main`. Commits go straight to `main` (the existing history does the same), no feature branches unless asked.
+- Push as the GitHub user **`kovendi`**: the repo's git identity is `user.name kovendi` / `kovendi@users.noreply.github.com`, and pushes go over SSH with that account's key. The `gh` CLI is logged in as a different account (`levikovendi`); don't use it for pushing and don't switch the remote to HTTPS.
+- Commit message: short English summary line, no trailing period.
+
 ### App version
 
 `version.js` (project root) assigns `window.APP_VERSION` (e.g. `"v1.0.0"`), loaded via classic `<script>` before any script that reads it. `index.html` shows it next to the Update History link, and `update-history.html` shows it near its header. Bump it on every push, together with the update-history row.
