@@ -14,8 +14,30 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--space-12);
-  padding: var(--space-4) var(--page-gutter) var(--space-16);
+  gap: var(--space-16);
+  padding: var(--space-4) var(--page-gutter) var(--space-20);
+}
+
+/* Format switch: the main navigation of the tab, so a touch taller than a
+   plain segmented filter. */
+.education-formats .chips--segmented .chips-item {
+  min-height: 36px;
+  font-size: var(--font-size-footnote);
+}
+
+.education-filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.education-filters[hidden] {
+  display: none;
+}
+
+/* Four levels incl. "Középhaladó": tighter side padding so the longest fits. */
+.education-levels .chips--segmented .chips-item {
+  padding-inline: var(--space-2);
 }
 
 .education-count {
@@ -23,10 +45,185 @@
   color: var(--color-text-secondary);
 }
 
-.education-list {
-  flex: 1;
+.education-view {
   display: flex;
   flex-direction: column;
+}
+
+.education-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Hub ---------------------------------------------------------------------------------- */
+
+.education-hub {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.education-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.education-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.education-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  margin: 0;
+  font-size: var(--font-size-title3);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.education-section-count {
+  font-size: var(--font-size-footnote);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.education-section-link {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  margin-right: calc(-1 * var(--space-6));
+  padding: 0 var(--space-6);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  color: var(--color-primary);
+  transition: opacity var(--duration-fast) var(--ease-ios);
+}
+
+.education-section-link .icon {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+@media (hover: hover) {
+  .education-section-link:hover {
+    background: var(--color-hover);
+  }
+}
+
+.education-section-link:active {
+  opacity: var(--press-opacity);
+}
+
+/* Horizontal shelf, bleeding to the screen edges like the chips row. */
+.education-shelf {
+  display: flex;
+  gap: var(--space-12);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--page-gutter);
+  scrollbar-width: none;
+  margin: 0 calc(-1 * var(--page-gutter));
+  padding: var(--space-4) var(--page-gutter) var(--space-8);
+}
+
+.education-shelf::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hero: brand navy band with drifting glows (same recipe as the home hero). */
+.education-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+  padding: var(--space-16);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(160deg, var(--color-brand-surface) 0%, var(--color-brand-deep) 100%);
+  box-shadow: var(--shadow-floating);
+  color: var(--color-on-brand);
+}
+
+.education-hero-glow {
+  position: absolute;
+  z-index: -1;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-round);
+  filter: blur(44px);
+  pointer-events: none;
+  animation: education-hero-drift var(--duration-ambient) var(--ease-in-out) infinite alternate;
+}
+
+.education-hero-glow--gold {
+  right: -25%;
+  bottom: -45%;
+  background: var(--color-glow-gold);
+  opacity: 0.6;
+}
+
+.education-hero-glow--blue {
+  top: -45%;
+  left: -25%;
+  background: var(--color-glow-blue);
+  opacity: 0.55;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes education-hero-drift {
+  to {
+    transform: translate(-14%, 12%) scale(1.12);
+  }
+}
+
+.education-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--font-size-caption1);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-highlight);
+}
+
+.education-hero-eyebrow .icon {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}
+
+.education-hero-title {
+  margin: 0;
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.education-hero-message {
+  margin: 0 0 var(--space-6);
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}
+
+/* --- Skeletons ---------------------------------------------------------------------------- */
+
+.education-skeleton-hero {
+  height: 168px;
+  margin-bottom: var(--space-20);
+  border-radius: var(--radius-xl);
 }
 
 .education-skeleton-row {

@@ -178,6 +178,74 @@ function renderOverview() {
   return overview;
 }
 
+// Favorites on the home page (tender 4) show the first FAVORITES_LIMIT items; the full,
+// sortable list is the Favorites page. Registered-only (K_000), so a guest gets the
+// same box with a registration CTA.
+const FAVORITES_LIMIT = 4;
+
+function renderFavoritesEmpty(isGuest) {
+  const goToSearch = () => window.pageTransition.go("../search/search.html");
+  const view = window.stateViewModule.renderStateView({
+    icon: "star",
+    title: t("home.favorites_empty_title"),
+    message: t(isGuest ? "home.favorites_guest_message" : "home.favorites_empty_message"),
+    actionLabel: t(isGuest ? "home.favorites_guest_action" : "home.favorites_empty_action"),
+    onAction: isGuest ? () => window.bottomSheetModule.showRegistrationRequired() : goToSearch,
+  });
+  view.classList.add("home-fav-empty");
+  return view;
+}
+
+function renderFavoriteRow(instrument, list, section) {
+  const row = document.createElement("div");
+  row.className = "home-fav-row";
+  row.appendChild(
+    window.priceRowModule.renderPriceRow({
+      instrument,
+      href: productHref(instrument),
+      favorite: true,
+      onFavoriteToggle: (inst) => {
+        window.storage.toggleFavorite(currentUser.id, inst.ticker);
+        window.toastModule.showToast({ message: t("favorites.removed"), icon: "check" });
+        window.motion.playOut(row, "home-fav-row--leaving", () => {
+          row.remove();
+          if (list.children.length === 0) section.replaceWith(renderFavoritesSection());
+        });
+        return true;
+      },
+    }),
+  );
+  return row;
+}
+
+function renderFavoritesSection() {
+  const section = document.createElement("section");
+  section.className = "home-section";
+  const head = document.createElement("div");
+  head.className = "home-section-head";
+  head.appendChild(renderText("h2", "home-section-title", t("home.favorites")));
+  section.appendChild(head);
+
+  const favorites = currentUser
+    ? window.storage
+        .getFavorites(currentUser.id)
+        .map((ticker) => window.storage.getInstrument(ticker))
+        .filter(Boolean)
+    : [];
+  if (favorites.length === 0 || window.mockNetwork.isEmptyMock()) {
+    section.appendChild(renderFavoritesEmpty(!currentUser));
+    return section;
+  }
+
+  const all = renderText("a", "home-section-link", t("home.favorites_all"));
+  all.href = "../favorites/favorites.html";
+  head.appendChild(all);
+  const list = document.createElement("div");
+  favorites.slice(0, FAVORITES_LIMIT).forEach((instrument) => list.appendChild(renderFavoriteRow(instrument, list, section)));
+  section.appendChild(list);
+  return section;
+}
+
 // Latest 5 issuer disclosures (NYK_001–NYK_003).
 function renderDisclosureRow(item) {
   const row = document.createElement("a");
@@ -231,6 +299,7 @@ function showSkeleton() {
 
   feedEl.replaceChildren(
     renderSection(null, skeleton("home-skeleton-carousel")),
+    renderSection("home.favorites", ...repeat(2, () => skeleton("home-skeleton-row"))),
     renderSection("home.toplists", skeleton("home-skeleton-segmented"), ...repeat(5, () => skeleton("home-skeleton-row"))),
     renderSection("home.disclosures", ...repeat(3, () => skeleton("home-skeleton-disclosure"))),
   );
@@ -243,6 +312,7 @@ function showFeed({ carouselItems, shares, disclosures }) {
   window.motion.fadeIn(overviewEl);
   feedEl.replaceChildren(
     renderSection(null, window.carouselModule.renderCarousel({ items: carouselItems })),
+    renderFavoritesSection(),
     renderSection(
       "home.toplists",
       window.toplistModule.renderToplist({ instruments: shares, hrefFor: productHref, sparkline: true }),

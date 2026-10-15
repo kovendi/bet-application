@@ -76,6 +76,18 @@ window.SEED_EDUCATION = {
       { q: "Mekkora összeget érdemes befektetni?", options: ["Amit hosszabb távon nem kell elérni", "Minden megtakarítást", "Hitelből felvett pénzt"], correct: 0, explain: "Árfolyamesésnél nem szabad kényszereladásra szorulnod." },
     ],
   },
+  e11: {
+    futam: false,
+    video: { duration: "6:30", description: "Nyitóaukció, folyamatos kereskedés, záróaukció: így telik egy nap a Budapesti Értéktőzsdén, és ezért változik napközben az árfolyam.", chapters: ["0:00 Nyitóaukció", "2:10 Folyamatos kereskedés", "4:40 Záróaukció és záróár"] },
+  },
+  e12: {
+    futam: true,
+    questions: [
+      { q: "Mit mutat egy zöld gyertya a gyertyagrafikonon?", options: ["Az időszak végén magasabb volt az ár, mint az elején", "A forgalom nőtt", "Osztalékfizetés történt"], correct: 0, explain: "A zöld gyertya záróára magasabb a nyitóáránál, vagyis az ár emelkedett." },
+      { q: "Mit jelent a 10-es P/E érték?", options: ["Az árfolyam az éves nyereség tízszerese", "A részvény 10%-ot hozott", "10 elemző ajánlja"], correct: 0, explain: "A P/E az árfolyam és az egy részvényre jutó nyereség hányadosa." },
+      { q: "Milyen cégeket érdemes P/E alapján összevetni?", options: ["Bármelyik kettőt", "Azonos iparágba tartozókat", "Csak külföldieket"], correct: 1, explain: "Iparáganként más a megszokott P/E szint, ezért csak azonos iparágon belül beszédes." },
+    ],
+  },
   e10: {
     futam: false,
     blocks: [

@@ -36,18 +36,21 @@ window.SEED_CONTENT = {
     { id: "n3", kind: "disclosure", ticker: "OTP", title: "OTP: Féléves jelentés 2026", text: "Új rendszeres jelentés érkezett.", at: "2026-10-13T08:30:00", disclosureId: "d1" },
   ],
 
-  // Education (EF_001–EF_005). type: article | video | quiz; level: beginner | advanced.
+  // Education (EF_001–EF_005). type: article | video | quiz;
+  // level: beginner | intermediate | advanced (the tender's three levels).
   education: [
     { id: "e1", title: "Mi az a tőzsde, és hogyan működik?", topic: "Alapok", level: "beginner", type: "article", minutes: 5 },
     { id: "e2", title: "Részvény, kötvény, ETF: a legfontosabb különbségek", topic: "Alapok", level: "beginner", type: "video", minutes: 8 },
     { id: "e3", title: "Hogyan olvassunk árfolyamgrafikont?", topic: "Elemzés", level: "beginner", type: "article", minutes: 6 },
-    { id: "e4", title: "Mit jelent a P/E mutató?", topic: "Elemzés", level: "advanced", type: "article", minutes: 7 },
+    { id: "e4", title: "Mit jelent a P/E mutató?", topic: "Elemzés", level: "intermediate", type: "article", minutes: 7 },
     { id: "e5", title: "Osztalék és osztalékhozam", topic: "Befektetés", level: "beginner", type: "video", minutes: 4 },
     { id: "e6", title: "Kvíz: tőzsdei alapfogalmak", topic: "Alapok", level: "beginner", type: "quiz", minutes: 3 },
-    { id: "e7", title: "Kockázat és diverzifikáció", topic: "Befektetés", level: "advanced", type: "article", minutes: 9 },
+    { id: "e7", title: "Kockázat és diverzifikáció", topic: "Befektetés", level: "intermediate", type: "article", minutes: 9 },
     { id: "e8", title: "Certifikátok és turbók működése", topic: "Termékek", level: "advanced", type: "video", minutes: 11 },
-    { id: "e9", title: "Kvíz: kockázat és hozam", topic: "Befektetés", level: "advanced", type: "quiz", minutes: 4 },
+    { id: "e9", title: "Kvíz: kockázat és hozam", topic: "Befektetés", level: "intermediate", type: "quiz", minutes: 4 },
     { id: "e10", title: "Állampapírok a tőzsdén", topic: "Termékek", level: "beginner", type: "article", minutes: 6 },
+    { id: "e11", title: "Egy kereskedési nap a BÉT-en", topic: "Alapok", level: "beginner", type: "video", minutes: 6 },
+    { id: "e12", title: "Kvíz: grafikonok és mutatók", topic: "Elemzés", level: "advanced", type: "quiz", minutes: 3 },
   ],
 
   brokers: [

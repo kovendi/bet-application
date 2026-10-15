@@ -83,6 +83,7 @@ Megjegyzések a 2. fázishoz: új `bar-chart` modul (sima CSS oszlopok, negatív
 
 - [x] **Kedvencek** (K_000–K_005): a hozzáadás a keresőre visz (K_001), új elem a lista végére kerül, húzással rendezhető (K_0011). Lista: ticker, árfolyam, napi változás, napi forgalom (K_002). Kibocsátói közzététel értesítés beállítása: egy kibocsátó, opcionális többes típusválasztás (K_003)
 - [x] **Árfolyamriasztás** (ÁR_000–ÁR_0053): max. 10 riasztás, egy instrumentum / riasztás, árszint átlépése felfelé és lefelé, teljesülés után eltűnik, törölhető (módosítás nem kell), késleltetett árfolyam disclaimer
+- [x] Kedvencek a főoldalon (tender 4. pont, "a főoldalon külön követheti"): "Kedvenceid" szakasz az első 4 kedvenccel és "Összes" linkkel; üres állapotban szaggatott keretes doboz CTA-val a keresőre, vendégnek regisztrációs CTA (K_000)
 - [x] Kezdőlap szerkesztése: kártyák törlése, hozzáadása és átrendezése (NYÁ_004), kedvencekkel is
 - [x] Widget testreszabása, kedvencekkel is (ÁF_0033): a widgetek oldalon mérethez tartozó "Szerkesztés" link a kezdőlap-szerkesztőt nyitja `?target=small|medium|large` paraméterrel, a lista mérete fix (2 / 4 / 8)
 - [x] Értesítések (appon belüli lista, olvasatlan jelzés a Home harangján; a push csak a tervekben): push és appon belüli (riasztás, kibocsátói közzététel). Megnyitáskor az adott közzététel vagy instrumentum nyílik (K_005)

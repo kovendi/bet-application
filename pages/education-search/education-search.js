@@ -25,7 +25,7 @@ function onSearch(query) {
   if (!query) return showState("edu.search_hint_title", "edu.search_hint_message");
   const matches = findMatches(query);
   if (matches.length === 0) return showState("edu.empty_title", "edu.search_empty_message");
-  resultsEl.replaceChildren(...matches.map(window.educationShared.renderRow));
+  resultsEl.replaceChildren(...matches.map((item) => window.educationShared.renderRow(item)));
   // Only the first appearance fades; while typing the list updates in place.
   if (!hasResults) window.motion.fadeIn(resultsEl);
   hasResults = true;

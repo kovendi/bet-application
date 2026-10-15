@@ -41,6 +41,38 @@
   gap: var(--space-8);
 }
 
+.home-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.home-section-link {
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+/* Empty favorites: one dashed outline, no nested box. */
+.home-fav-empty {
+  padding: var(--space-16);
+  border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-lg);
+}
+
+.home-fav-row--leaving {
+  animation: home-fav-leave var(--duration-base) var(--ease-out) forwards;
+}
+
+@keyframes home-fav-leave {
+  to {
+    opacity: 0;
+    transform: translateX(var(--space-16));
+  }
+}
+
 .home-section-title {
   margin: 0;
   font-size: var(--font-size-title2);

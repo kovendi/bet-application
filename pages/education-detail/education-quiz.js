@@ -27,12 +27,29 @@ window.educationQuiz = (function () {
       window.motion.fadeIn(node);
     }
 
+    // Best score so far (read before saving this run), shown under the result.
+    function renderBest(previous, isNewBest) {
+      if (isNewBest && previous) {
+        const badge = element("p", "education-quiz-best education-quiz-best--new");
+        badge.append(window.iconModule.renderIcon("star-filled"), document.createTextNode(t("edu.quiz_new_best")));
+        return badge;
+      }
+      if (previous && !isNewBest) {
+        return element("p", "education-quiz-best", t("edu.quiz_previous_best").replace("{score}", previous.score).replace("{total}", previous.total));
+      }
+      return null;
+    }
+
     function renderResult() {
       const result = element("div", "education-quiz-result");
       const great = score / total >= GOOD_SCORE_RATIO;
+      const previous = window.storage.getQuizBest(item.id);
+      const isNewBest = window.storage.saveQuizScore(item.id, score, total);
+      const best = renderBest(previous, isNewBest);
       result.append(
         element("h2", "education-quiz-result-title", t("edu.quiz_result_title")),
         element("p", "education-quiz-result-score", t("edu.quiz_result_score").replace("{score}", score).replace("{total}", total)),
+        ...(best ? [best] : []),
         element("p", "education-article-text", t(great ? "edu.quiz_result_great" : "edu.quiz_result_ok")),
         window.buttonModule.renderButton({
           label: t("edu.quiz_retry"),
