@@ -129,6 +129,12 @@
 
 .chart-controls > :first-child {
   flex: 1;
+  min-width: 0;
+}
+
+.chart-controls > :first-child .chips-item {
+  min-width: 0;
+  padding-inline: var(--space-2);
 }
 
 .chart-controls > :last-child {
@@ -136,7 +142,7 @@
 }
 
 .chart-controls > :last-child .chips-item {
-  padding: var(--space-6) var(--space-10);
+  padding: var(--space-6) var(--space-8);
 }
 
 /* Split / dividend markers (TA_001): circle with a one letter text, like a
