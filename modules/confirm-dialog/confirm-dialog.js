@@ -1,10 +1,11 @@
 // Classic script (not a module) — pages are opened via file://, which blocks
 // ES module imports, so this attaches its API to `window` instead.
 //
-// A modal "are you sure?" confirmation dialog — for destructive actions
+// An "are you sure?" confirmation drawer — for destructive actions
 // (delete a record, a user, ...) that shouldn't fire on a
-// single tap. Opens on the shared blurred overlay (modules/overlay), scales
-// in and fades out, closes on Esc / backdrop tap (= cancel), and removes
+// single tap. Slides up from the bottom over the shared blurred overlay
+// (modules/overlay), like bottom-sheet, slides back down, closes on Esc /
+// backdrop tap (= cancel), and removes
 // itself again, so a page doesn't need a dedicated slot for it in its markup.
 // Never use alert() / confirm() / prompt() — use this.
 //
@@ -47,6 +48,10 @@ window.confirmDialogModule = (function () {
     dialog.className = "confirm-dialog";
     dialog.setAttribute("role", "alertdialog");
     dialog.setAttribute("aria-modal", "true");
+
+    const handle = document.createElement("div");
+    handle.className = "confirm-dialog-handle";
+    dialog.appendChild(handle);
 
     // Actions run after the exit animation, so e.g. a navigation or a
     // follow-up toast never cuts the dialog off mid-animation.
@@ -91,18 +96,17 @@ window.confirmDialogModule = (function () {
       secondaryButton.textContent = secondaryLabel;
       secondaryButton.addEventListener("click", () => close(onSecondary));
 
-      actions.classList.add("confirm-dialog-actions--stacked");
       actions.appendChild(confirmButton);
       actions.appendChild(secondaryButton);
       actions.appendChild(cancelButton);
     } else {
-      actions.appendChild(cancelButton);
       actions.appendChild(confirmButton);
+      actions.appendChild(cancelButton);
     }
     dialog.appendChild(actions);
 
     const layer = window.overlayModule.openOverlay({
-      placement: "center",
+      placement: "bottom",
       content: dialog,
       onDismiss: () => close(onCancel),
     });

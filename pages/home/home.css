@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-20);
-  padding: var(--space-4) var(--page-gutter) var(--space-16);
+  padding: var(--space-20) var(--page-gutter) var(--space-16);
 }
 
 .home-feed {
@@ -66,15 +66,83 @@
   color: var(--color-text-secondary);
 }
 
-.home-main-card {
+/* --- Hero band ---------------------------------------------------------------
+   Brand navy in both themes (.theme-dark scope in the HTML), continuing the
+   brand-tone app bar. Two soft glows drift behind the content. */
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: var(--space-12);
-  padding: var(--space-14) var(--space-16);
+  padding: var(--space-4) var(--page-gutter) var(--space-20);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  background: linear-gradient(180deg, var(--color-brand-surface) 0%, var(--color-brand-deep) 100%);
+  box-shadow: var(--shadow-floating);
+}
+
+.home-hero-glow {
+  position: absolute;
+  z-index: -1;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-round);
+  filter: blur(48px);
+  pointer-events: none;
+  animation: home-hero-drift var(--duration-ambient) var(--ease-in-out) infinite alternate;
+}
+
+.home-hero-glow--gold {
+  top: 30%;
+  right: -25%;
+  background: var(--color-glow-gold);
+  opacity: 0.55;
+}
+
+.home-hero-glow--blue {
+  top: -20%;
+  left: -30%;
+  background: var(--color-glow-blue);
+  opacity: 0.6;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes home-hero-drift {
+  to {
+    transform: translate(-18%, 14%) scale(1.15);
+  }
+}
+
+/* Market status as a glass pill (inline: hugs its text) */
+.home-hero .market-status {
+  display: inline-flex;
+  padding: var(--space-4) var(--space-12) var(--space-4) var(--space-10);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-on-brand) 8%, transparent);
+  box-shadow: inset 0 0 0 var(--space-1) color-mix(in srgb, var(--color-on-brand) 10%, transparent);
+}
+
+.home-hero .home-overview-head {
+  margin-bottom: calc(-1 * var(--space-4));
+}
+
+.home-overview-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glass card on the navy band (not a card on a card: the band is a surface). */
+.home-main-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-14) var(--space-16) 0;
   border-radius: var(--radius-lg);
-  background: var(--color-card-background);
-  box-shadow: var(--shadow-card), inset 0 0 0 var(--space-1) var(--color-card-border);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-on-brand) 7%, transparent);
+  box-shadow: inset 0 0 0 var(--space-1) color-mix(in srgb, var(--color-on-brand) 12%, transparent);
   text-decoration: none;
   color: inherit;
   transition:
@@ -84,18 +152,18 @@
 
 @media (hover: hover) {
   .home-main-card:hover {
-    background: color-mix(in srgb, var(--color-text-main) 3%, var(--color-card-background));
+    background: color-mix(in srgb, var(--color-on-brand) 10%, transparent);
   }
 }
 
 .home-main-card:active {
-  transform: scale(0.985);
+  transform: scale(var(--press-scale));
 }
 
-.home-main-info {
+.home-main-head {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  align-items: baseline;
+  gap: var(--space-8);
   min-width: 0;
 }
 
@@ -111,17 +179,64 @@
 }
 
 .home-main-price {
-  margin-top: var(--space-6);
-  font-size: var(--font-size-title2);
+  font-size: var(--font-size-large-title);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--color-text-main);
   font-variant-numeric: tabular-nums;
+}
+
+.home-change-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.home-change-pill {
+  --change-color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-8) var(--space-2) var(--space-6);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-footnote);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--change-color);
+  background: color-mix(in srgb, var(--change-color) 18%, transparent);
+}
+
+.home-change-pill--up {
+  --change-color: var(--color-positive);
+}
+
+.home-change-pill--down {
+  --change-color: var(--color-negative);
+}
+
+.home-change-pill-icon {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}
+
+.home-change-today {
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Full-bleed curve along the card's bottom edge. */
+.home-main-spark {
+  width: calc(100% + 2 * var(--space-16));
+  height: 64px;
+  margin: var(--space-8) calc(-1 * var(--space-16)) 0;
 }
 
 .home-small-strip {
   display: flex;
   gap: var(--space-8);
-  margin: var(--space-8) calc(-1 * var(--page-gutter)) 0;
+  margin: var(--space-10) calc(-1 * var(--page-gutter)) 0;
   padding: var(--space-2) var(--page-gutter);
   overflow-x: auto;
   scrollbar-width: none;
@@ -143,8 +258,9 @@
   gap: var(--space-2);
   padding: var(--space-10) var(--space-12);
   border-radius: var(--radius-md);
-  background: var(--color-card-background);
-  box-shadow: inset 0 0 0 var(--space-1) var(--color-card-border);
+  background: color-mix(in srgb, var(--color-on-brand) 7%, transparent);
+  box-shadow: inset 0 0 0 var(--space-1) color-mix(in srgb, var(--color-on-brand) 10%, transparent);
+  color: inherit;
   font-family: inherit;
   text-align: left;
   transition:
@@ -154,7 +270,7 @@
 
 @media (hover: hover) {
   .home-small-card:hover {
-    background: color-mix(in srgb, var(--color-text-main) 4%, var(--color-card-background));
+    background: color-mix(in srgb, var(--color-on-brand) 11%, transparent);
   }
 }
 
@@ -177,8 +293,8 @@
 
 .home-disclosure {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  align-items: flex-start;
+  gap: var(--space-12);
   padding: var(--space-10) var(--space-8);
   margin: 0 calc(-1 * var(--space-8));
   border-radius: var(--radius-md);
@@ -187,8 +303,19 @@
   transition: background var(--duration-fast) var(--ease-ios);
 }
 
-.home-disclosure + .home-disclosure {
-  box-shadow: inset 0 var(--space-1) 0 var(--color-separator);
+/* iOS inset separator: starts after the monogram tile. */
+.home-disclosure {
+  position: relative;
+}
+
+.home-disclosure + .home-disclosure::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(var(--space-8) + 40px + var(--space-12));
+  right: var(--space-8);
+  height: var(--space-1);
+  background: var(--color-separator);
 }
 
 @media (hover: hover) {
@@ -199,6 +326,29 @@
 
 .home-disclosure:active {
   background: var(--color-pressed);
+}
+
+.home-disclosure-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Issuer monogram: a small tinted tile, so the list scans like a feed. */
+.home-disclosure-tile {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-caption2);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
 }
 
 .home-disclosure-head,
@@ -215,7 +365,7 @@
 
 /* Skeleton blocks: same footprint as the loaded content */
 .home-skeleton-main {
-  height: 112px;
+  height: 176px;
   border-radius: var(--radius-lg);
 }
 
@@ -240,4 +390,46 @@
 
 .home-skeleton-disclosure {
   height: 60px;
+}
+
+.home-overview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.home-edit-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  margin-right: calc(var(--space-8) * -1);
+  color: var(--color-highlight);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-ios);
+}
+
+.home-edit-link svg {
+  width: 24px;
+  height: 24px;
+}
+
+.home-edit-link:active {
+  opacity: var(--press-opacity);
+}
+
+.home-bell {
+  position: relative;
+}
+
+.home-bell-dot {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--color-negative);
 }

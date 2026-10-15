@@ -4,9 +4,12 @@
 // Swipeable highlight carousel (NYC_001–NYC_003): each slide has a title, a
 // category tag and a link; it auto-advances (default 5 s, our proposal for
 // NYC_002) and pauses while the user touches it. Slides are colored brand
-// gradients (mock content has no real images).
+// gradients (mock content has no real images) with the emblem's gold ring as
+// a decorative motif. The active dot fills up over the interval and its
+// animationend advances the slide, so the timing lives in CSS. Under reduced
+// motion there is no auto-advance (the dots stay static).
 //
-// Requires modules/i18n/i18n.js to be loaded first.
+// Requires modules/i18n/i18n.js and modules/motion/motion.js to be loaded first.
 //
 // Usage in a page:
 //   <script src="../../modules/carousel/carousel.js"></script>
@@ -39,7 +42,10 @@ window.carouselModule = (function () {
       const title = document.createElement("span");
       title.className = "carousel-title";
       title.textContent = item.title;
-      slide.append(tag, title);
+      const rings = document.createElement("span");
+      rings.className = "carousel-rings";
+      rings.setAttribute("aria-hidden", "true");
+      slide.append(rings, tag, title);
       track.appendChild(slide);
     });
 
@@ -52,12 +58,15 @@ window.carouselModule = (function () {
       return dot;
     });
 
+    const slideEls = Array.from(track.children);
+
     function currentIndex() {
       return Math.round(track.scrollLeft / (track.clientWidth || 1));
     }
     function markActive() {
       const index = currentIndex();
       dotEls.forEach((dot, i) => dot.classList.toggle("carousel-dot--active", i === index));
+      slideEls.forEach((slide, i) => slide.classList.toggle("carousel-slide--active", i === index));
     }
     function goTo(index) {
       track.scrollTo({ left: index * track.clientWidth, behavior: "smooth" });
@@ -65,17 +74,22 @@ window.carouselModule = (function () {
 
     track.addEventListener("scroll", markActive, { passive: true });
     markActive();
-    dotEls[0] && dotEls[0].classList.add("carousel-dot--active");
 
-    let paused = false;
-    ["pointerdown", "touchstart", "focusin"].forEach((evt) => track.addEventListener(evt, () => (paused = true)));
-    ["pointerup", "touchend", "focusout"].forEach((evt) => track.addEventListener(evt, () => (paused = false)));
+    function setPaused(paused) {
+      root.classList.toggle("carousel--paused", paused);
+    }
+    ["pointerdown", "touchstart", "focusin"].forEach((evt) => track.addEventListener(evt, () => setPaused(true)));
+    ["pointerup", "touchend", "focusout"].forEach((evt) => track.addEventListener(evt, () => setPaused(false)));
 
-    if (intervalMs > 0 && items.length > 1) {
-      setInterval(() => {
-        if (paused || !root.isConnected) return;
+    const autoplay = intervalMs > 0 && items.length > 1 && !window.motion.prefersReducedMotion();
+    if (autoplay) {
+      root.classList.add("carousel--autoplay");
+      root.style.setProperty("--carousel-interval", intervalMs + "ms");
+      // The active dot's fill animation ending is the "timer".
+      dots.addEventListener("animationend", (event) => {
+        if (!event.target.classList.contains("carousel-dot--active")) return;
         goTo((currentIndex() + 1) % items.length);
-      }, intervalMs);
+      });
     }
 
     root.append(track, dots);

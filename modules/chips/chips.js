@@ -46,11 +46,26 @@ window.chipsModule = (function () {
     let selected = multi ? activeIds.slice() : [activeId];
     const buttons = [];
 
+    // Segmented: one highlight slides under the options (iOS style) instead of
+    // each option switching its own background. Options are equal width, so
+    // the position is just the index (see chips.css).
+    const slidingThumb = variant === "segmented" && !multi;
+    let thumb = null;
+    if (slidingThumb) {
+      container.classList.add("chips--sliding");
+      container.style.setProperty("--chips-count", items.length);
+      thumb = document.createElement("span");
+      thumb.className = "chips-thumb";
+      thumb.setAttribute("aria-hidden", "true");
+      container.appendChild(thumb);
+    }
+
     function paint() {
-      buttons.forEach(({ button, id }) => {
+      buttons.forEach(({ button, id }, index) => {
         const isActive = selected.includes(id);
         button.classList.toggle("chips-item--active", isActive);
         button.setAttribute(multi ? "aria-pressed" : "aria-checked", isActive ? "true" : "false");
+        if (thumb && isActive) container.style.setProperty("--chips-index", index);
       });
     }
 

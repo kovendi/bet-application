@@ -34,15 +34,30 @@
   outline-offset: 2px;
 }
 
+/* Type tile: each content type has its own chart-set hue, so the list scans
+   by type at a glance (the meta line also names the type). */
 .education-row-icon {
+  --edu-tone: var(--color-accent);
   flex: none;
-  width: var(--icon-2xl);
-  height: var(--icon-2xl);
-  padding: var(--space-6);
+  width: 40px;
+  height: 40px;
+  padding: var(--space-10);
   box-sizing: border-box;
-  border-radius: var(--radius-round);
-  background: var(--color-hover);
-  color: var(--color-accent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--edu-tone) 16%, transparent);
+  color: var(--edu-tone);
+}
+
+.education-row-icon--article {
+  --edu-tone: var(--chart-1);
+}
+
+.education-row-icon--video {
+  --edu-tone: var(--chart-3);
+}
+
+.education-row-icon--quiz {
+  --edu-tone: var(--chart-4);
 }
 
 .education-row-body {

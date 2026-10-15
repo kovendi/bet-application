@@ -29,9 +29,8 @@ window.bottomNavModule = (function () {
   // because every destination is a separate page, the previously active id is
   // kept in sessionStorage so a fresh page can start the indicator at the old
   // spot and glide it to the new one. Clicking also plays the slide before
-  // navigating, so the user gets immediate feedback.
+  // navigating (until its transitionend), so the user gets immediate feedback.
   const STORAGE_KEY = "bottomNav.lastActive";
-  const NAVIGATE_DELAY_MS = 220;
 
   function readLast() {
     try { return sessionStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
@@ -39,6 +38,17 @@ window.bottomNavModule = (function () {
 
   function writeLast(id) {
     try { sessionStorage.setItem(STORAGE_KEY, id); } catch (e) { /* ignore */ }
+  }
+
+  // Lets the indicator finish gliding before leaving the page. Without a
+  // running transition (reduced motion) it navigates right away.
+  function navigateAfterSlide(indicator, href) {
+    const animated = parseFloat(getComputedStyle(indicator).transitionDuration) > 0;
+    if (!animated) {
+      window.location.href = href;
+      return;
+    }
+    indicator.addEventListener("transitionend", () => { window.location.href = href; }, { once: true });
   }
 
   function renderBottomNav({ items = [], activeId } = {}) {
@@ -91,7 +101,7 @@ window.bottomNavModule = (function () {
         event.preventDefault();
         setActive(item.id);
         writeLast(item.id);
-        setTimeout(() => { window.location.href = item.href; }, NAVIGATE_DELAY_MS);
+        navigateAfterSlide(indicator, item.href);
       });
 
       links.push(link);

@@ -1,20 +1,98 @@
 .sparkline {
   display: block;
   flex-shrink: 0;
+  overflow: visible;
+}
+
+.sparkline--up {
+  color: var(--color-positive);
+}
+
+.sparkline--down {
+  color: var(--color-negative);
+}
+
+.sparkline--flat {
+  color: var(--color-text-secondary);
 }
 
 .sparkline-line {
   fill: none;
+  stroke: currentColor;
   stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
-.sparkline--up .sparkline-line {
-  stroke: var(--color-positive);
+.sparkline-fill-top {
+  stop-color: currentColor;
+  stop-opacity: 0.32;
 }
 
-.sparkline--down .sparkline-line {
-  stroke: var(--color-negative);
+.sparkline-fill-bottom {
+  stop-color: currentColor;
+  stop-opacity: 0;
+}
+
+.sparkline-end-dot {
+  fill: currentColor;
+}
+
+.sparkline-end {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.sparkline-end-halo {
+  fill: currentColor;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sparkline-live var(--duration-live-pulse) var(--ease-out) infinite;
+}
+
+@keyframes sparkline-live {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+
+/* Draw-in on arrival: the curve is revealed left to right (a clip on the
+   whole element, so a TradingView canvas can do the same), and the live dot
+   appears once the reveal reaches it. */
+.sparkline--animate {
+  animation: sparkline-reveal var(--duration-draw) var(--ease-out) both;
+}
+
+.sparkline--animate .sparkline-end {
+  animation: sparkline-follow var(--duration-slow) var(--ease-out) both;
+  animation-delay: calc(var(--duration-draw) * 0.8);
+}
+
+@keyframes sparkline-reveal {
+  from {
+    clip-path: inset(-50% 100% -50% -50%);
+  }
+  to {
+    clip-path: inset(-50% -50% -50% -50%);
+  }
+}
+
+@keyframes sparkline-follow {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkline--animate .sparkline-end {
+    animation-delay: 0ms;
+  }
 }

@@ -39,7 +39,7 @@ iconGrid.className = "style-guide-icon-grid";
 ["home", "calendar", "profile", "bell", "search", "plus", "back", "filter", "edit", "check",
   "refresh", "menu", "trash", "logout", "users", "shield", "chat", "send", "close", "link",
   "book", "mail", "star", "star-filled", "chart-line", "chart-candle", "info", "chevron-right", "chevron-down", "lock",
-  "sparkles", "arrow-up", "arrow-down", "stop", "copy", "thumbs-up", "thumbs-down", "mic", "clock"].forEach((name) => {
+  "sparkles", "arrow-up", "arrow-down", "stop", "copy", "thumbs-up", "thumbs-down", "mic", "clock", "price-alert"].forEach((name) => {
   const cell = document.createElement("div");
   cell.className = "style-guide-icon-cell";
   cell.appendChild(window.iconModule.renderIcon(name));
@@ -178,6 +178,7 @@ addSection(
   "top-appbar",
   window.topAppbarModule.renderTopAppbar({ title: t("app.name") }),
   window.topAppbarModule.renderTopAppbar({ title: t("app.name"), onBack: () => {} }),
+  window.topAppbarModule.renderTopAppbar({ title: t("app.name"), tone: "brand" }),
 );
 
 // bottom-nav
@@ -325,6 +326,17 @@ sparkRow.className = "style-guide-icon-grid";
   const values = window.storage.getPriceSeries(ticker, "1m").map((c) => c.c);
   sparkRow.appendChild(window.sparklineModule.renderSparkline({ values, width: 80, height: 28 }));
 });
+// Hero variant: today's curve with area fill, draw-in and live end dot.
+sparkRow.appendChild(
+  window.sparklineModule.renderSparkline({
+    values: window.storage.getDayCurve("BUX"),
+    width: 160,
+    height: 48,
+    area: true,
+    animate: true,
+    endDot: true,
+  }),
+);
 addSection("sparkline", sparkRow);
 
 // price-row
@@ -352,7 +364,24 @@ renderPriceRows();
 addSection("price-row", priceRows);
 
 // chart
-addSection("chart", window.chartModule.renderChart({ instrument: window.storage.getInstrument("OTP") }));
+addSection(
+  "chart",
+  window.chartModule.renderChart({
+    instrument: window.storage.getInstrument("OTP"),
+    markers: window.storage.getProductMarkers("OTP"),
+  }),
+);
+
+// bar-chart
+addSection(
+  "bar-chart",
+  window.barChartModule.renderBarChart({
+    title: t("style_guide.demo_bar_chart"),
+    labels: [2021, 2022, 2023, 2024, 2025],
+    values: [12.4, 18.1, -6.3, null, 22.7],
+    formatValue: (value) => `${value < 0 ? "−" : ""}${window.moneyModule.formatNumber(value, 1)}`,
+  }),
+);
 
 // market-status (open: Wednesday 10:30 / closed: Saturday 12:00, Budapest time)
 const statusDemo = document.createElement("div");
@@ -367,7 +396,10 @@ addSection("market-status", statusDemo);
 addSection("carousel", window.carouselModule.renderCarousel({ items: window.storage.getCarouselItems() }));
 
 // toplist
-addSection("toplist", window.toplistModule.renderToplist({ instruments: window.storage.getInstruments("share") }));
+addSection(
+  "toplist",
+  window.toplistModule.renderToplist({ instruments: window.storage.getInstruments("share"), sparkline: true }),
+);
 
 // iphone-frame (wraps whole app pages, can't be demoed inline here)
 addSection("iphone-frame", textEl(t("style_guide.demo_iphone_frame"), "style-guide-caption"));

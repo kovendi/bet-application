@@ -17,6 +17,9 @@
 }
 
 .carousel-slide {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   flex: 0 0 100%;
   scroll-snap-align: start;
   box-sizing: border-box;
@@ -63,6 +66,52 @@
   --slide-end: color-mix(in srgb, var(--chart-7) 40%, var(--color-brand-surface));
 }
 
+/* The emblem's gold ring, echoed as two outlined circles drifting slowly at
+   the right edge (decoration only, clipped by the slide). */
+.carousel-rings,
+.carousel-rings::after {
+  position: absolute;
+  z-index: -1;
+  border-radius: var(--radius-round);
+  border: var(--space-2) solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  pointer-events: none;
+}
+
+.carousel-rings {
+  top: -30%;
+  right: -18%;
+  width: 62%;
+  aspect-ratio: 1;
+  opacity: 0.55;
+  animation: carousel-drift var(--duration-ambient) var(--ease-in-out) infinite alternate;
+}
+
+.carousel-rings::after {
+  content: "";
+  inset: 22%;
+  border-width: var(--space-1);
+}
+
+@keyframes carousel-drift {
+  to {
+    transform: translate(-6%, 8%) rotate(18deg);
+  }
+}
+
+/* The active slide's text rises in as it settles. */
+.carousel-tag,
+.carousel-title {
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+
+.carousel-slide:not(.carousel-slide--active) .carousel-tag,
+.carousel-slide:not(.carousel-slide--active) .carousel-title {
+  opacity: 0.4;
+  transform: translateY(var(--space-6));
+}
+
 .carousel-tag {
   align-self: flex-start;
   padding: var(--space-2) var(--space-8);
@@ -100,4 +149,36 @@
   width: var(--space-16);
   background: var(--color-primary);
   opacity: 1;
+}
+
+/* Autoplay: the active dot is a tiny progress bar that fills over the
+   interval; its animationend advances the carousel (see carousel.js). */
+.carousel--autoplay .carousel-dot {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel--autoplay .carousel-dot--active {
+  width: var(--space-24);
+  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.carousel--autoplay .carousel-dot--active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-primary);
+  transform-origin: left;
+  animation: carousel-progress var(--carousel-interval) var(--ease-in-out) both;
+}
+
+.carousel--paused .carousel-dot--active::after {
+  animation-play-state: paused;
+}
+
+@keyframes carousel-progress {
+  from {
+    transform: scaleX(0);
+  }
 }

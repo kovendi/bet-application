@@ -82,6 +82,34 @@
   color: var(--color-primary);
 }
 
+/* Sliding thumb (single-select segmented): the options sit above one
+   highlight that glides to the active index. Width and offset are derived
+   from the equal-width flex layout: (track - padding - gaps) / count. */
+.chips--sliding {
+  --chips-pad: var(--space-2);
+  --chips-gap: var(--space-2);
+  position: relative;
+  isolation: isolate;
+}
+
+.chips--sliding .chips-item--active {
+  background: transparent;
+}
+
+.chips-thumb {
+  position: absolute;
+  z-index: -1;
+  top: var(--chips-pad);
+  bottom: var(--chips-pad);
+  left: var(--chips-pad);
+  width: calc((100% - 2 * var(--chips-pad) - (var(--chips-count) - 1) * var(--chips-gap)) / var(--chips-count));
+  border-radius: var(--radius-xs);
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  box-shadow: var(--shadow-card);
+  transform: translateX(calc(var(--chips-index, 0) * (100% + var(--chips-gap))));
+  transition: transform var(--duration-slow) var(--ease-ios);
+}
+
 /* bubble: wrapping outlined filters */
 .chips--bubble {
   display: flex;

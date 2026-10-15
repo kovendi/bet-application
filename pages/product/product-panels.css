@@ -1,0 +1,196 @@
+/* Tab panels of the product page (financials, valuation, issuer, analysis,
+   disclosures, specs). The trading tab styles are in product.css. */
+
+.product-note {
+  margin: var(--space-6) 0 0;
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+}
+
+.product-text {
+  margin: 0;
+  font-size: var(--font-size-callout);
+  line-height: 1.45;
+  color: var(--color-text-main);
+}
+
+.product-chart-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  margin-top: var(--space-12);
+}
+
+.product-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+/* Recommendation counts: segmented bar plus a number legend (never color alone). */
+.product-reco-bar {
+  display: flex;
+  gap: var(--space-2);
+  height: var(--space-12);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.product-reco-segment {
+  flex: var(--reco-share) 1 0;
+  background: var(--color-text-secondary);
+}
+
+.product-reco-segment--buy {
+  background: var(--color-positive);
+}
+
+.product-reco-segment--sell {
+  background: var(--color-negative);
+}
+
+.product-reco-legend {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--space-10) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-reco-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+}
+
+.product-reco-count {
+  font-size: var(--font-size-title2);
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+.product-reco-label {
+  font-size: var(--font-size-subheadline);
+  color: var(--color-text-secondary);
+}
+
+/* Document / report / component rows */
+.product-doc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.product-doc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-10) 0;
+  border: 0;
+  border-bottom: var(--space-1) solid var(--color-separator);
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text-main);
+  text-decoration: none;
+  transition: background var(--duration-fast) var(--ease-ios);
+}
+
+.product-doc-list li:last-child .product-doc-row {
+  border-bottom: none;
+}
+
+button.product-doc-row:active,
+a.product-doc-row:active {
+  background: var(--color-pressed);
+}
+
+@media (hover: hover) {
+  button.product-doc-row:hover,
+  a.product-doc-row:hover {
+    background: var(--color-hover);
+  }
+}
+
+.product-doc-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.product-doc-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+}
+
+.product-doc-meta {
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.product-doc-format {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-caption1);
+  font-weight: 700;
+  color: var(--color-primary);
+  background: var(--color-hover);
+}
+
+.product-doc-format .icon {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}
+
+.product-doc-row > .icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.product-doc-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+/* In-app PDF viewer (bottom sheet): a mock page in place of the real file */
+.product-doc-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-bottom: var(--space-12);
+  padding: var(--space-16);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+}
+
+.product-doc-page-title {
+  margin: 0;
+  font-size: var(--font-size-headline);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.product-doc-page-meta {
+  margin: 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}
+
+.product-doc-page-text {
+  margin: 0;
+  font-size: var(--font-size-subheadline);
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+}

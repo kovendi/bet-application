@@ -16,6 +16,10 @@
 //     window.motion.replay(starEl, 'price-row-star--pop');
 //     // content arriving after a skeleton / a swap:
 //     window.motion.fadeIn(cardEl);
+//     // children (or an array of elements) rise in one after another:
+//     window.motion.stagger(listEl);
+//     // a number rolls up to its value (--duration-countup); format(n) -> text:
+//     window.motion.countUp(priceEl, 112480.35, (n) => money.formatNumber(n, 2));
 //   </script>
 
 window.motion = (function () {
@@ -53,5 +57,50 @@ window.motion = (function () {
     return el;
   }
 
-  return { playOut, replay, fadeIn };
+  function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  // Each element gets its index as --stagger-index; motion.css turns that into
+  // an animation delay, so they arrive one after another. Takes a container
+  // (its direct children) or a list of elements. Capped so a long list never
+  // keeps the user waiting for its tail.
+  const STAGGER_MAX = 8;
+  function stagger(target) {
+    const elements = Array.isArray(target) ? target : Array.from(target.children);
+    elements.forEach((element, index) => {
+      element.style.setProperty("--stagger-index", Math.min(index, STAGGER_MAX));
+      replay(element, "motion-stagger");
+    });
+    return target;
+  }
+
+  function durationToken(name) {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return raw.endsWith("ms") ? parseFloat(raw) : parseFloat(raw) * 1000;
+  }
+
+  // Rolls the text of `el` from just below `to` up to `to` (ease-out), the way
+  // a quote board settles. Driven by requestAnimationFrame; skipped entirely
+  // under reduced motion. The final text is always exactly format(to).
+  function countUp(el, to, format, { fromRatio = 0.96 } = {}) {
+    el.textContent = format(to);
+    if (prefersReducedMotion() || !to) return el;
+    const from = to * fromRatio;
+    const duration = durationToken("--duration-countup");
+    // Timing from the rAF timestamp only: pages may shadow the global
+    // `performance` (classic scripts share one global scope).
+    let start = null;
+    function frame(now) {
+      if (start === null) start = now;
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      el.textContent = format(progress < 1 ? from + (to - from) * eased : to);
+      if (progress < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    return el;
+  }
+
+  return { playOut, replay, fadeIn, stagger, countUp, prefersReducedMotion };
 })();

@@ -25,7 +25,7 @@ This is a mobile app mockup — design and test for mobile viewport first, alway
 ```
 mockup/
 ├── index.html      # overview page, links to every page in /pages
-├── global.css      # global rules only: color variables, base typography, resets
+├── global.css      # global rules only: design tokens (colors, spacing, type, motion, …), base typography, resets
 ├── version.js      # window.APP_VERSION
 ├── assets/         # all SVG files live here, referenced by path from pages/modules
 ├── locales/        # translation tables (hu.js, ...)
@@ -52,7 +52,7 @@ Never put `padding-top` on `body`, `.iphone-screen` or any scroll container that
 
 Language: hu only, for now. Translations live in `locales/hu.js`, which assigns a flat, dot-notation object to `window.LOCALES.hu` (e.g. `window.LOCALES.hu = { "nav.home": "...", "login.submit_button": "..." }`), never full sentences as keys. Plain `.js` (not `.json`) because `file://` pages can't `fetch()` JSON.
 
-Every page must include the locale script (`locales/hu.js`) before `modules/i18n/i18n.js`.
+The table is split by area: `locales/hu.js` holds the shared keys (nav, dates, states, common modules) and `hu-assist.js`, `hu-education.js`, `hu-product.js`, `hu-market.js`, `hu-account.js`, `hu-meta.js` extend it with `Object.assign(window.LOCALES.hu, {...})`. A new key goes into the file of the area it belongs to (`hu.js` only if several areas share it); a new area gets its own `hu-<area>.js`. Every page must include `locales/hu.js` first, then all the `hu-*.js` files, before `modules/i18n/i18n.js`. A new language repeats the same file set (`en.js`, `en-assist.js`, ...).
 
 The system (`modules/i18n/i18n.js`, `t()`, `window.LOCALES`) is built to support more languages later — adding one should only require dropping in a new `locales/<code>.js` file and linking it from pages, no logic changes. Don't hardcode `hu` outside of `locales/hu.js` and the default-language fallback in `i18n.js`.
 
@@ -71,7 +71,7 @@ No backend, so `localStorage` simulates a database. `modules/storage/storage.js`
 - `getDb()` / `saveDb(db)` — read/write the whole object; `getDb()` auto-initializes `{ users: [{ id: "demouser", username: "demo@example.com", password: "12345678", name: "Demo" }] }` on first use.
 - Per-entity helpers (e.g. `getUsers()`, `addUser(user)`, `findUserByUsername(username)`) and session helpers (`setCurrentUser(id)`, `getCurrentUser()`, `logout()`) live alongside the generic ones — add more as new entities are introduced, don't call `getDb()`/`saveDb()` directly from pages.
 - Don't store `File`/`Blob` objects (not JSON-serializable) — convert to a base64 data URL via `FileReader.readAsDataURL` first.
-- Static mock reference data (instruments, disclosures, carousel, education, brokers, price history) lives in `modules/storage/seed-*.js` and is read-only through `getInstruments()`, `getInstrument()`, `getChangePercent()`, `getPriceSeries()`, `getDisclosures()`, `getCarouselItems()`, `getEducation()`, `getEducationItem(id)` (list entry + body from `seed-education.js`), `getBrokers()`; favorites (`getFavorites/isFavorite/toggleFavorite`) are user state in the db. Pages using them link `seed-instruments.js`, `seed-content.js`, `seed-series.js` (and `seed-education.js` for education bodies) before `storage.js`.
+- Static mock reference data (instruments, disclosures, carousel, education, brokers, price history) lives in `modules/storage/seed-*.js` and is read-only through `getInstruments()`, `getInstrument()`, `getChangePercent()`, `getPriceSeries()`, `getDisclosures()`, `getCarouselItems()`, `getEducation()`, `getEducationItem(id)` (list entry + body from `seed-education.js`), `getBrokers()`; `getDayCurve(ticker)` (today's mini curve from the previous close to the current price, so its direction always matches the daily change; used by price-row sparklines and the home hero); favorites (`getFavorites/isFavorite/toggleFavorite`) are user state in the db. Pages using them link `seed-instruments.js`, `seed-content.js`, `seed-series.js` (and `seed-education.js` for education bodies) before `storage.js`.
 - Any page reading/writing data must link `modules/storage/storage.js` (no paired CSS — logic-only, same exception as `i18n.js`).
 
 ## Modules (reusable components)
@@ -85,11 +85,17 @@ When the user says an element is repeating and should be a "common module" (e.g.
 - Before building any element, check if a matching module already exists — if so, reuse/import it instead of recreating it.
 - Do not duplicate/reimplement an existing module's markup on a new page — import it.
 
-Current modules: action-bar, banner, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, money, motion, overlay, price-row, progress-bar, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network.
+Current modules: action-bar, banner, bar-chart, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, money, motion, overlay, page-transition, price-row, progress-bar, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network.
 
 ## Rules
 
-Project-specific rules and conventions will be collected here as the project develops.
+### Docs first
+
+Before starting any page, feature or phase, read the relevant requirements in `../docs/`. Start with `../docs/követelmenyek-osszefoglalo.md`: it is the digest of the tender (requirement codes, per-type tables), the BÉT's consolidated Q&A (every bidder's questions with the BÉT's answers) and the reference screens, so the PDF/docx do not have to be re-read every time. Only open the originals (`BET_Mobilapp_tender_...pdf`, `BET_Mobilapp_kerdesek_...docx`, `arculat/`) when the digest is missing a detail or is unclear.
+
+When you find something in the originals that affects the design and is not in the digest, add it to `követelmenyek-osszefoglalo.md` in the same task. Keep the digest short: requirements that matter for the mockup only.
+
+New questions for the BÉT go into `../docs/kerdesek-kliensnek.md` (collected for the next round, not sent yet), each with the source file, page or section and the quoted passage, plus a working hypothesis.
 
 ### Efficient workflow
 
@@ -102,12 +108,12 @@ The mockup should feel like a native iOS app. We follow the Apple Human Interfac
 - **Priority:** the BÉT brand (Brand / Arculat, Color Palette) and the tender requirements win over the HIG whenever they conflict. Colors always come from the tokens, never from iOS system colors.
 - **Clarity:** the content is the star, not the chrome. Prefer lists and grouped rows over bordered boxes (also see "box in a box"). Never rely on color alone (icon, sign or text too).
 - **Depth:** layers via `--color-background` → `--color-card-background`, bottom sheets for secondary tasks, subtle shadows only.
-- **Typography:** system font stack only. iOS-like scale: large title 34 px, title 22 px, body 17 px, subheadline 15 px, footnote 13 px, caption 12 px. Prefer these over ad-hoc sizes.
-- **Touch targets:** at least `var(--tap-min)` (44 px) tall and wide for every tappable element (the visible shape may be smaller if the hit area is padded). Side margin 16 px.
+- **Typography:** system font stack only, iOS type scale through the `--font-size-*` tokens (see Design system first).
+- **Touch targets:** at least `var(--tap-min)` (44 px) tall and wide for every tappable element (the visible shape may be smaller if the hit area is padded). Side margin `var(--page-gutter)` (16 px).
 - **Icons:** SF Symbols can't be used on the web (license). Icons go through `modules/icon` only, in an SF-like style: outlined, uniform stroke, rounded caps. When adding an icon, use the SF Symbols name as the reference for the file name where one fits (e.g. `chevron-right`, `gearshape`).
-- **Motion:** use `var(--ease-ios)` with `var(--duration-fast)` (press feedback) or `var(--duration-base)` (state changes), never a hardcoded curve. Every interactive element has an `:active` state (press: `transform: scale(0.96–0.97)` or opacity). `global.css` already disables motion under `prefers-reduced-motion`.
+- **Motion:** see Premium UI → Motion and Interactive states.
 - **Haptics:** not possible in a browser, so the visual press/toggle feedback stands in for it. Don't add `navigator.vibrate`.
-- **Patterns:** standard iOS ones: bottom tab bar, large title that collapses on scroll, inset grouped lists (`menu-list`), segmented control (`chips`), swipe actions, pull-friendly lists.
+- **Patterns:** standard iOS ones: bottom tab bar, inset grouped lists (`menu-list`), segmented control (`chips`), swipe actions, pull-friendly lists. No collapsing large title: page titles always sit in the app bar (see Top app bar).
 
 ### Premium UI & interaction feedback
 
@@ -116,39 +122,43 @@ The UI must feel premium: a static mockup that behaves like a real, polished app
 **Design system first**
 
 - New screens and elements match the existing ones. Reuse existing modules and classes (button, input, card, menu-list, chips, tabs, …) before writing anything new.
-- Every color, spacing, radius, font size, icon size, shadow, z-index, duration and easing is a CSS custom property on `:root` in `global.css`. Never hardcode a value in a component rule. Use the existing steps: `--space-N` (N = px: 1, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32; `--page-gutter`), `--radius-xs|sm|md|lg|xl|pill|round`, `--font-size-*` (iOS scale: large-title 34, title2 22, title3 20, headline/body 17, callout 16, subheadline 15, footnote 13, caption1 12, caption2 11), `--icon-xs…2xl`, `--shadow-card|popover`, `--z-sticky|overlay|toast|popover`, `--duration-fast|base|slow`, `--ease-ios|out`, `--press-scale|opacity`. Need a value that isn't there? Add a token (both themes if it differs) rather than an ad-hoc number. Fixed component dimensions (e.g. a 51×31 switch) may stay in px.
+- Every color, spacing, radius, font size, icon size, shadow, z-index, duration and easing is a CSS custom property on `:root` in `global.css`. Never hardcode a value in a component rule. Use the existing steps: `--space-N` (N = px: 1, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32; `--page-gutter`), `--radius-xs|sm|md|lg|xl|pill|round`, `--font-size-*` (iOS scale: large-title 34, title2 22, title3 20, headline/body 17, callout 16, subheadline 15, footnote 13, caption1 12, caption2 11), `--icon-xs…2xl`, `--shadow-card|popover|floating`, `--z-sticky|overlay|toast|popover`, `--duration-fast|base|slow` (plus effect durations: `--duration-draw`, `--duration-countup`, `--duration-live-pulse`, `--duration-ambient`, `--stagger-step`), `--ease-ios|out|in-out`, `--press-scale|opacity`. Need a value that isn't there? Add a token (both themes if it differs) rather than an ad-hoc number. Fixed component dimensions (e.g. a 51×31 switch) may stay in px.
 - If a pattern already appears in two places, propose turning it into a shared module (see [Modules](#modules-reusable-components)) instead of copying it a third time.
 - If a new element has no counterpart in the existing mockup, ask before introducing a new visual pattern.
 
 **Interactive states** — every clickable element (button, link, list row, chip, icon button):
 
-- `:hover` only inside `@media (hover: hover)` (no sticky hover on touch), `:active` press state (see Apple HIG → Motion), and a visible `:focus-visible` ring (`--color-primary`).
-- `cursor: pointer`, `-webkit-tap-highlight-color: transparent` and the default focus ring come from the baseline in `global.css`; components only add their own hover/active look. Row/surface feedback uses `--color-hover` / `--color-pressed`.
+- `:hover` only inside `@media (hover: hover)` (no sticky hover on touch).
+- `:active` press state: `transform: scale(var(--press-scale))` or `opacity: var(--press-opacity)`, animated with `var(--duration-fast)`. Row/surface feedback uses `--color-hover` / `--color-pressed`.
+- `cursor: pointer`, `-webkit-tap-highlight-color: transparent` and the `:focus-visible` ring (`--color-primary`) come from the baseline in `global.css`; components only add their own hover/active look and must not remove the focus ring.
 - Icon-only buttons in a top bar use `.top-appbar-icon-button` (44 px hit area).
 
 **Motion**
 
-- Every state change animates: appear/disappear, expand/collapse, list insert/remove, tab/segment switch, sheet/dialog open/close. No element pops in or out instantly. Use `modules/motion`: `fadeIn(el)` for arriving content, `playOut(el, class, done)` for exit animations, `replay(el, class)` for one-shot effects (e.g. the favorite star pop).
-- 150–300 ms, ease-out or a spring-like curve (`--ease-ios`), never `linear`. Durations and easings are always tokens.
-- Under `prefers-reduced-motion` only simple fades or nothing (`global.css` already shortens all motion globally; don't override it).
+- Every state change animates: appear/disappear, expand/collapse, list insert/remove, tab/segment switch, sheet/dialog open/close. No element pops in or out instantly. Use `modules/motion`: `fadeIn(el)` for arriving content, `stagger(containerOrArray)` for lists/feeds arriving one after another, `countUp(el, value, format)` for a headline figure rolling up to its value, `playOut(el, class, done)` for exit animations, `replay(el, class)` for one-shot effects (e.g. the favorite star pop).
+- Durations: `--duration-fast` (150 ms, press feedback), `--duration-base` (250 ms, state changes), `--duration-slow` (300 ms, sheets/larger moves); `--duration-ambient` only for slow decorative drift (hero glows, carousel rings, AI orb). Easing: `--ease-ios` (spring-like), `--ease-out` or `--ease-in-out` (looping drift), never `linear` and never a hardcoded curve.
+- Premium touches already in the system, reuse them rather than inventing new ones: brand hero band (home), glass surfaces (`--color-glass`, bottom nav), live pulse (market-status, sparkline `endDot`), sliding segmented thumb (chips), tinted change pills (price-row), chart/sparkline reveal.
+- **Page transitions:** sub-pages slide in from the right and going back slides the screen out to the right (`modules/page-transition`, linked in the `<head>` of every app page, before `theme.js`). Plain `<a href>` links push automatically; script navigation must use `window.pageTransition.go(url)`, `.back()` (instead of `history.back()`) or `.backTo(url)` (fixed parent), never `window.location.href` / `history.back()` for sub-page navigation. Bottom-nav tab switches, logout/login and reloads are not transitions and keep a plain `location.href`.
+- `global.css` already shortens all motion under `prefers-reduced-motion`; don't override it.
 
 **Loading, empty and error states**
 
 - Where a real app would wait for data (lists, charts, details), load it through `window.mockNetwork.request(key, produce)`, show `modules/skeleton` blocks sized by page classes to match the final layout (see `pages/home`), then `motion.fadeIn` the content.
 - Mock the error state for important screens too: `modules/state-view` with `variant: 'error'` and a Retry action.
 - Never leave a blank area: an empty state (`state-view`, default variant) has a short explanation and the primary action that fills it.
-- Demo any state from the URL: `?mock=slow` (skeletons), `?mock=error` (first request fails, Retry recovers), `?mock=empty` (pages call `mockNetwork.isEmptyMock()`). `index.html` links these for the home page.
+- Demo any state from the URL: `?mock=slow` (skeletons), `?mock=error` (first request fails, Retry recovers), `?mock=empty` (pages call `mockNetwork.isEmptyMock()`). `index.html` lists them in its "Állapotok" section (one row per screen, chips for slow/error/empty).
 
 **Submitting & validation**
 
 - Forms use `novalidate` and are validated in JS. Never rely on the browser's native `required` bubbles.
+- **Input pattern (login is the reference):** a text/number/password field is always `inputModule.renderInput({ icon, ... })` (icon row, label small above the value) inside `inputModule.renderInputStack([...])` (one rounded container, dividers between fields), even for a single field. Never a bare `renderInput` without `icon`, never a custom-styled input. The form is a flex column with `gap: var(--space-14)`: fields stack, then the form-level error banner, then the submit button. Fields without a fitting icon get the closest SF-like one (add it to `modules/icon` if missing). Selection controls (chips/segmented, toggle) sit above the stack with a `.app-input-label` caption.
 - Errors are inline, per field, in `--color-negative` (text + icon, not color alone), translated via `t()`: `inputModule.setFieldError(input, msg)` / `clearFieldError(input)`. Form-level errors (wrong password, network) are a `warning` banner above the submit button.
 - The submit button shows a progress state and is disabled while "sending": `buttonModule.setButtonLoading(button, true)`. On success give clear confirmation (toast, inline checkmark, or navigation back); on error show an inline message and keep the user's input.
 - Toggles, checkboxes, favorites and reactions update immediately with a small animation (no waiting). `price-row` flips its star itself; `onFavoriteToggle` returns `false` to veto (guest).
 
 **Dialogs & toasts**
 
-- Never use `alert()`, `confirm()` or `prompt()`. Use `confirm-dialog` (centered) or `bottom-sheet`; both sit on the shared `modules/overlay` (blurred backdrop, animated in and out, Esc and backdrop tap close it, focus returns). Destructive actions use `--color-negative`, and the dialog focuses Cancel first. Pages using either link `motion` + `overlay` (js + css) too.
+- Never use `alert()`, `confirm()` or `prompt()`. Use `confirm-dialog` (a confirmation drawer sliding up from the bottom) or `bottom-sheet` — never a centered popup; both sit on the shared `modules/overlay` (blurred backdrop, animated in and out, Esc and backdrop tap close it, focus returns). Destructive actions use `--color-negative`, and the dialog focuses Cancel first. Pages using either link `motion` + `overlay` (js + css) too.
 - Short success/info messages: `window.toastModule.showToast({ message, icon })`. It drops in, dismisses itself via a CSS animation delay, and tap dismisses it early.
 - A tap must never do nothing: an unfinished feature shows a "coming soon" toast instead of an empty handler.
 - Forms live on their own screen or inline, not inside popups, unless the user explicitly asks.
@@ -156,7 +166,7 @@ The UI must feel premium: a static mockup that behaves like a real, polished app
 **Layout**
 
 - Mobile-first; desktop shows the app in `iphone-frame`. Every page has `<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />` and respects `env(safe-area-inset-*)`.
-- Body text at least 16 px (the HIG scale's 17 px); hierarchy through weight and size, not color alone.
+- Body text uses `--font-size-body` (17 px); running text never goes below `--font-size-callout` (16 px). The smaller steps (subheadline, footnote, caption) are for secondary info only. Hierarchy through weight and size, not color alone.
 
 **Code**
 
@@ -184,7 +194,7 @@ Pages must never produce horizontal scroll. Watch for decorative elements (e.g. 
 
 On pages using `bottom-nav` (which is `position: sticky; bottom: 0;`), the content element directly above it inside `#screen-content`'s flex column must have `flex: 1` (all sibling states — loaded, empty, error, etc.) so it fills the remaining viewport height. Without this, short content leaves `bottom-nav` floating right below it instead of pinned to the bottom of the screen.
 
-`bottom-nav` takes its destinations via `renderBottomNav({ items, activeId })` — define the items list once and reuse it on every page so the main menu is identical everywhere.
+Main pages render the shared main menu with `bottomNavModule.renderMainNav(activeId)` (items defined once in `MAIN_ITEMS` inside the module), so it is identical everywhere. `renderBottomNav({ items, activeId })` is the generic builder underneath; don't pass a custom items list on app pages.
 
 ### Top app bar
 
@@ -226,15 +236,15 @@ Exception: `index.html` (root landing page), `pages/style-guide/style-guide.html
 
 `pages/update-history/update-history.html` is a table (Date, Version, Change) listing every change made to the codebase, newest entries added at the top. It is a meta/overview page (no `iphone-frame`, see exception above) and is exempt from the [File length](#file-length) line limit — never split or trim it. The page chrome (title, column headers, back button) is translated via `t()` like any other page; the Change column's text stays hardcoded in English regardless of language, since it's a developer-facing log.
 
-Before every `git push`, add one row to the top of this table: the current date and time (not just date — hour and minute too), the new `APP_VERSION`, and a one-line summary of what changed. Do not add a row on plain `git commit` — only when pushing. Treat this as part of the push itself, not a follow-up task.
+Before every `git push`, bump `APP_VERSION` (see App version) and add one row to the top of this table: the current date and time (hour and minute too), the new `APP_VERSION`, and a one-line summary of what changed. Do not add a row on plain `git commit` — only when pushing. Treat this as part of the push itself, not a follow-up task.
 
-The system only provides today's date, not the current time — never guess the time. Ask the user for the current hour and minute right before adding the row, and use exactly what they provide.
+Never guess the time: read the local date and time with the `date` shell command right before adding the row.
 
 The page has a back button that always navigates to `index.html` (not `history.back()`).
 
 ### App version
 
-`version.js` (project root) assigns `window.APP_VERSION` (e.g. `"v1.0.0"`), loaded via classic `<script>` before any script that reads it. `index.html` shows it next to the Update History link, and `update-history.html` shows it near its header. Bump it alongside the update-history row on every push that changes app behavior.
+`version.js` (project root) assigns `window.APP_VERSION` (e.g. `"v1.0.0"`), loaded via classic `<script>` before any script that reads it. `index.html` shows it next to the Update History link, and `update-history.html` shows it near its header. Bump it on every push, together with the update-history row.
 
 ## Charts / TradingView
 
@@ -246,6 +256,7 @@ Every price chart in the real app will be a **TradingView** chart (Lightweight C
 - When a requirement asks for a visual that TradingView cannot do, flag it to the user before building and propose a TradingView-compatible alternative.
 - **Audit of existing screens (done):** `chart` module (line/area + candle, ranges, crosshair, right price scale) maps 1:1 to Lightweight Charts, used on the product page and in the style guide. `sparkline` (home cards, price rows) is a plain line series with hidden axes, which Lightweight Charts can render with scales and crosshair turned off. The iPhone widgets (`pages/widgets`) are native WidgetKit, so TradingView does not apply there: they need a native mini chart (Swift Charts), and the mockup's sparkline is only a visual reference. The day-range bar and the performance row on the product page are plain CSS, not charts. Nothing built so far needs changing.
 - The colors still come from the `--chart-*` tokens (see Brand / Arculat); the real implementation maps them into the TradingView theme options.
+- **Reveal on draw:** the chart and the animated sparkline appear with a left-to-right `clip-path` reveal of the whole element, not a stroke animation inside the plot. That is deliberate: the same clip can be animated on the TradingView canvas container, so it stays buildable.
 
 ## Currency
 
@@ -267,8 +278,8 @@ The app follows the Budapesti Értéktőzsde (BÉT) brand identity. Source mater
 - **Brand colors** (from the manual, `RGB`):
   - MNB kék (navy): `#232157` (35 33 87), tints 70/50/30/10/5 %
   - MNB arany (gold): `#BA8C5D` (186 140 93), tints 70/50/30/10/5 %
-- **Chart color set** (electronic-surfaces manual p. 35–37, "Diagramok, grafikonok"): 3 groups (primary / secondary / supplementary) × 7 steps from dark to light, with exact RGB/CMYK on p. 36. Use it for every chart/diagram instead of inventing colors. Single-series / monochrome: the blue ramp `#00142A`, `#002955`, `#003D80`, `#0051AA`, `#3374BB`, `#6697CC`, `#99B9DD`. Multi-series: `#0051AA` (blue), `#232151` (navy), `#BA8C5D` (gold), `#0F809A` (teal), `#ED6B6A` (coral), `#BBC761` (lime), `#00B1B9` (cyan), `#A04863` (plum), `#3A956C` (green). Copy the needed ones into `global.css` as `--chart-*` tokens when the chart module is built (check dark-mode contrast against `--color-card-background` first; the darkest blues need a lighter step there).
-- **Presentation-style accents:** a 1.5 pt gold line (`#BA8C5D`) separates a title from content; headings are navy. Echo this in page headers sparingly.
+- **Chart color set** (electronic-surfaces manual p. 35–37, "Diagramok, grafikonok"): 3 groups (primary / secondary / supplementary) × 7 steps from dark to light, with exact RGB/CMYK on p. 36. Use it for every chart/diagram instead of inventing colors. Single-series / monochrome: the blue ramp `#00142A`, `#002955`, `#003D80`, `#0051AA`, `#3374BB`, `#6697CC`, `#99B9DD`. Multi-series: `#0051AA` (blue), `#232151` (navy), `#BA8C5D` (gold), `#0F809A` (teal), `#ED6B6A` (coral), `#BBC761` (lime), `#00B1B9` (cyan), `#A04863` (plum), `#3A956C` (green). These live in `global.css` as `--chart-1…9` and `--chart-grid`; dark mode uses lighter blue steps for `--chart-1`/`--chart-2`, because the darkest blues fail contrast against `--color-card-background`. Need another one? Add it as a `--chart-*` token in both themes.
+- **Presentation-style accents:** the manual's 1.5 pt gold line between a title and its content may be echoed sparingly (`--color-accent`). Headings use `--color-text-main`, not navy (navy text is unreadable in dark mode, see Color Palette).
 
 ## Color Palette
 
@@ -276,7 +287,7 @@ Both themes are first-class: the tender (B_001) requires dark/light selection wi
 
 | Token | Dark | Light | Use |
 |---|---|---|---|
-| `--color-background` | `#090814` | `#F4F4F7` | app screen background |
+| `--color-background` | `#090814` | `#EFEFF5` | app screen background (light is a cool off-white so white cards lift off it) |
 | `--color-card-background` | `#1A193D` | `#FFFFFF` | cards, inputs, sheets (subtle border/shadow, no pure black shadow in dark) |
 | `--color-text-main` | `#F4F4F7` | `#121129` | titles, button labels, key info (never pure white/black) |
 | `--color-text-secondary` | `#A7A6B9` | `#4F4D74` | dates, stats, descriptions, inactive nav, disclaimers |
@@ -297,11 +308,16 @@ Both themes are first-class: the tender (B_001) requires dark/light selection wi
 | `--color-backdrop` | `rgba(4,3,12,.55)` | `rgba(18,17,41,.30)` | dialog/sheet backdrop (with `--backdrop-blur`) |
 | `--color-toast-background` | `rgba(38,37,82,.92)` | `rgba(18,17,41,.90)` | toast pill (text: `--color-on-brand`) |
 | `--color-knob` | `#FFFFFF` | `#FFFFFF` | toggle knob (iOS style) |
+| `--color-glass` / `--color-glass-border` | `rgba(26,25,61,.72)` / `rgba(244,244,247,.08)` | `rgba(255,255,255,.78)` / `rgba(35,33,87,.08)` | frosted floating surfaces (bottom nav), with `--backdrop-blur` |
+| `--color-brand-deep` | `#15143B` | `#15143B` | lower end of the brand hero gradient (from `--color-brand-surface`) |
+| `--color-glow-gold` / `--color-glow-blue` | `rgba(186,140,93,.5)` / `rgba(102,151,204,.42)` | same | blurred decorative glows (hero, login, AI orb), never behind the logo |
 
 Rules:
 
 - `--color-positive` / `--color-negative` are for market direction and status only; never use them for decoration or brand elements. Never rely on color alone for a price change — also show the sign (+/−) or an arrow, for accessibility (NFK_003).
 - The navy `#232157` is too dark to read on the dark background, so `--color-primary` switches to the lighter brand blue `#6697CC` in dark mode. Use the real brand navy as a *surface* (e.g. the emblem background, a header band), not as text, in dark mode.
 - Don't hardcode hex values in pages or modules — use the tokens (`var(--color-…)`). Chart colors use `--chart-*` tokens (see Brand / Arculat).
-- `global.css` holds exactly this table (plus the `--chart-*` tokens). Dark is the base; light applies via `prefers-color-scheme` unless the user chose a theme by hand: `modules/theme/theme.js` (`window.theme`, `initTheme()` in `<head>` of every page, `setTheme('system'|'dark'|'light')`) sets `data-theme` on `<html>`. The light values therefore exist twice in `global.css` (media query + `[data-theme="light"]`) — change both. Text on `--color-accent` uses `--color-on-accent`.
+- The color tokens in `global.css` are exactly this table plus the `--chart-*` tokens (spacing, type, motion etc. are separate tokens, see Premium UI → Design system first). Dark is the base; light applies via `prefers-color-scheme` unless the user chose a theme by hand: `modules/theme/theme.js` (`window.theme`, `initTheme()` in `<head>` of every page, `setTheme('system'|'dark'|'light')`) sets `data-theme` on `<html>`. The light values therefore exist twice in `global.css` (media query + `[data-theme="light"]`) — change both. Text on `--color-accent` uses `--color-on-accent`.
+- **Dark islands:** the color tokens are declared on `:root, .theme-dark`. Adding `theme-dark` to an element gives its whole subtree the dark tokens in both themes; use it for anything sitting on the brand navy (home hero band, `top-appbar` with `tone: "brand"`), so modules inside (market-status, skeleton, change colors) stay readable without page-specific overrides.
+- Shadows: `--shadow-card` (cards), `--shadow-popover` (sheets, dialogs), `--shadow-floating` (floating bars, the hero band); all tinted navy, never pure black.
 - If a token value changes, change this table in the same edit.

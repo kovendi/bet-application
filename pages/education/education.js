@@ -43,7 +43,7 @@ function paintList() {
     return;
   }
   listEl.replaceChildren(...items.map(window.educationShared.renderRow));
-  window.motion.fadeIn(listEl);
+  window.motion.stagger(listEl);
 }
 
 function showSkeleton() {

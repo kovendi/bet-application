@@ -73,7 +73,7 @@ const field = window.searchFieldModule.renderSearchField({
 field.classList.add("search-bar-field");
 
 document.getElementById("search-top-appbar").appendChild(
-  window.topAppbarModule.renderTopAppbar({ onBack: () => history.back(), center: field, hideMenuButton: true }),
+  window.topAppbarModule.renderTopAppbar({ onBack: () => window.pageTransition.back(), center: field, hideMenuButton: true }),
 );
 
 onSearch("");

@@ -1,0 +1,92 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+.pers-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pers-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+.pers-note {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-footnote);
+}
+
+.pers-section-title {
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.hedit-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--tap-min);
+  border-bottom: 1px solid var(--color-separator);
+}
+
+.hedit-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8) 0;
+}
+
+.hedit-name {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.hedit-sub {
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hedit-button {
+  flex: none;
+  appearance: none;
+  border: none;
+  background: transparent;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  border-radius: var(--radius-md);
+  transition:
+    transform var(--duration-fast) var(--ease-ios),
+    opacity var(--duration-fast) var(--ease-ios);
+}
+
+.hedit-button:active:not(:disabled) {
+  transform: scale(var(--press-scale));
+}
+
+.hedit-button:disabled {
+  opacity: 0.35;
+}
+
+.hedit-candidates {
+  display: flex;
+  flex-direction: column;
+}

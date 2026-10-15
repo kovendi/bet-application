@@ -27,7 +27,7 @@ function renderRow(item) {
   row.href = "../education-detail/education-detail.html?id=" + encodeURIComponent(item.id);
 
   const icon = window.iconModule.renderIcon(TYPE_ICONS[item.type]);
-  icon.classList.add("education-row-icon");
+  icon.classList.add("education-row-icon", `education-row-icon--${item.type}`);
 
   const body = document.createElement("span");
   body.className = "education-row-body";

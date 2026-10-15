@@ -9,3 +9,16 @@
     transform: translateY(var(--space-6));
   }
 }
+
+/* Staggered arrival (motion.stagger): same rise as fade-in, each child delayed
+   by its --stagger-index. */
+.motion-stagger {
+  animation: motion-fade-in var(--duration-slow) var(--ease-out) both;
+  animation-delay: calc(var(--stagger-index, 0) * var(--stagger-step));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-stagger {
+    animation-delay: 0ms;
+  }
+}

@@ -20,8 +20,9 @@
 //       // The star flips instantly with a pop; return false to keep it as it
 //       // was (guest -> showRegistrationRequired()).
 //       onFavoriteToggle: (instrument, wasFavorite) => {...},
-//       sparkline: true, // optional mini curve
+//       sparkline: true, // optional mini curve of today (storage.getDayCurve)
 //       meta: 'name', // second line: 'name' (default) | 'turnover'
+//       rank: 1, // optional position badge in front (toplists)
 //     }));
 //   </script>
 
@@ -34,6 +35,7 @@ window.priceRowModule = (function () {
     onFavoriteToggle,
     sparkline = false,
     meta = "name",
+    rank = null,
   } = {}) {
     const money = window.moneyModule;
     const change = window.storage.getChangePercent(instrument);
@@ -48,6 +50,13 @@ window.priceRowModule = (function () {
     else if (onClick) {
       main.type = "button";
       main.addEventListener("click", () => onClick(instrument));
+    }
+
+    if (rank !== null) {
+      const badge = document.createElement("span");
+      badge.className = "price-row-rank" + (rank === 1 ? " price-row-rank--first" : "");
+      badge.textContent = rank;
+      main.appendChild(badge);
     }
 
     const left = document.createElement("div");
@@ -66,8 +75,7 @@ window.priceRowModule = (function () {
     main.appendChild(left);
 
     if (sparkline) {
-      const series = window.storage.getPriceSeries(instrument.ticker, "1m");
-      const spark = window.sparklineModule.renderSparkline({ values: series.map((c) => c.c) });
+      const spark = window.sparklineModule.renderSparkline({ values: window.storage.getDayCurve(instrument.ticker) });
       spark.classList.add("price-row-spark");
       main.appendChild(spark);
     }

@@ -46,6 +46,7 @@ div.price-row-main {
 /* The list re-sorts in place (toplist segments): rows fade up into place. */
 .price-row--enter {
   animation: price-row-in var(--duration-base) var(--ease-out) both;
+  animation-delay: calc(var(--stagger-index, 0) * var(--stagger-step) / 2);
 }
 
 @keyframes price-row-in {
@@ -53,6 +54,27 @@ div.price-row-main {
     opacity: 0;
     transform: translateY(var(--space-4));
   }
+}
+
+.price-row-rank {
+  flex-shrink: 0;
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-caption2);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  background: var(--color-pressed);
+}
+
+/* The leader gets the brand gold, the only decorative use in the list. */
+.price-row-rank--first {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
 }
 
 .price-row-left {
@@ -92,22 +114,29 @@ div.price-row-main {
   font-variant-numeric: tabular-nums;
 }
 
+/* Change as a softly tinted pill: the sign carries the meaning, the tint
+   makes direction scannable down a long list. */
 .price-row-change {
+  --change-color: var(--color-text-secondary);
+  padding: var(--space-1) var(--space-6);
+  border-radius: var(--radius-pill);
   font-size: var(--font-size-caption1);
-  font-weight: 600;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  color: var(--change-color);
+  background: color-mix(in srgb, var(--change-color) 14%, transparent);
 }
 
 .price-row-change--up {
-  color: var(--color-positive);
+  --change-color: var(--color-positive);
 }
 
 .price-row-change--down {
-  color: var(--color-negative);
+  --change-color: var(--color-negative);
 }
 
 .price-row-change--flat {
-  color: var(--color-text-secondary);
+  --change-color: var(--color-text-secondary);
 }
 
 .price-row-star {

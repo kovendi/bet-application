@@ -22,9 +22,10 @@
 //   <script src="../../modules/top-appbar/top-appbar.js"></script>
 //   <script>
 //     container.appendChild(window.topAppbarModule.renderTopAppbar({
-//       title: 'Piactér', // left slot; add onBack: () => history.back() on sub-pages
+//       title: 'Piactér', // left slot; add onBack: () => window.pageTransition.back() on sub-pages
 //       left: someElement,
 //       right: someOtherElement,
+//       tone: 'default', // 'brand': navy bar that runs into a brand hero band (home)
 //     }));
 //   </script>
 
@@ -36,7 +37,7 @@ window.topAppbarModule = (function () {
     button.setAttribute("aria-label", window.i18n.t("topbar.menu"));
     button.appendChild(window.iconModule.renderIcon("menu"));
     button.addEventListener("click", () => {
-      window.location.href = "../menu/menu.html";
+      window.pageTransition.go("../menu/menu.html");
     });
     return button;
   }
@@ -59,9 +60,11 @@ window.topAppbarModule = (function () {
     return title;
   }
 
-  function renderTopAppbar({ title, onBack, left, center, right, hideMenuButton } = {}) {
+  function renderTopAppbar({ title, onBack, left, center, right, hideMenuButton, tone = "default" } = {}) {
     const bar = document.createElement("header");
     bar.className = "top-appbar";
+    // The brand bar is navy in both themes, so its contents use the dark tokens.
+    if (tone === "brand") bar.classList.add("top-appbar--brand", "theme-dark");
 
     const leftSlot = document.createElement("div");
     leftSlot.className = "top-appbar-slot top-appbar-slot--left";

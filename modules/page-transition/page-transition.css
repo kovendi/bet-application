@@ -1,0 +1,35 @@
+/* Entry: the screen arrives from the right (push) or eases in from the left
+   (back). Exit (back): the screen slides out to the right and stays there
+   (fill forwards) until the browser has swapped the page. */
+html[data-page-enter="forward"] #screen-content {
+  animation: page-enter-forward var(--duration-page) var(--ease-ios) both;
+  box-shadow: var(--shadow-page-edge);
+}
+
+html[data-page-enter="back"] #screen-content {
+  animation: page-enter-back var(--duration-page) var(--ease-ios) both;
+}
+
+#screen-content.page-leave-back {
+  animation: page-leave-back var(--duration-page-leave) var(--ease-ios) forwards;
+  box-shadow: var(--shadow-page-edge);
+  pointer-events: none;
+}
+
+/* The screen never gets a horizontal scrollbar while it is off to the side. */
+html[data-page-enter],
+html:has(.page-leave-back) {
+  overflow-x: clip;
+}
+
+@keyframes page-enter-forward {
+  from { transform: translateX(100%); }
+}
+
+@keyframes page-enter-back {
+  from { transform: translateX(var(--page-back-offset)); opacity: var(--page-back-opacity); }
+}
+
+@keyframes page-leave-back {
+  to { transform: translateX(100%); }
+}

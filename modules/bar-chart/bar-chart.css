@@ -1,0 +1,85 @@
+.bar-chart {
+  margin: 0;
+}
+
+.bar-chart-title {
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-subheadline);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.bar-chart-plot {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.bar-chart-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.bar-chart-value {
+  max-width: 100%;
+  font-size: var(--font-size-caption2);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-main);
+  white-space: nowrap;
+}
+
+.bar-chart-value--missing {
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.bar-chart-track {
+  position: relative;
+  width: 100%;
+  height: var(--bar-chart-height);
+}
+
+.bar-chart-bar {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: var(--bar-bottom);
+  height: var(--bar-size);
+  border-radius: var(--radius-xs);
+  background: color-mix(in srgb, var(--chart-1) 55%, transparent);
+  transform-origin: bottom;
+  animation: bar-chart-grow var(--duration-slow) var(--ease-ios) both;
+  animation-delay: calc(var(--bar-index) * var(--stagger-step) / 2);
+}
+
+.bar-chart-bar--negative {
+  background: color-mix(in srgb, var(--color-negative) 70%, transparent);
+  transform-origin: top;
+}
+
+.bar-chart-column--last .bar-chart-bar {
+  background: var(--chart-1);
+}
+
+.bar-chart-column--last .bar-chart-bar--negative {
+  background: var(--color-negative);
+}
+
+.bar-chart-label {
+  font-size: var(--font-size-caption2);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes bar-chart-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}

@@ -28,6 +28,7 @@
 //       range: '1m', // optional: 1d | 1w | 1m | 3m | 1y | 5y | max
 //       type: 'line', // optional: 'line' | 'candle'
 //       height: 200, // optional plot height in px
+//       markers: [{ t: timestampMs, type: 'dividend' | 'split' | 'reverse_split' }], // optional (TA_001)
 //     }));
 //   </script>
 
@@ -35,6 +36,8 @@ window.chartModule = (function () {
   const SVG_NS = "http://www.w3.org/2000/svg";
   const RANGES = ["1d", "1w", "1m", "3m", "1y", "5y", "max"];
   const PAD = { right: 52, bottom: 20, top: 8 };
+  const MARKER_RADIUS = 8;
+  const MARKER_OFFSET = 14;
 
   function svgEl(name, attrs) {
     const el = document.createElementNS(SVG_NS, name);
@@ -42,7 +45,7 @@ window.chartModule = (function () {
     return el;
   }
 
-  function renderChart({ instrument, range = "1m", type = "line", height = 200 } = {}) {
+  function renderChart({ instrument, range = "1m", type = "line", height = 200, markers = [] } = {}) {
     const t = window.i18n.t;
     const money = window.moneyModule;
 
@@ -71,6 +74,7 @@ window.chartModule = (function () {
 
     let candles = [];
     let layout = null;
+    let markerPoints = [];
 
     const decimals = instrument.unit === "HUF" || instrument.price >= 1000 ? 0 : 2;
     const fmt = (value) => money.formatNumber(value, decimals);
@@ -100,7 +104,9 @@ window.chartModule = (function () {
       const c = candles[index];
       readoutMain.className = "chart-readout-main";
       readoutMain.textContent = money.formatPrice(c.c, instrument.unit);
-      readoutSub.textContent = formatTime(c.t, range === "1d");
+      const marked = markerPoints.find((point) => point.index === index);
+      const time = formatTime(c.t, range === "1d");
+      readoutSub.textContent = marked ? `${time} · ${marked.label}` : time;
     }
 
     function draw() {
@@ -121,7 +127,7 @@ window.chartModule = (function () {
       const y = (v) => PAD.top + (1 - (v - min) / (max - min)) * innerH;
       layout = { x, y, innerW, width };
 
-      const svg = svgEl("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img", class: "chart-svg" });
+      const svg = svgEl("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img", class: "chart-svg chart-svg--reveal" });
       svg.setAttribute(
         "aria-label",
         `${instrument.ticker} ${t(`chart.period_${range}`)}: ${money.formatPrice(candles[0].o, instrument.unit)} → ${money.formatPrice(candles[candles.length - 1].c, instrument.unit)}`,
@@ -174,6 +180,26 @@ window.chartModule = (function () {
         }));
         svg.appendChild(svgEl("polyline", { points: points.join(" "), class: "chart-line" }));
       }
+
+      // split / dividend markers below the bars of their candle (TradingView
+      // markers: position belowBar, shape circle with a one letter text)
+      markerPoints = [];
+      markers.forEach((marker) => {
+        if (marker.t < candles[0].t || marker.t > candles[candles.length - 1].t) return;
+        let index = 0;
+        candles.forEach((candle, i) => {
+          if (Math.abs(candle.t - marker.t) < Math.abs(candles[index].t - marker.t)) index = i;
+        });
+        const cx = x(index);
+        const cy = Math.min(y(candles[index].l) + MARKER_OFFSET, PAD.top + innerH - MARKER_RADIUS);
+        const group = svgEl("g", { class: `chart-marker chart-marker--${marker.type}` });
+        group.appendChild(svgEl("circle", { cx, cy, r: MARKER_RADIUS, class: "chart-marker-dot" }));
+        const letter = svgEl("text", { x: cx, y: cy + 3, "text-anchor": "middle", class: "chart-marker-letter" });
+        letter.textContent = t(`chart.marker_${marker.type}_short`);
+        group.appendChild(letter);
+        svg.appendChild(group);
+        markerPoints.push({ index, label: t(`chart.marker_${marker.type}`) });
+      });
 
       // crosshair (hidden until scrubbing)
       const crossV = svgEl("line", { class: "chart-cross", y1: PAD.top, y2: PAD.top + innerH, visibility: "hidden" });

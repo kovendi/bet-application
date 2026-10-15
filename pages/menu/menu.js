@@ -8,7 +8,7 @@ function renderTopbar() {
       title: window.i18n.t("menu.title"),
       // Reachable from the hamburger button on every page, so back goes the
       // way the user came instead of a hardcoded href.
-      onBack: () => history.back(),
+      onBack: () => window.pageTransition.back(),
       hideMenuButton: true,
     }),
   );
@@ -28,7 +28,19 @@ function confirmLogout() {
 }
 
 function renderMenu() {
+  const go = (url) => () => {
+    window.pageTransition.go(url);
+  };
   const groups = [
+    {
+      title: window.i18n.t("menu.group_personal"),
+      items: [
+        { icon: "star", title: window.i18n.t("menu.favorites_title"), description: window.i18n.t("menu.favorites_description"), onSelect: go("../favorites/favorites.html") },
+        { icon: "price-alert", title: window.i18n.t("menu.alerts_title"), description: window.i18n.t("menu.alerts_description"), onSelect: go("../alerts/alerts.html") },
+        { icon: "mail", title: window.i18n.t("menu.notifications_title"), description: window.i18n.t("menu.notifications_description"), onSelect: go("../notifications/notifications.html") },
+        { icon: "home", title: window.i18n.t("menu.home_edit_title"), description: window.i18n.t("menu.home_edit_description"), onSelect: go("../home-edit/home-edit.html") },
+      ],
+    },
     {
       title: window.i18n.t("menu.group_account"),
       items: [
@@ -37,7 +49,7 @@ function renderMenu() {
           title: window.i18n.t("menu.profile_title"),
           description: window.i18n.t("menu.profile_description"),
           onSelect: () => {
-            window.location.href = "../profile/profile.html";
+            window.pageTransition.go("../profile/profile.html");
           },
         },
         {

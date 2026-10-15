@@ -44,6 +44,7 @@ window.SEED_INSTRUMENTS = (function () {
     ["BUXZ26", "BUX határidős 2026. dec.", "other", "pt", 112650, 112060, 111800, 112900, 5200000000, 0],
     ["OTPZ26", "OTP határidős 2026. dec.", "other", "pt", 32600, 32240, 32150, 32780, 1900000000, 0],
     ["EURZ26", "EUR/HUF határidős 2026. dec.", "other", "pt", 395.4, 396.1, 395.0, 396.4, 980000000, 0],
+    ["BUXC12", "BUX vételi opció 112 000 2026. dec.", "other", "pt", 1180, 1150, 1140, 1210, 640000000, 0],
   ];
 
   return ROWS.map(function (r) {

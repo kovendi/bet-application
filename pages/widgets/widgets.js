@@ -6,10 +6,11 @@ document.querySelectorAll("[data-i18n]").forEach((el) => {
   el.textContent = t(el.dataset.i18n);
 });
 
+// Default order from the tender (ÁF_001): BUX, CETOP NTR, BUMIX, then OTP, MOL, Richter, Telekom.
 // Proposed instrument count per widget size (ÁF_001–ÁF_0021): small 2, medium 4, large 8.
 const WIDGETS = [
-  { size: "small", tickers: ["BUX", "OTP"] },
-  { size: "medium", tickers: ["BUX", "OTP", "MOL", "RICHTER"] },
+  { size: "small", tickers: ["BUX", "CETOP NTR"] },
+  { size: "medium", tickers: ["BUX", "CETOP NTR", "BUMIX", "OTP"] },
   { size: "large", tickers: ["BUX", "CETOP NTR", "BUMIX", "OTP", "MOL", "RICHTER", "MTELEKOM", "OPUS"] },
 ];
 
@@ -81,3 +82,7 @@ WIDGETS.forEach((config) => {
   list.appendChild(section);
   window.motion.fadeIn(section);
 });
+
+document.getElementById("widgets-top-appbar").appendChild(
+  window.topAppbarModule.renderTopAppbar({ title: t("widgets.title"), onBack: () => window.pageTransition.back() }),
+);

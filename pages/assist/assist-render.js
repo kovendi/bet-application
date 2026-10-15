@@ -153,9 +153,11 @@ window.assistRender = (function () {
 
   function renderInstrumentsBlock(tickers) {
     const wrap = element("div", "assist-rich assist-rich--rows");
+    let anyDelayed = false;
     tickers.forEach((ticker) => {
       const instrument = window.storage.getInstrument(ticker);
       if (!instrument) return;
+      if (instrument.delayed) anyDelayed = true;
       wrap.appendChild(
         window.priceRowModule.renderPriceRow({
           instrument,
@@ -164,6 +166,7 @@ window.assistRender = (function () {
         }),
       );
     });
+    if (anyDelayed) wrap.appendChild(element("p", "assist-disclaimer", t("assist.delayed_note")));
     return wrap;
   }
 

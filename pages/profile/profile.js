@@ -19,7 +19,7 @@ function renderTopbar() {
   document.getElementById("profile-top-appbar").appendChild(
     window.topAppbarModule.renderTopAppbar({
       title: t("profile.title"),
-      onBack: () => history.back(),
+      onBack: () => window.pageTransition.back(),
     }),
   );
 }

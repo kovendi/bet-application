@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="../../modules/skeleton/skeleton.css" />
   <link rel="stylesheet" href="../../modules/state-view/state-view.css" />
   <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="../../modules/page-transition/page-transition.css" />
+  <script src="../../modules/page-transition/page-transition.js"></script>
   <script src="../../modules/theme/theme.js"></script>
   <script>window.theme.initTheme();</script>
 </head>
@@ -28,8 +30,17 @@
   <div id="screen-content">
     <div class="home-page">
       <div id="home-top-appbar"></div>
+      <section class="home-hero theme-dark" aria-labelledby="home-overview-title">
+        <span class="home-hero-glow home-hero-glow--gold" aria-hidden="true"></span>
+        <span class="home-hero-glow home-hero-glow--blue" aria-hidden="true"></span>
+        <div id="home-market-status"></div>
+        <div class="home-overview-head">
+          <h2 id="home-overview-title" class="home-section-title" data-i18n="home.overview"></h2>
+          <a class="home-edit-link" href="../home-edit/home-edit.html"></a>
+        </div>
+        <div id="home-overview" class="home-overview"></div>
+      </section>
       <main class="home-content">
-        <section id="home-market-status"></section>
         <div id="home-feed" class="home-feed"></div>
         <div id="home-disclaimer"></div>
       </main>
@@ -38,6 +49,13 @@
   </div>
 
   <script src="../../locales/hu.js"></script>
+  <script src="../../locales/hu-assist.js"></script>
+  <script src="../../locales/hu-education.js"></script>
+  <script src="../../locales/hu-product.js"></script>
+  <script src="../../locales/hu-market.js"></script>
+  <script src="../../locales/hu-account.js"></script>
+  <script src="../../locales/hu-personal.js"></script>
+  <script src="../../locales/hu-meta.js"></script>
   <script src="../../modules/i18n/i18n.js"></script>
   <script src="../../modules/icon/icon.js"></script>
   <script src="../../modules/money/money.js"></script>

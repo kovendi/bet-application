@@ -66,6 +66,7 @@ function renderRows(items) {
         favorite: isFavorite(instrument.ticker),
         onFavoriteToggle: toggleFavorite,
         meta: state.sort === "turnover" ? "turnover" : "name",
+        sparkline: true,
       }),
     );
   });
@@ -82,7 +83,7 @@ function appendNextPage(items, sentinel) {
   const next = items.slice(from, from + PAGE_SIZE);
   const rows = renderRows(next);
   listEl.insertBefore(rows, sentinel);
-  Array.from(listEl.querySelectorAll(".price-row")).slice(from).forEach(window.motion.fadeIn);
+  window.motion.stagger(Array.from(listEl.querySelectorAll(".price-row")).slice(from));
   if (from + next.length >= items.length) {
     stopObserving();
     sentinel.remove();

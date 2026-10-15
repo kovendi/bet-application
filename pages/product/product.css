@@ -35,23 +35,46 @@
 .product-price {
   font-size: var(--font-size-large-title);
   font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
 }
 
 .product-change {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-8);
-  font-size: var(--font-size-callout);
-  font-weight: 600;
+  margin-top: var(--space-4);
+}
+
+/* Signed change as a tinted pill (same look as the home hero). */
+.product-change-pill {
+  --change-color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-8) var(--space-2) var(--space-6);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-footnote);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--change-color);
+  background: color-mix(in srgb, var(--change-color) 14%, transparent);
+}
+
+.product-change-icon {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
 }
 
 .product-change--up {
+  --change-color: var(--color-positive);
   color: var(--color-positive);
 }
 
 .product-change--down {
+  --change-color: var(--color-negative);
   color: var(--color-negative);
 }
 
@@ -248,4 +271,29 @@
 
 .product-skeleton-panel {
   height: 220px;
+}
+
+/* The bar star reuses price-row's on/pop states but keeps the standard bar
+   button look and size (not the list-row star's larger tap target). */
+.top-appbar-icon-button.price-row-star {
+  width: var(--appbar-btn-size);
+  height: var(--appbar-btn-size);
+  margin-right: 0;
+  background: var(--color-card-background);
+  color: var(--color-text-main);
+}
+
+.top-appbar-icon-button.price-row-star .icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+
+.top-appbar-icon-button.price-row-star.price-row-star--on {
+  color: var(--color-highlight);
+}
+
+.product-appbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
 }

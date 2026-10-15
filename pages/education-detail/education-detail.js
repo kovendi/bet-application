@@ -77,7 +77,7 @@ function renderNotFound() {
       title: t("edu.not_found_title"),
       message: t("edu.not_found_message"),
       actionLabel: t("edu.back_to_list"),
-      onAction: () => (window.location.href = LIST_HREF),
+      onAction: () => window.pageTransition.backTo(LIST_HREF),
     }),
   );
 }
@@ -93,7 +93,7 @@ function renderItem() {
 document.getElementById("education-detail-top-appbar").appendChild(
   window.topAppbarModule.renderTopAppbar({
     title: item ? t(`edu.type_${item.type}`) : t("nav.education"),
-    onBack: () => (document.referrer ? history.back() : (window.location.href = LIST_HREF)),
+    onBack: () => (document.referrer ? window.pageTransition.back() : window.pageTransition.backTo(LIST_HREF)),
   }),
 );
 

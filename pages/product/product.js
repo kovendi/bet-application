@@ -2,12 +2,26 @@ window.i18n.initI18n();
 const t = window.i18n.t;
 const money = window.moneyModule;
 
-const TABS_SHARE = ["trading", "financials", "valuation", "issuer", "disclosures", "analysis"];
+const shared = window.productShared;
+const { el, directionOf, valueNode } = shared;
+
+// Tabs per instrument type (TA_001–TA_007). BÉTa products and derivatives
+// only have the trading content, so they get no tab row at all.
+const TABS_BY_CATEGORY = {
+  share: ["trading", "financials", "valuation", "issuer", "disclosures", "analysis"],
+  bond: ["trading", "disclosures", "issuer"],
+  etf: ["trading", "issuer", "disclosures"],
+  index: ["trading", "specs", "composition", "disclosures"],
+  certificate: ["trading", "issuer", "disclosures"],
+  other: ["trading"],
+};
 const PERFORMANCE_RANGES = ["1w", "1m", "3m", "1y", "5y"];
 
 const params = new URLSearchParams(window.location.search);
 const ticker = params.get("ticker") || "OTP";
 const instrument = window.storage.getInstrument(ticker);
+const detail = instrument ? window.storage.getProductDetail(ticker) : null;
+const markers = instrument && instrument.category === "share" ? window.storage.getProductMarkers(ticker) : [];
 const forceEmpty = window.mockNetwork.isEmptyMock();
 
 const els = {
@@ -18,26 +32,6 @@ const els = {
   panel: document.getElementById("product-panel"),
   disclaimer: document.getElementById("product-disclaimer"),
 };
-
-function directionOf(value) {
-  return value > 0 ? "up" : value < 0 ? "down" : "flat";
-}
-
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
-
-// TA_000 proposal: a missing value shows "–" with a visually quiet style, and
-// the screen reader reads "Nincs adat".
-function valueNode(value) {
-  if (value !== null && value !== undefined && value !== 0) return document.createTextNode(value);
-  const missing = el("span", "product-fact-missing", "–");
-  missing.setAttribute("aria-label", t("product.no_data"));
-  return missing;
-}
 
 // --- Favorites: registered users only (K_000) ---------------------------------
 
@@ -68,6 +62,17 @@ function renderFavoriteButton() {
   return button;
 }
 
+// Price alert shortcut next to the star (ÁR_000): opens the new-alert form for this instrument.
+function renderAppbarActions() {
+  const bell = el("a", "top-appbar-icon-button");
+  bell.href = "../alert-new/alert-new.html?ticker=" + encodeURIComponent(ticker);
+  bell.setAttribute("aria-label", t("alerts.add"));
+  bell.appendChild(window.iconModule.renderIcon("price-alert"));
+  const group = el("div", "product-appbar-actions");
+  group.append(bell, renderFavoriteButton());
+  return group;
+}
+
 // --- Header ---------------------------------------------------------------------
 
 function formatAbsoluteChange() {
@@ -80,14 +85,24 @@ function formatAbsoluteChange() {
 
 function paintHeader() {
   const change = window.storage.getChangePercent(instrument);
-  const changeRow = el("div", `product-change product-change--${directionOf(change)}`);
-  changeRow.append(
-    el("span", "", `${formatAbsoluteChange()} (${money.formatPercent(change)})`),
-    el("span", "product-change-note", t("product.since_close")),
-  );
+  const direction = directionOf(change);
+  const changeRow = el("div", "product-change");
+  const pill = el("span", `product-change-pill product-change--${direction}`);
+  if (direction !== "flat") {
+    const arrow = window.iconModule.renderIcon(direction === "up" ? "arrow-up" : "arrow-down");
+    arrow.classList.add("product-change-icon");
+    pill.appendChild(arrow);
+  }
+  pill.appendChild(document.createTextNode(`${formatAbsoluteChange()} (${money.formatPercent(change)})`));
+  changeRow.append(pill, el("span", "product-change-note", t("product.since_close")));
+
+  const price = el("span", "product-price");
+  window.motion.countUp(price, instrument.price, (value) => money.formatPrice(value, instrument.unit), {
+    fromRatio: 0.985,
+  });
   els.header.replaceChildren(
     el("p", "product-name", instrument.name),
-    el("span", "product-price", money.formatPrice(instrument.price, instrument.unit)),
+    price,
     changeRow,
     el("p", "product-feed", t(instrument.delayed ? "product.delayed" : "product.realtime")),
   );
@@ -99,7 +114,7 @@ function paintHeader() {
 // Every chart in the real app is a TradingView chart (see CLAUDE.md), so the
 // page only uses what the chart module offers: line/candle and time ranges.
 function paintChart() {
-  els.chart.replaceChildren(window.chartModule.renderChart({ instrument, range: "1m", type: "line", height: 220 }));
+  els.chart.replaceChildren(window.chartModule.renderChart({ instrument, range: "1m", type: "line", height: 220, markers }));
   window.motion.fadeIn(els.chart);
 }
 
@@ -115,6 +130,12 @@ function showBrokerSheet(action) {
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.append(el("span", "", broker.name), window.iconModule.renderIcon("link"));
+    // Measurable redirect (TA_000): the tap is counted per broker, then the
+    // browser opens the broker's site.
+    link.addEventListener("click", () => {
+      window.storage.logBrokerClick(broker.id, ticker, action);
+      window.toastModule.showToast({ message: t("product.broker_redirect").replace("{broker}", broker.name), icon: "link" });
+    });
     const item = el("li");
     item.appendChild(link);
     list.appendChild(item);
@@ -137,43 +158,31 @@ function paintActions() {
 
 // --- Tab panels ----------------------------------------------------------------------
 
-function fact(labelKey, value) {
-  const row = el("div", "product-fact");
-  const label = el("dt", "", t(labelKey));
-  const data = el("dd");
-  data.appendChild(valueNode(value));
-  row.append(label, data);
-  return row;
-}
-
 function dayRange() {
-  const wrap = el("div", "product-range");
-  const labels = el("div", "product-range-labels");
-  labels.append(
-    el("span", "", money.formatPrice(instrument.dayLow, instrument.unit)),
-    el("span", "product-range-caption", t("product.day_range")),
-    el("span", "", money.formatPrice(instrument.dayHigh, instrument.unit)),
-  );
-  const track = el("div", "product-range-track");
-  const span = instrument.dayHigh - instrument.dayLow;
-  const position = span > 0 ? ((instrument.price - instrument.dayLow) / span) * 100 : 50;
-  const marker = el("span", "product-range-marker");
-  marker.style.setProperty("--range-position", `${Math.min(100, Math.max(0, position))}%`);
-  track.appendChild(marker);
-  wrap.append(labels, track);
-  return wrap;
+  return shared.rangeTrack({
+    low: instrument.dayLow,
+    high: instrument.dayHigh,
+    value: instrument.price,
+    caption: t("product.day_range"),
+    format: (value) => money.formatPrice(value, instrument.unit),
+  });
 }
 
+// Table of TA_001–TA_007: indexes have no order book and no turnover.
 function keyFacts() {
   const facts = el("dl", "product-facts");
+  if (instrument.category === "index") {
+    facts.append(shared.fact(t("product.prev_close"), money.formatPrice(instrument.prevClose, instrument.unit)), dayRange());
+    return facts;
+  }
   const hasBook = instrument.bid !== null;
   facts.append(
-    fact("product.bid", hasBook ? money.formatPrice(instrument.bid, instrument.unit) : null),
-    fact("product.ask", hasBook ? money.formatPrice(instrument.ask, instrument.unit) : null),
-    fact("product.prev_close", money.formatPrice(instrument.prevClose, instrument.unit)),
+    shared.fact(t("product.bid"), hasBook ? money.formatPrice(instrument.bid, instrument.unit) : null),
+    shared.fact(t("product.ask"), hasBook ? money.formatPrice(instrument.ask, instrument.unit) : null),
+    shared.fact(t("product.prev_close"), money.formatPrice(instrument.prevClose, instrument.unit)),
     dayRange(),
-    fact("product.turnover", instrument.turnover ? money.formatCompactMoney(instrument.turnover) : null),
-    fact("product.quantity", instrument.quantity ? money.formatNumber(instrument.quantity, 0) : null),
+    shared.fact(t("product.turnover"), instrument.turnover ? money.formatCompactMoney(instrument.turnover) : null),
+    shared.fact(t("product.quantity"), instrument.quantity ? money.formatNumber(instrument.quantity, 0) : null),
   );
   return facts;
 }
@@ -190,54 +199,102 @@ function performance() {
     const value = periodChange(range);
     const item = el("div", "product-performance-item");
     item.appendChild(el("span", "product-performance-label", t(`chart.range_${range}`)));
-    const number = el("span", `product-performance-value product-change--${directionOf(value)}`, value === null ? "–" : money.formatPercent(value));
+    const number = el("span", `product-performance-value product-change--${directionOf(value)}`);
+    number.appendChild(value === null ? valueNode(null) : document.createTextNode(money.formatPercent(value)));
     item.appendChild(number);
     grid.appendChild(item);
   });
   return grid;
 }
 
-function section(titleKey, content) {
-  const wrap = el("div");
-  wrap.append(el("h2", "product-section-title", t(titleKey)), content);
-  return wrap;
+// Split / dividend dates and ratios, only listed when there was one (TA_001).
+function corporateEvents() {
+  const rows = markers.map((marker) => {
+    const label = `${t(`chart.marker_${marker.type}`)} · ${shared.formatDate(new Date(marker.t).toISOString())}`;
+    const value = marker.type === "dividend" ? `${money.formatMoney(marker.value)}${t("product.per_share")}` : marker.ratio;
+    return [label, value];
+  });
+  const block = el("div");
+  block.append(shared.factList(rows), shared.note(t("product.marker_legend")));
+  return shared.section(t("product.section_events"), block);
 }
 
 function tradingPanel() {
   const fragment = document.createDocumentFragment();
-  fragment.append(section("product.section_key", keyFacts()), section("product.section_performance", performance()));
+  if (detail.beta) {
+    fragment.appendChild(window.bannerModule.renderBanner({ text: t("product.beta_delay"), variant: "info", icon: "clock" }));
+  }
+  if (instrument.category === "other") {
+    fragment.appendChild(window.productTypes.derivativeSection(detail));
+    return fragment;
+  }
+  fragment.append(shared.section(t("product.section_key"), keyFacts()), shared.section(t("product.section_performance"), performance()));
+  if (markers.length) fragment.appendChild(corporateEvents());
   return fragment;
 }
 
-// The other tabs get their content in phase 2.
-function comingSoonPanel() {
-  return window.stateViewModule.renderStateView({
-    title: t("product.soon_title"),
-    message: t("product.soon_message"),
-  });
+function buildPanel(tabId) {
+  const shareTabs = window.productShareTabs;
+  switch (tabId) {
+    case "financials":
+      return shareTabs.financialsPanel(detail);
+    case "valuation":
+      return shareTabs.valuationPanel(detail);
+    case "analysis":
+      return shareTabs.analysisPanel(detail, instrument, window.productDisclosures.openDocument);
+    case "issuer":
+      return instrument.category === "share"
+        ? shareTabs.issuerPanel(detail)
+        : window.productTypes.specsPanel(detail, `issuer.about_${instrument.category}`);
+    case "specs":
+      return window.productTypes.specsPanel(detail, `issuer.about_${instrument.category}`);
+    case "composition":
+      return window.productTypes.compositionPanel(detail);
+    case "disclosures":
+      return window.productDisclosures.disclosuresPanel(ticker);
+    default:
+      return tradingPanel();
+  }
 }
 
 function paintPanel(tabId) {
-  els.panel.replaceChildren(tabId === "trading" ? tradingPanel() : comingSoonPanel());
+  els.panel.replaceChildren(buildPanel(tabId));
   window.motion.fadeIn(els.panel);
 }
 
+// The analysis tab only exists where there is BÉT-supported coverage (TA_0015).
+function tabIds() {
+  if (detail.beta) return ["trading"];
+  return TABS_BY_CATEGORY[instrument.category].filter((id) => id !== "analysis" || detail.analysis);
+}
+
+// Deep links (home disclosures, notifications K_005): ?tab=disclosures opens that
+// tab, &doc=<id> also opens the notified disclosure.
+function openLinkedDocument() {
+  const docId = params.get("doc");
+  const doc = docId && window.storage.getProductDisclosures(ticker).find((item) => item.id === docId);
+  if (doc) window.productDisclosures.openDocument(doc);
+}
+
 function paintTabs() {
-  if (instrument.category !== "share") {
+  const ids = tabIds();
+  const startTab = ids.includes(params.get("tab")) ? params.get("tab") : "trading";
+  if (ids.length < 2) {
     els.tabs.replaceChildren();
     paintPanel("trading");
     return;
   }
   els.tabs.replaceChildren(
     window.chipsModule.renderChips({
-      items: TABS_SHARE.map((id) => ({ id, label: t(`product.tab_${id}`) })),
+      items: ids.map((id) => ({ id, label: t(`product.tab_${id}`) })),
       variant: "chips",
-      activeId: "trading",
+      activeId: startTab,
       ariaLabel: t("product.tabs"),
       onChange: paintPanel,
     }),
   );
-  paintPanel("trading");
+  paintPanel(startTab);
+  if (startTab === "disclosures") openLinkedDocument();
 }
 
 // --- Loading / error / not found ---------------------------------------------------
@@ -309,15 +366,15 @@ function load() {
 // --- Page chrome -------------------------------------------------------------------
 
 function goBack() {
-  if (document.referrer) window.history.back();
-  else window.location.href = "../market/market.html";
+  if (document.referrer) window.pageTransition.back();
+  else window.pageTransition.backTo("../market/market.html");
 }
 
 document.getElementById("product-top-appbar").appendChild(
   window.topAppbarModule.renderTopAppbar({
     title: instrument ? instrument.ticker : t("product.title"),
     onBack: goBack,
-    right: instrument ? renderFavoriteButton() : undefined,
+    right: instrument ? renderAppbarActions() : undefined,
   }),
 );
 load();

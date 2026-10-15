@@ -105,9 +105,64 @@ window.storage = (function () {
     return instrument ? window.generatePriceSeries(instrument, range) : [];
   }
 
+  // Today's curve for mini charts (mock): runs from the previous close to the
+  // current price, so its direction always matches the daily change shown next
+  // to it. The intraday series only lends its wiggle (trend removed), scaled
+  // to the size of today's move.
+  function getDayCurve(ticker) {
+    const instrument = getInstrument(ticker);
+    if (!instrument) return [];
+    const shape = getPriceSeries(ticker, "1d").map((candle) => candle.c);
+    const last = shape.length - 1;
+    const start = instrument.prevClose;
+    const end = instrument.price;
+    const wiggle = shape.map((value, i) => value - (shape[0] + ((shape[last] - shape[0]) * i) / last));
+    const maxWiggle = Math.max(...wiggle.map(Math.abs)) || 1;
+    const amplitude = Math.abs(end - start) * 0.6 || end * 0.002;
+    return wiggle.map((w, i) => start + ((end - start) * i) / last + (w / maxWiggle) * amplitude);
+  }
+
   function getDisclosures(ticker) {
     const all = window.SEED_CONTENT.disclosures;
     return ticker ? all.filter((d) => d.ticker === ticker) : all.slice();
+  }
+
+  // Tab content per instrument (financials, issuer, specs, ...). Shares come
+  // from seed-product.js, the other types from seed-product-types.js. Returns
+  // null for an unknown ticker. BÉTa products get a flag, they only have the
+  // trading tab (TA_006).
+  function getProductDetail(ticker) {
+    const instrument = getInstrument(ticker);
+    if (!instrument) return null;
+    const base =
+      instrument.category === "share"
+        ? window.SEED_PRODUCT.shareDetail(instrument)
+        : window.SEED_PRODUCT_TYPES.detail(instrument) || {};
+    return Object.assign({ beta: window.SEED_PRODUCT.BETA_TICKERS.indexOf(ticker) !== -1 }, base);
+  }
+
+  // Split / dividend markers for the chart time axis (TA_001).
+  function getProductMarkers(ticker) {
+    return window.SEED_PRODUCT.markers(ticker);
+  }
+
+  // Disclosure list of one product (TA_0014): the home feed entries merged
+  // with the generated per-type list, newest first.
+  function getProductDisclosures(ticker) {
+    const instrument = getInstrument(ticker);
+    if (!instrument) return [];
+    const categoryMap = { Rendszeres: "Pénzügyi jelentések", Rendkívüli: "Rendkívüli tájékoztatások", Tulajdonosi: "Tulajdonosi bejelentések" };
+    const fromFeed = getDisclosures(ticker).map((item) => Object.assign({}, item, { category: categoryMap[item.category] || item.category }));
+    const merged = fromFeed.concat(window.SEED_PRODUCT.disclosures(instrument));
+    return merged.sort((a, b) => (a.date < b.date ? 1 : -1));
+  }
+
+  // Measurable broker redirect (TA_000): every tap on a broker is counted.
+  function logBrokerClick(brokerId, ticker, action) {
+    const db = getDb();
+    db.brokerClicks = db.brokerClicks || [];
+    db.brokerClicks.push({ brokerId, ticker, action, at: new Date().toISOString() });
+    saveDb(db);
   }
 
   function getCarouselItems() {
@@ -155,6 +210,109 @@ window.storage = (function () {
     return index === -1;
   }
 
+  // Manual order of the favorites list (K_0011): the whole ordered list is saved.
+  function setFavorites(userId, tickers) {
+    const db = getDb();
+    db.favorites = db.favorites || {};
+    db.favorites[userId] = tickers.slice();
+    saveDb(db);
+  }
+
+  // Issuer disclosure notification per favorite (K_003). One issuer, optional
+  // list of disclosure types; an empty list means every type. null = off.
+  function getFavoriteNotify(userId, ticker) {
+    const all = (getDb().favoriteNotify || {})[userId] || {};
+    return all[ticker] || null;
+  }
+
+  function setFavoriteNotify(userId, ticker, settings) {
+    const db = getDb();
+    db.favoriteNotify = db.favoriteNotify || {};
+    const all = db.favoriteNotify[userId] || {};
+    if (settings) all[ticker] = { types: settings.types.slice() };
+    else delete all[ticker];
+    db.favoriteNotify[userId] = all;
+    saveDb(db);
+  }
+
+  // Price alerts (ÁR_000–ÁR_0053): { id, ticker, direction: 'up' | 'down', level, createdAt }.
+  // The page enforces the limit of ALERT_LIMIT per user.
+  const ALERT_LIMIT = 10;
+
+  function getAlerts(userId) {
+    return ((getDb().alerts || {})[userId] || []).slice();
+  }
+
+  function addAlert(userId, { ticker, direction, level }) {
+    const db = getDb();
+    db.alerts = db.alerts || {};
+    const list = db.alerts[userId] || [];
+    const alert = { id: "a" + Date.now(), ticker, direction, level, createdAt: new Date().toISOString() };
+    list.push(alert);
+    db.alerts[userId] = list;
+    saveDb(db);
+    return alert;
+  }
+
+  // A fulfilled alert disappears (ÁR_0052); the deletion is the same call.
+  function removeAlert(userId, alertId) {
+    const db = getDb();
+    db.alerts = db.alerts || {};
+    db.alerts[userId] = (db.alerts[userId] || []).filter((a) => a.id !== alertId);
+    saveDb(db);
+  }
+
+  // In-app notification inbox: { id, kind: 'alert' | 'disclosure', ticker, title,
+  // text, at, read }. First read seeds a few demo entries per user.
+  function getNotifications(userId) {
+    const db = getDb();
+    db.notifications = db.notifications || {};
+    if (!db.notifications[userId]) {
+      db.notifications[userId] = window.SEED_CONTENT.notifications.map((n) => Object.assign({ read: false }, n));
+      saveDb(db);
+    }
+    return db.notifications[userId].slice();
+  }
+
+  function saveNotifications(userId, list) {
+    const db = getDb();
+    db.notifications = db.notifications || {};
+    db.notifications[userId] = list;
+    saveDb(db);
+  }
+
+  function markNotificationRead(userId, id) {
+    saveNotifications(
+      userId,
+      getNotifications(userId).map((n) => (n.id === id ? Object.assign({}, n, { read: true }) : n)),
+    );
+  }
+
+  function markAllNotificationsRead(userId) {
+    saveNotifications(
+      userId,
+      getNotifications(userId).map((n) => Object.assign({}, n, { read: true })),
+    );
+  }
+
+  // Home overview (NYÁ_001, NYÁ_004): ordered tickers on the cards, max 8. Guests and
+  // users who never edited see the default set (configured by the developers).
+  const DEFAULT_HOME_CARDS = ["BUX", "CETOP NTR", "BUMIX", "OTP", "MOL", "RICHTER", "MTELEKOM"];
+  const HOME_CARDS_LIMIT = 8;
+
+  function getHomeCards(userId) {
+    const saved = userId ? (getDb().homeCards || {})[userId] : null;
+    return (saved || DEFAULT_HOME_CARDS).slice();
+  }
+
+  function setHomeCards(userId, tickers) {
+    const db = getDb();
+    db.homeCards = db.homeCards || {};
+    if (tickers) db.homeCards[userId] = tickers.slice();
+    else delete db.homeCards[userId];
+    saveDb(db);
+  }
+
   // Bet assist AI chat state per registered user: accepted disclaimer, the
   // conversations and the daily question counter (AI_000–AI_007).
   function getAssist(userId) {
@@ -195,7 +353,12 @@ window.storage = (function () {
     getInstrument,
     getChangePercent,
     getPriceSeries,
+    getDayCurve,
     getDisclosures,
+    getProductDetail,
+    getProductMarkers,
+    getProductDisclosures,
+    logBrokerClick,
     getCarouselItems,
     getEducation,
     getEducationItem,
@@ -204,6 +367,20 @@ window.storage = (function () {
     getFavorites,
     isFavorite,
     toggleFavorite,
+    setFavorites,
+    getFavoriteNotify,
+    setFavoriteNotify,
+    ALERT_LIMIT,
+    getAlerts,
+    addAlert,
+    removeAlert,
+    getNotifications,
+    markNotificationRead,
+    markAllNotificationsRead,
+    DEFAULT_HOME_CARDS,
+    HOME_CARDS_LIMIT,
+    getHomeCards,
+    setHomeCards,
     getAssist,
     saveAssist,
     setCurrentUser,

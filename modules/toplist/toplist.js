@@ -15,6 +15,7 @@
 //       instruments: window.storage.getInstruments('share'),
 //       limit: 5, // optional, default 5
 //       hrefFor: (instrument) => '../product/product.html?ticker=' + instrument.ticker,
+//       sparkline: true, // optional mini curve per row
 //     }));
 //   </script>
 
@@ -25,7 +26,7 @@ window.toplistModule = (function () {
     turnover: (a, b) => b.turnover - a.turnover,
   };
 
-  function renderToplist({ instruments = [], limit = 5, hrefFor } = {}) {
+  function renderToplist({ instruments = [], limit = 5, hrefFor, sparkline = false } = {}) {
     const t = window.i18n.t;
     const root = document.createElement("div");
     root.className = "toplist";
@@ -38,12 +39,15 @@ window.toplistModule = (function () {
         .slice()
         .sort(SORTERS[id])
         .slice(0, limit)
-        .forEach((instrument) => {
+        .forEach((instrument, index) => {
           const row = window.priceRowModule.renderPriceRow({
             instrument,
             href: hrefFor ? hrefFor(instrument) : undefined,
             meta: id === "turnover" ? "turnover" : "name",
+            sparkline,
+            rank: index + 1,
           });
+          row.style.setProperty("--stagger-index", index);
           row.classList.add("price-row--enter");
           list.appendChild(row);
         });

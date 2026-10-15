@@ -29,6 +29,13 @@ window.SEED_CONTENT = {
     { id: "d8", ticker: "OTP", title: "Saját részvény vásárlása", category: "Tulajdonosi", date: "2026-10-08", format: "pdf" },
   ],
 
+  // Demo notification inbox (K_005, ÁR_0051): an alert hit and issuer disclosures.
+  notifications: [
+    { id: "n1", kind: "alert", ticker: "OTP", title: "Árfolyamriasztás: OTP", text: "Az árfolyam átlépte a 32 000 Ft szintet felfelé.", at: "2026-10-15T09:42:00" },
+    { id: "n2", kind: "disclosure", ticker: "MOL", title: "MOL: Osztalékfizetés időpontja", text: "Új rendkívüli tájékoztatás érkezett.", at: "2026-10-13T16:05:00", disclosureId: "d2" },
+    { id: "n3", kind: "disclosure", ticker: "OTP", title: "OTP: Féléves jelentés 2026", text: "Új rendszeres jelentés érkezett.", at: "2026-10-13T08:30:00", disclosureId: "d1" },
+  ],
+
   // Education (EF_001–EF_005). type: article | video | quiz; level: beginner | advanced.
   education: [
     { id: "e1", title: "Mi az a tőzsde, és hogyan működik?", topic: "Alapok", level: "beginner", type: "article", minutes: 5 },

@@ -11,56 +11,151 @@
 </head>
 <body>
   <div id="screen-content">
-    <div class="landing-page">
-      <h1 class="landing-title" data-i18n="app.name"></h1>
-      <p class="landing-subtitle" data-i18n="index.subtitle"></p>
+    <main class="landing-page">
+      <header class="landing-header">
+        <h1 class="landing-title" data-i18n="app.name"></h1>
+        <p class="landing-subtitle"><span data-i18n="index.subtitle"></span> <span id="landing-version" class="landing-version"></span></p>
+        <a class="landing-cta" href="pages/login/login.html" data-i18n="index.try_app"></a>
+      </header>
 
-      <p class="landing-subtitle" data-i18n="index.group_screens"></p>
-      <ul class="landing-page-list">
-        <li><a class="landing-page-link" href="pages/login/login.html" data-i18n="login.submit_button"></a></li>
-        <li><a class="landing-page-link" href="pages/home/home.html" data-i18n="nav.home"></a></li>
-        <li><a class="landing-page-link" href="pages/market/market.html" data-i18n="nav.market"></a></li>
-        <li><a class="landing-page-link" href="pages/assist/assist.html" data-i18n="index.assist"></a></li>
-        <li><a class="landing-page-link" href="pages/education/education.html" data-i18n="index.education"></a></li>
-        <li><a class="landing-page-link" href="pages/education-detail/education-detail.html?id=e1" data-i18n="index.education_article"></a></li>
-        <li><a class="landing-page-link" href="pages/education-detail/education-detail.html?id=e2" data-i18n="index.education_video"></a></li>
-        <li><a class="landing-page-link" href="pages/education-detail/education-detail.html?id=e6" data-i18n="index.education_quiz"></a></li>
-        <li><a class="landing-page-link" href="pages/product/product.html?ticker=OTP" data-i18n="index.product_share"></a></li>
-        <li><a class="landing-page-link" href="pages/product/product.html?ticker=BUX" data-i18n="index.product_index"></a></li>
-        <li><a class="landing-page-link" href="pages/product/product.html?ticker=HGB30A" data-i18n="index.product_bond"></a></li>
-        <li><a class="landing-page-link" href="pages/widgets/widgets.html" data-i18n="index.widgets"></a></li>
-        <li><a class="landing-page-link" href="pages/menu/menu.html" data-i18n="menu.title"></a></li>
-        <li><a class="landing-page-link" href="pages/profile/profile.html" data-i18n="profile.title"></a></li>
-      </ul>
+      <section class="landing-section">
+        <h2 class="landing-section-title" data-i18n="index.group_start"></h2>
+        <div class="landing-grid">
+          <a class="landing-tile" href="pages/login/login.html" data-i18n="login.submit_button"></a>
+          <a class="landing-tile" href="pages/home/home.html" data-i18n="nav.home"></a>
+          <a class="landing-tile" href="pages/home-edit/home-edit.html" data-i18n="home_edit.title"></a>
+          <a class="landing-tile" href="pages/menu/menu.html" data-i18n="menu.title"></a>
+          <a class="landing-tile" href="pages/profile/profile.html" data-i18n="profile.title"></a>
+          <a class="landing-tile" href="pages/assist/assist.html" data-i18n="index.assist"></a>
+        </div>
+      </section>
 
-      <p class="landing-subtitle" data-i18n="index.group_states"></p>
-      <ul class="landing-page-list">
-        <li><a class="landing-page-link" href="pages/home/home.html?mock=slow" data-i18n="index.state_slow"></a></li>
-        <li><a class="landing-page-link" href="pages/home/home.html?mock=error" data-i18n="index.state_error"></a></li>
-        <li><a class="landing-page-link" href="pages/home/home.html?mock=empty" data-i18n="index.state_empty"></a></li>
-        <li><a class="landing-page-link" href="pages/market/market.html?mock=error" data-i18n="index.state_market_error"></a></li>
-        <li><a class="landing-page-link" href="pages/market/market.html?mock=empty" data-i18n="index.state_market_empty"></a></li>
-        <li><a class="landing-page-link" href="pages/product/product.html?ticker=OTP&mock=error" data-i18n="index.state_product_error"></a></li>
-        <li><a class="landing-page-link" href="pages/assist/assist.html?mock=error" data-i18n="index.assist_error"></a></li>
-        <li><a class="landing-page-link" href="pages/education/education.html?mock=error" data-i18n="index.state_education_error"></a></li>
-        <li><a class="landing-page-link" href="pages/education/education.html?mock=empty" data-i18n="index.state_education_empty"></a></li>
-      </ul>
+      <section class="landing-section">
+        <h2 class="landing-section-title" data-i18n="index.group_market"></h2>
+        <div class="landing-grid">
+          <a class="landing-tile" href="pages/market/market.html" data-i18n="nav.market"></a>
+          <a class="landing-tile" href="pages/search/search.html" data-i18n="index.search"></a>
+        </div>
+        <div class="landing-card">
+          <p class="landing-card-title" data-i18n="index.product_page"></p>
+          <div class="landing-chips">
+            <a class="landing-chip" href="pages/product/product.html?ticker=OTP" data-i18n="index.product_share"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=BUX" data-i18n="index.product_index"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=HGB30A" data-i18n="index.product_bond"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=BUXETF" data-i18n="index.product_etf"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=ERBUXTL" data-i18n="index.product_certificate"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=BUXZ26" data-i18n="index.product_future"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=BUXC12" data-i18n="index.product_option"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=EURZ26" data-i18n="index.product_fx"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=DUNAHOUSE" data-i18n="index.product_beta"></a>
+            <a class="landing-chip" href="pages/product/product.html?ticker=OPUS" data-i18n="index.product_no_pe"></a>
+          </div>
+        </div>
+      </section>
 
-      <p class="landing-subtitle" data-i18n="index.group_meta"></p>
-      <ul class="landing-page-list">
-        <li><a class="landing-page-link" href="pages/style-guide/style-guide.html" data-i18n="index.style_guide"></a></li>
-        <li>
-          <a class="landing-page-link" href="pages/update-history/update-history.html">
-            <span data-i18n="index.update_history"></span>
-            <span id="landing-version" class="landing-version"></span>
-          </a>
-        </li>
-      </ul>
-    </div>
+      <section class="landing-section">
+        <h2 class="landing-section-title" data-i18n="index.education"></h2>
+        <div class="landing-grid">
+          <a class="landing-tile" href="pages/education/education.html" data-i18n="index.education_list"></a>
+          <a class="landing-tile" href="pages/education-search/education-search.html" data-i18n="index.search"></a>
+        </div>
+        <div class="landing-card">
+          <p class="landing-card-title" data-i18n="index.education_detail"></p>
+          <div class="landing-chips">
+            <a class="landing-chip" href="pages/education-detail/education-detail.html?id=e1" data-i18n="index.education_article"></a>
+            <a class="landing-chip" href="pages/education-detail/education-detail.html?id=e2" data-i18n="index.education_video"></a>
+            <a class="landing-chip" href="pages/education-detail/education-detail.html?id=e6" data-i18n="index.education_quiz"></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section">
+        <h2 class="landing-section-title" data-i18n="index.group_watch"></h2>
+        <div class="landing-grid">
+          <a class="landing-tile" href="pages/favorites/favorites.html" data-i18n="favorites.title"></a>
+          <a class="landing-tile" href="pages/favorite-notify/favorite-notify.html?ticker=OTP" data-i18n="notify.title"></a>
+          <a class="landing-tile" href="pages/alerts/alerts.html" data-i18n="alerts.title"></a>
+          <a class="landing-tile" href="pages/alert-new/alert-new.html" data-i18n="alert_new.title"></a>
+          <a class="landing-tile" href="pages/notifications/notifications.html" data-i18n="notifications.title"></a>
+        </div>
+      </section>
+
+      <section class="landing-section">
+        <h2 class="landing-section-title" data-i18n="index.group_states"></h2>
+        <div class="landing-card landing-card-rows">
+          <div class="landing-row">
+            <span class="landing-row-label" data-i18n="nav.home"></span>
+            <span class="landing-chips">
+              <a class="landing-chip" href="pages/home/home.html?mock=slow" data-i18n="index.chip_slow"></a>
+              <a class="landing-chip" href="pages/home/home.html?mock=error" data-i18n="index.chip_error"></a>
+              <a class="landing-chip" href="pages/home/home.html?mock=empty" data-i18n="index.chip_empty"></a>
+            </span>
+          </div>
+          <div class="landing-row">
+            <span class="landing-row-label" data-i18n="nav.market"></span>
+            <span class="landing-chips">
+              <a class="landing-chip" href="pages/market/market.html?mock=slow" data-i18n="index.chip_slow"></a>
+              <a class="landing-chip" href="pages/market/market.html?mock=error" data-i18n="index.chip_error"></a>
+              <a class="landing-chip" href="pages/market/market.html?mock=empty" data-i18n="index.chip_empty"></a>
+            </span>
+          </div>
+          <div class="landing-row">
+            <span class="landing-row-label" data-i18n="index.product_page"></span>
+            <span class="landing-chips">
+              <a class="landing-chip" href="pages/product/product.html?ticker=OTP&mock=slow" data-i18n="index.chip_slow"></a>
+              <a class="landing-chip" href="pages/product/product.html?ticker=OTP&mock=error" data-i18n="index.chip_error"></a>
+            </span>
+          </div>
+          <div class="landing-row">
+            <span class="landing-row-label" data-i18n="index.education"></span>
+            <span class="landing-chips">
+              <a class="landing-chip" href="pages/education/education.html?mock=slow" data-i18n="index.chip_slow"></a>
+              <a class="landing-chip" href="pages/education/education.html?mock=error" data-i18n="index.chip_error"></a>
+              <a class="landing-chip" href="pages/education/education.html?mock=empty" data-i18n="index.chip_empty"></a>
+            </span>
+          </div>
+          <div class="landing-row">
+            <span class="landing-row-label" data-i18n="favorites.title"></span>
+            <span class="landing-chips">
+              <a class="landing-chip" href="pages/favorites/favorites.html?mock=slow" data-i18n="index.chip_slow"></a>
+              <a class="landing-chip" href="pages/favorites/favorites.html?mock=error" data-i18n="index.chip_error"></a>
+            </span>
+          </div>
+          <div class="landing-row">
+            <span class="landing-row-label" data-i18n="alerts.title"></span>
+            <span class="landing-chips">
+              <a class="landing-chip" href="pages/alerts/alerts.html?mock=empty" data-i18n="index.chip_empty"></a>
+            </span>
+          </div>
+          <div class="landing-row">
+            <span class="landing-row-label" data-i18n="index.assist"></span>
+            <span class="landing-chips">
+              <a class="landing-chip" href="pages/assist/assist.html?mock=error" data-i18n="index.chip_error"></a>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section">
+        <h2 class="landing-section-title" data-i18n="index.group_meta"></h2>
+        <div class="landing-grid">
+          <a class="landing-tile" href="pages/widgets/widgets.html" data-i18n="index.widgets"></a>
+          <a class="landing-tile" href="pages/style-guide/style-guide.html" data-i18n="index.style_guide"></a>
+          <a class="landing-tile" href="pages/update-history/update-history.html" data-i18n="index.update_history"></a>
+        </div>
+      </section>
+    </main>
   </div>
 
   <script src="version.js"></script>
   <script src="locales/hu.js"></script>
+  <script src="locales/hu-assist.js"></script>
+  <script src="locales/hu-education.js"></script>
+  <script src="locales/hu-product.js"></script>
+  <script src="locales/hu-market.js"></script>
+  <script src="locales/hu-account.js"></script>
+  <script src="locales/hu-personal.js"></script>
+  <script src="locales/hu-meta.js"></script>
   <script src="modules/i18n/i18n.js"></script>
   <script>
     window.i18n.initI18n();

@@ -1,5 +1,5 @@
 .assist-composer {
-  padding: var(--space-8) var(--page-gutter) calc(var(--space-24) + env(safe-area-inset-bottom));
+  padding: var(--space-8) var(--page-gutter) var(--space-8);
 }
 
 .assist-input-row {

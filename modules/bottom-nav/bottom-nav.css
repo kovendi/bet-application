@@ -13,8 +13,12 @@
   display: flex;
   padding: var(--bottom-nav-pad);
   border-radius: var(--radius-pill);
-  background: var(--color-card-background);
-  border: var(--space-1) solid var(--color-card-border);
+  /* Frosted glass: content scrolling underneath shows through, blurred. */
+  background: var(--color-glass);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  backdrop-filter: var(--backdrop-blur);
+  border: var(--space-1) solid var(--color-glass-border);
+  box-shadow: var(--shadow-floating);
   pointer-events: auto;
 }
 
@@ -78,6 +82,13 @@
 
 .bottom-nav-item--active .bottom-nav-item-icon--active {
   display: block;
+  animation: bottom-nav-icon-pop var(--duration-slow) var(--ease-ios);
+}
+
+@keyframes bottom-nav-icon-pop {
+  50% {
+    transform: scale(1.15);
+  }
 }
 
 .bottom-nav-item-label {

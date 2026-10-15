@@ -37,6 +37,7 @@ window.iconModule = (function () {
     "exclamationmark-circle": "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-2h2v2Zm0-4h-2V7h2v6Z",
     refresh:
       "M17.65 6.35A7.96 7.96 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35Z",
+    reorder: "M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3ZM9 3 5 6.99h3V14h2V6.99h3L9 3Z",
     menu: "M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z",
     trash:
       "M9 3a1 1 0 0 0-1 1v1H4a1 1 0 1 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7h1a1 1 0 1 0 0-2h-4V4a1 1 0 0 0-1-1H9Zm1 2h4V4h-4v1ZM7 7h10v12H7V7Zm3 2a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0v-6a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0v-6a1 1 0 0 0-1-1Z",
@@ -78,6 +79,7 @@ window.iconModule = (function () {
   // e.g. in the bottom nav. Rendered with stroke="currentColor", stroke-width 2.
   const OUTLINE_PATHS = {
     "home-outline": "M4 10.2 12 3.8l8 6.4V19.5a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1v-9.3Z",
+    "price-alert": "M3.5 12h17M12 3.5v5.5M9.5 6 12 3.5 14.5 6M12 20.5V15M9.5 18l2.5 2.5 2.5-2.5",
     "chart-line-outline": "M3.5 17 9.2 11.2l3.8 3.8 7.5-7.6",
     "chat-outline": "M12 4C7.03 4 3.5 7.2 3.5 11.2c0 2.2 1.1 4.1 2.9 5.4-.1 1.1-.5 2-1.1 2.9 1.5-.2 2.7-.8 3.6-1.5.9.3 1.9.4 3.1.4 4.97 0 8.5-3.2 8.5-7.2S16.97 4 12 4Z",
     "book-outline": "M6 3.5h10a2.5 2.5 0 0 1 2.5 2.5v13.5H7A2.5 2.5 0 0 1 4.5 17V5A1.5 1.5 0 0 1 6 3.5ZM4.5 17A2.5 2.5 0 0 1 7 14.5h11.5",

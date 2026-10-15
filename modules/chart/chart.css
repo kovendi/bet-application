@@ -47,6 +47,21 @@
   overflow: visible;
 }
 
+/* Each (re)draw reveals the plot left to right. It clips the whole plot
+   element, so the real TradingView canvas container can animate the same way. */
+.chart-svg--reveal {
+  animation: chart-reveal var(--duration-draw) var(--ease-out) both;
+}
+
+@keyframes chart-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 -10% 0 0);
+  }
+}
+
 .chart-grid {
   stroke: var(--chart-grid);
   stroke-width: 1;
@@ -122,4 +137,29 @@
 
 .chart-controls > :last-child .chips-item {
   padding: var(--space-6) var(--space-10);
+}
+
+/* Split / dividend markers (TA_001): circle with a one letter text, like a
+   TradingView series marker below the bar. */
+.chart-marker-dot {
+  fill: var(--color-card-background);
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+}
+
+.chart-marker--split .chart-marker-dot,
+.chart-marker--reverse_split .chart-marker-dot {
+  fill: var(--color-accent);
+}
+
+.chart-marker-letter {
+  font-size: var(--font-size-caption2);
+  font-weight: 700;
+  fill: var(--color-highlight);
+  pointer-events: none;
+}
+
+.chart-marker--split .chart-marker-letter,
+.chart-marker--reverse_split .chart-marker-letter {
+  fill: var(--color-on-accent);
 }

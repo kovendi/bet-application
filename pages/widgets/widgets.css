@@ -9,14 +9,7 @@
   --widget-medium-width: 338px;
   --widget-large-height: 354px;
   --widget-radius: 22px;
-  padding: 0 var(--page-gutter) var(--space-24);
-}
-
-.widgets-title {
-  margin: 0 0 var(--space-4);
-  font-size: var(--font-size-large-title);
-  font-weight: 700;
-  color: var(--color-text-main);
+  padding: var(--space-12) var(--page-gutter) var(--space-24);
 }
 
 .widgets-hint {

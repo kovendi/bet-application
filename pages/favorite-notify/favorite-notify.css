@@ -1,0 +1,51 @@
+#screen-content {
+  height: 100%;
+  overflow-x: clip;
+}
+
+.pers-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pers-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-4) var(--page-gutter) var(--space-16);
+}
+
+.pers-note {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-footnote);
+}
+
+.pers-section-title {
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-footnote);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.notify-issuer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-8) 0;
+}
+
+.notify-issuer-ticker {
+  font-size: var(--font-size-title2);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.notify-types {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
