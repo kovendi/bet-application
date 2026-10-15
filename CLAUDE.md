@@ -46,7 +46,7 @@ Each page links `global.css`, its own `<name>.css`, plus the CSS of every module
 
 ## Top inset / sticky bars (do not regress)
 
-Never put `padding-top` on `body`, `.iphone-screen` or any scroll container that holds a sticky app bar — sticky sticks at the padding edge, so content scrolls visibly in the strip above the bar. The notch/status-bar inset is the CSS variable `--screen-inset-top` (global.css; `.iphone-frame` overrides it to 46px). `.top-appbar` absorbs it into its own opaque box; pages without an app bar get it automatically on `#screen-content`. App bar background must stay opaque.
+Never put `padding-top` on `body`, `.iphone-screen` or any scroll container that holds a sticky app bar — sticky sticks at the padding edge, so content scrolls visibly in the strip above the bar. The notch/status-bar inset is the CSS variable `--screen-inset-top` (global.css; `.iphone-screen` overrides it to 46px in the mobile frame, 0 for tablet/desktop/custom and landscape). `.top-appbar` absorbs it into its own opaque box; pages without an app bar get it automatically on `#screen-content`. App bar background must stay opaque.
 
 ## i18n
 
@@ -230,7 +230,7 @@ Page template:
 </body>
 ```
 
-Also link `modules/iphone-frame/iphone-frame.css` in `<head>`.
+Also link `modules/iphone-frame/iphone-frame.css` in `<head>`. With the frame, a device switcher is rendered top right of the browser window (outside the device): mobile (390×844), tablet (820×1180), desktop (1440×900), custom (width × height in px), plus portrait/landscape for the presets. Presets live in `DEVICES` in `iphone-frame.js`. The choice is stored in localStorage and applies to every page; frames larger than the window are scaled down with `transform`, so the page still lays out at the device's real CSS width. Only the mobile frame has the notch and the 46px top inset.
 
 Exception: `index.html` (root landing page), `pages/style-guide/style-guide.html`, and `pages/update-history/update-history.html` are meta/overview pages, not app screens — they render full-width and must NOT be wrapped in `iphone-frame`.
 

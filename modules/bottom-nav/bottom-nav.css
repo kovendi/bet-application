@@ -11,6 +11,8 @@
   --bottom-nav-pad: var(--space-4);
   position: relative;
   display: flex;
+  max-width: var(--bottom-nav-max-width);
+  margin-inline: auto;
   padding: var(--bottom-nav-pad);
   border-radius: var(--radius-pill);
   /* Frosted glass: content scrolling underneath shows through, blurred. */

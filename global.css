@@ -73,8 +73,29 @@
   --frame-body: #000000;
   --frame-edge: #3a3d3f;
   --frame-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --frame-control-color: #8d9396;
+  --frame-control-active: #ffffff;
+  --frame-control-field: #1c1e1f;
+  /* Bezel / corner radius per device type (mobile is the default) */
   --frame-padding: 14px;
+  --frame-radius: 55px;
   --frame-screen-radius: 40px;
+  --frame-padding-tablet: 20px;
+  --frame-radius-tablet: 36px;
+  --frame-screen-radius-tablet: 18px;
+  --frame-padding-desktop: 10px;
+  --frame-radius-desktop: 14px;
+  --frame-screen-radius-desktop: 6px;
+  /* Default screen size (average iPhone, 390 x 844 pt); iphone-frame.js sets
+     the actual device size inline, the frame adds its padding around it */
+  --frame-screen-width: 390px;
+  --frame-screen-height: 844px;
+  /* landscape phone: space the left-edge notch takes inside the screen */
+  --frame-landscape-notch-inset: 46px;
+  /* rotating / switching device: frame resize animation */
+  --duration-rotate: 500ms;
+  /* Floating bottom nav never stretches wider than this on wide phones / tablets */
+  --bottom-nav-max-width: 360px;
   /* toast/overlay offset below the notch inside the frame */
   --frame-content-top: 60px;
 

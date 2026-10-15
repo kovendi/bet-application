@@ -5,6 +5,17 @@
 window.LOCALES = window.LOCALES || {};
 window.LOCALES.hu = {
   "app.name": "BET",
+  "frame.portrait": "Álló",
+  "frame.landscape": "Fekvő",
+  "frame.device": "Eszköz",
+  "frame.mobile": "Mobil",
+  "frame.tablet": "Tablet",
+  "frame.desktop": "Desktop",
+  "frame.custom": "Egyedi",
+  "frame.width": "Szélesség (px)",
+  "frame.width_short": "Sz",
+  "frame.height": "Magasság (px)",
+  "frame.height_short": "M",
   "nav.home": "Főoldal",
   "nav.search": "Keresés",
   "nav.market": "Piactér",

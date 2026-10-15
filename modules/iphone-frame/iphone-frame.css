@@ -1,26 +1,43 @@
 /* Only applied when JS has confirmed we're on desktop and added the frame.
-   Device chrome only — the dimensions below model the physical phone, so
+   Device chrome only — the dimensions below model the physical device, so
    they are not design-system spacing. */
 body.has-iphone-frame {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: var(--frame-desk-background);
 }
 
+/* Registered so the screen inset can animate along with the rotation. */
+@property --screen-inset-top {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+/* --frame-screen-width / -height are set inline by iphone-frame.js (device
+   size, already swapped for landscape); --frame-scale shrinks frames that
+   don't fit the window, without changing the CSS width the page lays out at. */
 .iphone-frame {
   position: relative;
-  width: 390px;
-  height: 844px;
-  max-width: 100vw;
-  max-height: 100vh;
+  flex-shrink: 0;
+  width: calc(var(--frame-screen-width) + 2 * var(--frame-padding));
+  height: calc(var(--frame-screen-height) + 2 * var(--frame-padding));
   background: var(--frame-body);
-  border-radius: 55px;
+  border-radius: var(--frame-radius);
   padding: var(--frame-padding);
   box-shadow:
     0 0 0 var(--space-2) var(--frame-edge),
     var(--frame-shadow);
+  transform: scale(var(--frame-scale, 1));
+  transition:
+    width var(--duration-rotate) var(--ease-ios),
+    height var(--duration-rotate) var(--ease-ios),
+    padding var(--duration-rotate) var(--ease-ios),
+    border-radius var(--duration-rotate) var(--ease-ios),
+    transform var(--duration-rotate) var(--ease-ios);
 }
 
 .iphone-notch {
@@ -33,6 +50,13 @@ body.has-iphone-frame {
   background: var(--frame-body);
   border-radius: var(--radius-xl);
   z-index: 2;
+  transition:
+    top var(--duration-rotate) var(--ease-ios),
+    left var(--duration-rotate) var(--ease-ios),
+    width var(--duration-rotate) var(--ease-ios),
+    height var(--duration-rotate) var(--ease-ios),
+    transform var(--duration-rotate) var(--ease-ios),
+    opacity var(--duration-rotate) var(--ease-ios);
 }
 
 .iphone-screen {
@@ -50,8 +74,155 @@ body.has-iphone-frame {
   /* notch bottom (20px top + 32px height, minus the frame's 14px padding) + 8px gap;
      consumed by the app bar / #screen-content, not as padding here (see global.css) */
   --screen-inset-top: 46px;
+  transition:
+    --screen-inset-top var(--duration-rotate) var(--ease-ios),
+    padding-left var(--duration-rotate) var(--ease-ios),
+    border-radius var(--duration-rotate) var(--ease-ios);
 }
 
 .iphone-screen::-webkit-scrollbar {
   display: none;
+}
+
+/* First paint after a page load: no animation from the default size. */
+.iphone-frame--static,
+.iphone-frame--static .iphone-notch,
+.iphone-frame--static .iphone-screen {
+  transition: none;
+}
+
+/* Landscape phone: the notch moves to the left edge and the screen keeps
+   clear of it instead of getting a top inset. */
+.iphone-frame--mobile.iphone-frame--landscape .iphone-notch {
+  top: 50%;
+  left: var(--space-20);
+  width: var(--space-32);
+  height: 120px;
+  transform: translateY(-50%);
+}
+
+.iphone-frame--landscape .iphone-screen {
+  --screen-inset-top: 0px;
+}
+
+.iphone-frame--mobile.iphone-frame--landscape .iphone-screen {
+  padding-left: var(--frame-landscape-notch-inset);
+}
+
+/* Tablet / desktop / custom: no notch, no top inset, thinner bezel. */
+.iphone-frame--tablet,
+.iphone-frame--custom {
+  --frame-padding: var(--frame-padding-tablet);
+  --frame-radius: var(--frame-radius-tablet);
+  --frame-screen-radius: var(--frame-screen-radius-tablet);
+  --frame-content-top: calc(var(--frame-padding-tablet) + var(--space-16));
+}
+
+.iphone-frame--desktop {
+  --frame-padding: var(--frame-padding-desktop);
+  --frame-radius: var(--frame-radius-desktop);
+  --frame-screen-radius: var(--frame-screen-radius-desktop);
+  --frame-content-top: calc(var(--frame-padding-desktop) + var(--space-16));
+}
+
+.iphone-frame:not(.iphone-frame--mobile) .iphone-notch {
+  opacity: 0;
+}
+
+.iphone-frame:not(.iphone-frame--mobile) .iphone-screen {
+  --screen-inset-top: 0px;
+}
+
+/* Device switcher, top right of the browser window (outside the device). */
+.frame-switcher {
+  position: fixed;
+  top: var(--space-16);
+  right: var(--space-16);
+  z-index: var(--z-popover);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--frame-body);
+  border: var(--space-1) solid var(--frame-edge);
+  color: var(--frame-control-color);
+  font-size: var(--font-size-footnote);
+}
+
+.frame-switcher-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.frame-switcher-group[hidden] {
+  display: none;
+}
+
+.frame-switcher-select,
+.frame-switcher-input {
+  height: var(--space-32);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--frame-control-field);
+  color: var(--frame-control-active);
+  font: inherit;
+}
+
+.frame-switcher-select {
+  padding: 0 var(--space-12);
+  cursor: pointer;
+}
+
+.frame-switcher-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.frame-switcher-input {
+  width: 64px;
+  padding: 0 var(--space-8);
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.frame-switcher-input::-webkit-inner-spin-button,
+.frame-switcher-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.frame-switcher-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-32);
+  height: var(--space-32);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--frame-control-color);
+  cursor: pointer;
+  transition:
+    background var(--duration-base) var(--ease-ios),
+    color var(--duration-base) var(--ease-ios);
+}
+
+@media (hover: hover) {
+  .frame-switcher-btn:hover {
+    color: var(--frame-control-active);
+  }
+}
+
+.frame-switcher-btn svg {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+
+.frame-switcher-btn[aria-pressed="true"] {
+  background: var(--frame-edge);
+  color: var(--frame-control-active);
 }

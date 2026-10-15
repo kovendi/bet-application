@@ -5,6 +5,17 @@
 window.LOCALES = window.LOCALES || {};
 window.LOCALES.en = {
   "app.name": "BET",
+  "frame.portrait": "Portrait",
+  "frame.landscape": "Landscape",
+  "frame.device": "Device",
+  "frame.mobile": "Mobile",
+  "frame.tablet": "Tablet",
+  "frame.desktop": "Desktop",
+  "frame.custom": "Custom",
+  "frame.width": "Width (px)",
+  "frame.width_short": "W",
+  "frame.height": "Height (px)",
+  "frame.height_short": "H",
   "nav.home": "Home",
   "nav.search": "Search",
   "nav.market": "Market",
