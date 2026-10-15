@@ -3,7 +3,10 @@
 // exactly at the instrument's current price. Same ticker + range always gives
 // the same curve, so screens look stable between reloads.
 //
-// window.generatePriceSeries(instrument, range) -> [{ t, o, h, l, c }]
+// window.generatePriceSeries(instrument, range, history) -> [{ t, o, h, l, c }]
+//   history (optional): extra candles before the range's own window, so the
+//   chart can be scrolled back in time. The range's own candles stay identical
+//   with or without it (the walk is generated backwards from the last one).
 //   range: 1d | 1w | 1m | 3m | 1y | 5y | max
 //   t: timestamp (ms). 1d is intraday (5-minute candles over the 9:00–17:00
 //   session), the rest are daily / weekly / monthly candles.
@@ -39,7 +42,7 @@ window.generatePriceSeries = (function () {
     };
   }
 
-  return function generatePriceSeries(instrument, range) {
+  return function generatePriceSeries(instrument, range, history) {
     const cfg = RANGES[range] || RANGES["1m"];
     const count = cfg[0];
     const step = cfg[1];
@@ -55,11 +58,12 @@ window.generatePriceSeries = (function () {
       open.setHours(9, 0, 0, 0);
       last = open.getTime() + (count - 1) * step;
     }
-    const first = last - (count - 1) * step;
+    const total = count + (history || 0);
+    const first = last - (total - 1) * step;
 
     const candles = [];
     let close = instrument.price;
-    for (let i = count - 1; i >= 0; i--) {
+    for (let i = total - 1; i >= 0; i--) {
       const open = close / (1 + (rand() - 0.5) * 2 * vol);
       const wick = close * vol * 0.5;
       candles.unshift({

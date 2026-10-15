@@ -1,6 +1,9 @@
 // Classic script (not a module) — English keys for: product page (tabs, chart, specs).
 // Extends window.LOCALES.en from en.js, so load it after en.js.
 Object.assign(window.LOCALES.en, {
+  "chart.drag_hint": "Drag for earlier data",
+  "chart.jump_latest": "Latest",
+  "chart.scroll_label": "Chart, scrolls left and right",
   "chart.range_label": "Time range",
   "chart.type_label": "Chart type",
   "chart.type_line": "Line chart",

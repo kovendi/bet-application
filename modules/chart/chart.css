@@ -37,6 +37,67 @@
 
 .chart-plot {
   width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.chart-plot--scrollable {
+  cursor: grab;
+}
+
+.chart-plot--dragging {
+  cursor: grabbing;
+}
+
+/* Scroll affordances in the readout row: a hint until the first drag, a
+   "back to latest" pill once the chart is scrolled into the past. */
+.chart-hint,
+.chart-latest {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  min-width: 0;
+  font-size: var(--font-size-caption1);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.chart-hint[hidden],
+.chart-latest[hidden] {
+  display: none;
+}
+
+.chart-hint .icon,
+.chart-latest .icon {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+  flex: none;
+}
+
+.chart-hint .icon:first-child {
+  transform: scaleX(-1);
+}
+
+.chart-latest {
+  padding: var(--space-6) var(--space-10);
+  border: 1px solid var(--color-separator);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-ios), transform var(--duration-fast) var(--ease-ios);
+}
+
+.chart-latest:active {
+  transform: scale(var(--press-scale));
+  opacity: var(--press-opacity);
+}
+
+@media (hover: hover) {
+  .chart-latest:hover {
+    background: var(--color-hover);
+  }
 }
 
 .chart-svg {

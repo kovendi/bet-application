@@ -1,6 +1,9 @@
 // Classic script (not a module) — Hungarian keys for: product page (tabs, chart, specs).
 // Extends window.LOCALES.hu from hu.js, so load it after hu.js.
 Object.assign(window.LOCALES.hu, {
+  "chart.drag_hint": "Húzd a korábbi adatokhoz",
+  "chart.jump_latest": "Legfrissebb",
+  "chart.scroll_label": "Grafikon, balra-jobbra görgethető",
   "chart.range_label": "Időtáv",
   "chart.type_label": "Grafikon típusa",
   "chart.type_line": "Vonaldiagram",

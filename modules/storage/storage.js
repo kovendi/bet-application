@@ -101,9 +101,10 @@ window.storage = (function () {
     return ((instrument.price - instrument.prevClose) / instrument.prevClose) * 100;
   }
 
-  function getPriceSeries(ticker, range) {
+  // history: extra candles before the range's own window (scrollable chart).
+  function getPriceSeries(ticker, range, history) {
     const instrument = getInstrument(ticker);
-    return instrument ? window.generatePriceSeries(instrument, range) : [];
+    return instrument ? window.generatePriceSeries(instrument, range, history) : [];
   }
 
   // Today's curve for mini charts (mock): runs from the previous close to the
