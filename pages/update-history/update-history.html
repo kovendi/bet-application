@@ -33,6 +33,11 @@
         <tbody>
           <!-- Newest entries go at the top. The Change column stays in English. -->
           <tr>
+            <td>2026-10-15 17:39</td>
+            <td>v0.8.2</td>
+            <td>Bottom nav: sits lower on phones with a home indicator, like a native iOS 26 tab bar. Bottom padding is now max(8px, safe-area-inset-bottom - --bottom-nav-home-overlap); new token --bottom-nav-home-overlap (14px) in global.css. Without a bottom inset (browser tab, desktop frame) the 8px gap is unchanged.</td>
+          </tr>
+          <tr>
             <td>2026-10-15 17:33</td>
             <td>v0.8.1</td>
             <td>PWA: fix the installed iOS 26 app. apple-mobile-web-app-status-bar-style is now "default" instead of "black-translucent", which removes the gap under the sticky bottom nav and the frosted band over the top of the page. pwa.js keeps the theme-color meta in sync with the .top-appbar (else body) background on load and on theme change, and exposes pwaModule.syncThemeColor(). CLAUDE.md PWA chapter updated. Browser layout is untouched.</td>

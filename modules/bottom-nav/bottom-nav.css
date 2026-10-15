@@ -3,7 +3,10 @@
   position: sticky;
   bottom: 0;
   z-index: var(--z-sticky);
-  padding: 0 var(--space-12) calc(env(safe-area-inset-bottom) + var(--space-8));
+  /* Native-like height: on a phone with a home indicator (inset ~34px) the pill
+     ends ~20px above the screen edge; without an inset (browser tab, desktop
+     frame) the old 8px gap stays. */
+  padding: 0 var(--space-12) max(var(--space-8), calc(env(safe-area-inset-bottom) - var(--bottom-nav-home-overlap)));
   pointer-events: none;
 }
 

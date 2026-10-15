@@ -96,6 +96,9 @@
   --duration-rotate: 500ms;
   /* Floating bottom nav never stretches wider than this on wide phones / tablets */
   --bottom-nav-max-width: 360px;
+  /* How far the floating bottom nav reaches into the home-indicator safe area:
+     iOS 26 tab bars sit ~20pt above the screen edge, not above the full inset. */
+  --bottom-nav-home-overlap: 14px;
   /* toast/overlay offset below the notch inside the frame */
   --frame-content-top: 60px;
 
