@@ -67,6 +67,17 @@ addSection(
   }),
 );
 
+// code-step (six-digit e-mail code; demo code 123456)
+addSection(
+  "code-step",
+  window.codeStepModule.renderCodeStep({
+    email: "demo@example.com",
+    submitLabel: t("style_guide.demo_loading_button"),
+    onVerified: () => window.toastModule.showToast({ message: t("style_guide.demo_toast_message"), icon: "check" }),
+  }),
+);
+addSection("validators", textEl("validateEmail · validatePassword · validateConfirm", "style-guide-caption"));
+
 // overlay / motion / mock-network (used through other modules)
 addSection("overlay", textEl("confirm-dialog, bottom-sheet", "style-guide-caption"));
 addSection("motion", textEl("playOut · replay · fadeIn", "style-guide-caption"));

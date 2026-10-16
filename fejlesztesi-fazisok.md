@@ -114,8 +114,8 @@ Megjegyzések: új oldalak `register`, `forgot-password`; új modulok `code-step
 
 - [ ] Mindkét téma végigellenőrzése minden oldalon, kontraszt és akadálymentesség (NFK_003)
 - [ ] Kis és nagy képernyő (iPhone SE – Pro Max) ellenőrzés
-- [ ] Style guide teljes naprakésszé tétele
-- [ ] `index.html` átnézése: minden oldal elérhető legyen onnan
+- [x] Style guide teljes naprakésszé tétele: a hiányzó `code-step` és `validators` bekerült (`style-guide-feedback.js`). Böngészőben még nem volt kipróbálva
+- [x] `index.html` átnézése: minden oldal elérhető onnan (szkripttel ellenőrizve), a hu/en fordítások kulcsra egyeznek (788/788)
 - [ ] Update history és verzió frissítése
 - [ ] Képernyőtervek exportja az ajánlathoz (a tender 5.1 szerint a fő felületek látványtervei). E-mailenként max. 20 MB, letöltési link és több e-mail is elfogadott
 
