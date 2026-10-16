@@ -107,8 +107,8 @@ Megjegyzések: új oldalak `register`, `forgot-password`; új modulok `code-step
 ## 5. fázis: Angol nyelv és állapotok
 
 - [x] Angol nyelv (`locales/en*.js`, a mock tartalom angol változata a `modules/storage/seed-en.js` és `seed-assist-en.js` fájlokban), nyelvváltó a beállításokban (B_002)
-- [ ] Betöltés, üres és hiba állapot (`?mock=slow|empty|error`) a még hiányzó oldalakon. Kész: Home, Piactér, Edukáció, termékadatlap, Bet assist
-- [ ] "Piac zárva" és "nincs adat" állapotok végigvezetése. A BÉT csak kereskedési napokon 8–18 óra között vállal rendelkezésre állást, ezért a hibaállapot (Újra gomb) mindenhol legyen meg
+- [x] Betöltés, üres és hiba állapot (`?mock=slow|empty|error`) a még hiányzó oldalakon. Kész: Home, Piactér, Edukáció, termékadatlap, Bet assist, Kedvencek, Riasztások, Értesítések, Edukáció részlet, Kedvenc értesítés, Kezdőlap szerkesztése (az utolsó három új, `index.html` Állapotok szakaszában linkelve). A keresőoldalak és statikus oldalak (Névjegy, Menü, Beállítások) nem töltenek adatot, ott nem kell. Böngészőben még nem volt kipróbálva
+- [x] "Piac zárva" és "nincs adat" állapotok végigvezetése. Kész: `?market=closed|open` bármikor kikényszeríti a piaci státuszt (`market-status`), zárva esetén a `bannerModule.renderPriceNotices()` az árfolyamos oldalakon (Home, Piactér, Termékadatlap, Keresés, Kedvencek, Riasztások, Új riasztás) a késleltetett disclaimer fölött "A piac zárva, az árfolyamok az utolsó kereskedési nap záróárát mutatják" jegyzetet ad; az `index.html` Állapotok szakaszában "Piac zárva" chip. A "nincs adat" (`–`, "Nincs adat" képernyőolvasónak) a 2. fázisban készült el. Böngészőben még nem volt kipróbálva. A BÉT csak kereskedési napokon 8–18 óra között vállal rendelkezésre állást, ezért a hibaállapot (Újra gomb) mindenhol legyen meg
 
 ## 6. fázis: Csiszolás és átadás
 

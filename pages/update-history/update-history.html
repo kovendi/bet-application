@@ -33,6 +33,16 @@
         <tbody>
           <!-- Newest entries go at the top. The Change column stays in English. -->
           <tr>
+            <td>2026-10-16 10:00</td>
+            <td>v0.9.0</td>
+            <td>Settings: new "Mockup" section for demo scenarios. Segmented pickers for market status (real time / open / closed) and network state (normal / slow / error / empty), plus a reset row with confirm dialog. New logic-only module modules/mock-settings (localStorage mockSettings); market-status and mock-network read it as a fallback, the ?market= / ?mock= URL parameters still win. Locale keys settings.group_mockup, settings.mock_*.</td>
+          </tr>
+          <tr>
+            <td>2026-10-16 09:30</td>
+            <td>v0.8.3</td>
+            <td>Earlier uncommitted work, now recorded: buttonModule.requireFilled (submit stays disabled until required fields are filled, used on login, register, forgot-password, account-change, feedback); loading, error and empty mock states on Home edit, Favorite notify and Education detail; "Market closed" chips and the new state rows on index.html; closed-market banner and market status wiring on more pages; code-step and register/login validation tweaks; locale keys for these.</td>
+          </tr>
+          <tr>
             <td>2026-10-15 17:39</td>
             <td>v0.8.2</td>
             <td>Bottom nav: sits lower on phones with a home indicator, like a native iOS 26 tab bar. Bottom padding is now max(8px, safe-area-inset-bottom - --bottom-nav-home-overlap); new token --bottom-nav-home-overlap (14px) in global.css. Without a bottom inset (browser tab, desktop frame) the 8px gap is unchanged.</td>

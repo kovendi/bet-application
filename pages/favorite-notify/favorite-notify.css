@@ -49,3 +49,13 @@
   flex-direction: column;
   gap: var(--space-10);
 }
+
+.notify-skeleton-header {
+  height: var(--tap-min);
+  border-radius: var(--radius-md);
+}
+
+.notify-skeleton-toggle {
+  height: var(--space-32);
+  border-radius: var(--radius-md);
+}

@@ -19,6 +19,8 @@
 //     }));
 //     // the standard "prices are delayed" strip:
 //     container.appendChild(window.bannerModule.renderDelayedDisclaimer());
+//     // delayed strip plus a "market closed" note when closed (load market-status too):
+//     container.appendChild(window.bannerModule.renderPriceNotices());
 //   </script>
 
 window.bannerModule = (function () {
@@ -52,5 +54,17 @@ window.bannerModule = (function () {
     return renderBanner({ text: window.i18n.t("disclaimer.delayed"), variant: "info", icon: "info" });
   }
 
-  return { renderBanner, renderDelayedDisclaimer };
+  // The delayed-price strip, preceded by a "market closed" note while the market
+  // is closed (PS_001). Needs modules/market-status loaded; without it only the
+  // delayed strip shows.
+  function renderPriceNotices() {
+    const fragment = document.createDocumentFragment();
+    if (window.marketStatusModule && window.marketStatusModule.isClosed()) {
+      fragment.appendChild(renderBanner({ text: window.i18n.t("disclaimer.market_closed"), variant: "info", icon: "clock" }));
+    }
+    fragment.appendChild(renderDelayedDisclaimer());
+    return fragment;
+  }
+
+  return { renderBanner, renderDelayedDisclaimer, renderPriceNotices };
 })();

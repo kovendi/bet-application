@@ -23,3 +23,21 @@
   font-size: var(--font-size-footnote);
   color: var(--color-text-secondary);
 }
+
+.settings-mockup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.settings-scenario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.settings-hint {
+  margin: 0;
+  font-size: var(--font-size-footnote);
+  color: var(--color-text-secondary);
+}

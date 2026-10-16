@@ -12,6 +12,8 @@
 //       onClick: () => {...},
 //     }));
 //
+//     // Disabled until every required field is filled:
+//     buttonModule.requireFilled(submitButton, [inputEl, textareaEl]);
 //     // While a (mock) request runs: spinner instead of the label, disabled,
 //     // aria-busy. Turn it off again on success or error.
 //     window.buttonModule.setButtonLoading(button, true);
@@ -55,9 +57,27 @@ window.buttonModule = (function () {
       button.appendChild(spinner);
     }
     button.classList.toggle("app-button--loading", isLoading);
-    button.disabled = isLoading;
+    // After loading a form button goes back to what its required fields say.
+    button.disabled = isLoading || (button.syncRequired ? !button.syncRequired(false) : false);
     button.setAttribute("aria-busy", isLoading ? "true" : "false");
   }
 
-  return { renderButton, setButtonLoading };
+  // A submit button that stays disabled until every required field has a value,
+  // so an empty form can never be sent. `fields` are the input/textarea elements;
+  // `isReady` adds a condition of its own (e.g. a switch, a lock). Returns a sync
+  // function to call after the state changes without an `input` event (programmatic
+  // value changes, switches).
+  function requireFilled(button, fields, isReady = () => true) {
+    const sync = (apply = true) => {
+      const ready = fields.every((field) => field.value.trim()) && isReady();
+      if (apply) button.disabled = !ready;
+      return ready;
+    };
+    button.syncRequired = sync;
+    fields.forEach((field) => field.addEventListener("input", () => sync()));
+    sync();
+    return sync;
+  }
+
+  return { renderButton, setButtonLoading, requireFilled };
 })();

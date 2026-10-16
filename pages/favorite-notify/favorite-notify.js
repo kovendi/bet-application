@@ -53,6 +53,36 @@ function renderTypes(types, onChange) {
   return section;
 }
 
+function showLoading() {
+  contentEl.setAttribute("aria-busy", "true");
+  contentEl.replaceChildren(
+    window.skeletonModule.renderSkeleton("notify-skeleton-header"),
+    window.skeletonModule.renderSkeleton("notify-skeleton-toggle"),
+  );
+}
+
+function load() {
+  showLoading();
+  window.mockNetwork
+    .request("favorite-notify", () => window.storage.getFavoriteNotify(user.id, instrument.ticker))
+    .then(() => {
+      contentEl.removeAttribute("aria-busy");
+      render();
+    })
+    .catch(() => {
+      contentEl.removeAttribute("aria-busy");
+      contentEl.replaceChildren(
+        window.stateViewModule.renderStateView({
+          variant: "error",
+          title: t("state.error_title"),
+          message: t("state.error_message"),
+          actionLabel: t("state.retry"),
+          onAction: load,
+        }),
+      );
+    });
+}
+
 function render() {
   const current = window.storage.getFavoriteNotify(user.id, instrument.ticker);
   let enabled = Boolean(current);
@@ -106,7 +136,7 @@ if (!user) {
     window.stateViewModule.renderStateView({ title: t("notify.unknown"), message: "", actionLabel: t("favorites.title"), onAction: () => window.pageTransition.back() }),
   );
 } else {
-  render();
+  load();
 }
 
 if (!window.iphoneFrame.isRealMobileDevice()) {

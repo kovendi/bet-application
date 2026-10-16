@@ -73,6 +73,7 @@ window.LOCALES.hu = {
   "date.weekday_short_5": "pén",
   "date.weekday_short_6": "szo",
   "disclaimer.delayed": "Az árfolyamadatok késleltetettek (az indexek kivételével), és kizárólag tájékoztató jellegűek.",
+  "disclaimer.market_closed": "A piac zárva, az árfolyamok az utolsó kereskedési nap záróárát mutatják.",
   "registration_required.title": "Regisztráció szükséges",
   "registration_required.message": "Ez a funkció csak regisztrált felhasználóknak érhető el. A regisztráció ingyenes.",
   "registration_required.register_button": "Regisztráció",

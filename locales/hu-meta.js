@@ -30,6 +30,7 @@ Object.assign(window.LOCALES.hu, {
   "index.chip_slow": "Lassú betöltés",
   "index.chip_error": "Hálózati hiba",
   "index.chip_empty": "Üres állapot",
+  "index.chip_closed": "Piac zárva",
   "index.widgets": "iPhone widgetek",
   "index.style_guide": "Style guide",
   "index.update_history": "Változásnapló",

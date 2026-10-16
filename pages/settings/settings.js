@@ -34,6 +34,70 @@ function renderLanguage() {
   return section;
 }
 
+// Demo scenarios for the client: each choice is saved in localStorage
+// (modules/mock-settings) and read by market-status and mock-network on the
+// next page load. A URL parameter still overrides it.
+function renderScenarioPicker(name, labelKey, optionKeys) {
+  const wrap = document.createElement("div");
+  wrap.className = "settings-scenario";
+  const label = document.createElement("p");
+  label.className = "app-input-label";
+  label.textContent = t(labelKey);
+  const chips = window.chipsModule.renderChips({
+    variant: "segmented",
+    ariaLabel: t(labelKey),
+    activeId: window.mockSettings.get(name),
+    items: window.mockSettings.OPTIONS[name].map((id) => ({ id, label: t(optionKeys + id) })),
+    onChange: (value) => {
+      window.mockSettings.set(name, value);
+      window.toastModule.showToast({ message: t("settings.mock_saved"), icon: "check" });
+    },
+  });
+  wrap.append(label, chips);
+  return wrap;
+}
+
+function renderMockup() {
+  const section = document.createElement("div");
+  section.className = "settings-mockup";
+  const title = document.createElement("h2");
+  title.className = "menu-list-group-title";
+  title.textContent = t("settings.group_mockup");
+  const hint = document.createElement("p");
+  hint.className = "settings-hint";
+  hint.textContent = t("settings.mockup_hint");
+
+  const reset = window.menuListModule.renderMenuList([
+    {
+      items: [
+        {
+          icon: "refresh",
+          title: t("settings.mock_reset_title"),
+          description: t("settings.mock_reset_description"),
+          onSelect: () =>
+            window.confirmDialogModule.showConfirmDialog({
+              title: t("settings.mock_reset_title"),
+              message: t("settings.mock_reset_confirm"),
+              confirmLabel: t("settings.mock_reset_button"),
+              onConfirm: () => {
+                window.mockSettings.reset();
+                window.location.reload();
+              },
+            }),
+        },
+      ],
+    },
+  ]);
+  section.append(
+    title,
+    hint,
+    renderScenarioPicker("market", "settings.mock_market_label", "settings.mock_market_"),
+    renderScenarioPicker("network", "settings.mock_network_label", "settings.mock_network_"),
+    reset,
+  );
+  return section;
+}
+
 function renderInfoMenu() {
   const go = (url) => () => window.pageTransition.go(url);
   return window.menuListModule.renderMenuList([
@@ -63,7 +127,7 @@ const version = document.createElement("p");
 version.className = "settings-version";
 version.textContent = t("settings.version").replace("{version}", window.APP_VERSION || "");
 
-content.append(renderLanguage(), renderInfoMenu(), version);
+content.append(renderLanguage(), renderMockup(), renderInfoMenu(), version);
 
 if (!window.iphoneFrame.isRealMobileDevice()) {
   document.body.appendChild(window.iphoneFrame.renderIphoneFrame(document.getElementById("screen-content")));

@@ -175,7 +175,7 @@ if (!user) {
   const preset = window.storage.getInstrument(new URLSearchParams(window.location.search).get("ticker"));
   if (preset) showForm(preset);
   else showPicker();
-  document.getElementById("pers-disclaimer").appendChild(window.bannerModule.renderDelayedDisclaimer());
+  document.getElementById("pers-disclaimer").appendChild(window.bannerModule.renderPriceNotices());
 }
 
 if (!window.iphoneFrame.isRealMobileDevice()) {

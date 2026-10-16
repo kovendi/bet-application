@@ -28,8 +28,13 @@ window.mockNetwork = (function () {
   const DEFAULT_DELAY_MS = 700;
   const failedKeys = new Set();
 
+  // ?mock= in the URL wins, else the saved Settings → Mockup choice
+  // (modules/mock-settings, optional); 'normal' means no mock state.
   function getMockState() {
-    return new URLSearchParams(window.location.search).get("mock");
+    const fromUrl = new URLSearchParams(window.location.search).get("mock");
+    if (fromUrl) return fromUrl;
+    const saved = window.mockSettings ? window.mockSettings.get("network") : "normal";
+    return saved === "normal" ? null : saved;
   }
 
   function isEmptyMock() {

@@ -121,6 +121,9 @@ if (biometricUser) {
 const usernameInput = document.getElementById("login-username");
 const passwordInput = document.getElementById("login-password");
 const errorSlot = document.getElementById("login-error");
+// Disabled while a field is empty and during a lockout (FK_0072).
+let locked = false;
+const syncSubmit = window.buttonModule.requireFilled(submitButton, [usernameInput, passwordInput], () => !locked);
 
 function validateFields() {
   // Autofill doesn't fire `input`, so stale messages are cleared here too.
@@ -154,7 +157,8 @@ function showLoginError(messageKey) {
 // After five failed attempts the button locks for 5, 10, 30, then 60 seconds (FK_0072).
 // The banner counts down; the lock lives in storage, so a reload does not skip it.
 function showLock(seconds) {
-  submitButton.disabled = true;
+  locked = true;
+  syncSubmit();
   const banner = window.bannerModule.renderBanner({ text: "", variant: "warning", icon: "clock" });
   errorSlot.replaceChildren(banner);
   window.mockNetwork.countdown(
@@ -163,7 +167,8 @@ function showLock(seconds) {
       banner.querySelector(".banner-text").textContent = window.i18n.t("login.locked").replace("{seconds}", left);
     },
     () => {
-      submitButton.disabled = false;
+      locked = false;
+      syncSubmit();
       errorSlot.replaceChildren();
     },
   );

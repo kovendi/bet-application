@@ -243,7 +243,7 @@ function renderSearchButton() {
 document.getElementById("market-top-appbar").appendChild(window.topAppbarModule.renderTopAppbar({ title: t("nav.market"), right: renderSearchButton() }));
 renderControls();
 load();
-document.getElementById("market-disclaimer").appendChild(window.bannerModule.renderDelayedDisclaimer());
+document.getElementById("market-disclaimer").appendChild(window.bannerModule.renderPriceNotices());
 document.getElementById("market-bottom-nav").appendChild(window.bottomNavModule.renderMainNav("market"));
 
 if (!window.iphoneFrame.isRealMobileDevice()) {

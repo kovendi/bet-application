@@ -87,7 +87,7 @@ When the user says an element is repeating and should be a "common module" (e.g.
 - Before building any element, check if a matching module already exists — if so, reuse/import it instead of recreating it.
 - Do not duplicate/reimplement an existing module's markup on a new page — import it.
 
-Current modules: action-bar, banner, bar-chart, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, money, motion, overlay, page-transition, price-row, progress-bar, pwa, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network (`pwa/pwa.js` is logic-only too; its install card has `pwa.css`).
+Current modules: action-bar, banner, bar-chart, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, mock-settings, money, motion, overlay, page-transition, price-row, progress-bar, pwa, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network, mock-settings (`pwa/pwa.js` is logic-only too; its install card has `pwa.css`).
 
 ## Rules
 
@@ -148,6 +148,7 @@ The UI must feel premium: a static mockup that behaves like a real, polished app
 - Where a real app would wait for data (lists, charts, details), load it through `window.mockNetwork.request(key, produce)`, show `modules/skeleton` blocks sized by page classes to match the final layout (see `pages/home`), then `motion.fadeIn` the content.
 - Mock the error state for important screens too: `modules/state-view` with `variant: 'error'` and a Retry action.
 - Never leave a blank area: an empty state (`state-view`, default variant) has a short explanation and the primary action that fills it.
+- Demo scenarios can also be saved from Settings → Mockup (`modules/mock-settings`, localStorage `mockSettings`: market auto/open/closed, network normal/slow/error/empty); the URL parameter wins over the saved value. Pages using `market-status` or `mock-network` load `mock-settings.js` before them.
 - Demo any state from the URL: `?mock=slow` (skeletons), `?mock=error` (first request fails, Retry recovers), `?mock=empty` (pages call `mockNetwork.isEmptyMock()`). `index.html` lists them in its "Állapotok" section (one row per screen, chips for slow/error/empty).
 
 **Submitting & validation**
@@ -155,6 +156,7 @@ The UI must feel premium: a static mockup that behaves like a real, polished app
 - Forms use `novalidate` and are validated in JS. Never rely on the browser's native `required` bubbles.
 - **Input pattern (login is the reference):** a text/number/password field is always `inputModule.renderInput({ icon, ... })` (icon row, label small above the value) inside `inputModule.renderInputStack([...])` (one rounded container, dividers between fields), even for a single field. Never a bare `renderInput` without `icon`, never a custom-styled input. The form is a flex column with `gap: var(--space-14)`: fields stack, then the form-level error banner, then the submit button. Fields without a fitting icon get the closest SF-like one (add it to `modules/icon` if missing). Selection controls (chips/segmented, toggle) sit above the stack with a `.app-input-label` caption.
 - Errors are inline, per field, in `--color-negative` (text + icon, not color alone), translated via `t()`: `inputModule.setFieldError(input, msg)` / `clearFieldError(input)`. Form-level errors (wrong password, network) are a `warning` banner above the submit button.
+- A submit button stays disabled until every required field has a value: `buttonModule.requireFilled(submit, [inputEls], isReady?)` (also covers extra conditions such as mandatory switches). Format errors (bad e-mail, weak password) are still shown inline on submit.
 - The submit button shows a progress state and is disabled while "sending": `buttonModule.setButtonLoading(button, true)`. On success give clear confirmation (toast, inline checkmark, or navigation back); on error show an inline message and keep the user's input.
 - Toggles, checkboxes, favorites and reactions update immediately with a small animation (no waiting). `price-row` flips its star itself; `onFavoriteToggle` returns `false` to veto (guest).
 

@@ -150,8 +150,36 @@ function render() {
   contentEl.replaceChildren(title, renderCurrent(), hint, renderCandidates(), reset);
 }
 
+function showLoading() {
+  contentEl.setAttribute("aria-busy", "true");
+  const rows = Array.from({ length: 6 }, () => window.skeletonModule.renderSkeleton("hedit-skeleton-row"));
+  contentEl.replaceChildren(...rows);
+}
+
+function load() {
+  showLoading();
+  window.mockNetwork
+    .request("home-edit", () => tickers)
+    .then(() => {
+      contentEl.removeAttribute("aria-busy");
+      render();
+    })
+    .catch(() => {
+      contentEl.removeAttribute("aria-busy");
+      contentEl.replaceChildren(
+        window.stateViewModule.renderStateView({
+          variant: "error",
+          title: t("state.error_title"),
+          message: t("state.error_message"),
+          actionLabel: t("state.retry"),
+          onAction: load,
+        }),
+      );
+    });
+}
+
 if (user) {
-  render();
+  load();
 } else {
   // The overview is the same for every guest; editing is a registered feature.
   contentEl.replaceChildren(

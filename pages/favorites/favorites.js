@@ -184,7 +184,7 @@ function load() {
 
 if (user) {
   load();
-  document.getElementById("pers-disclaimer").appendChild(window.bannerModule.renderDelayedDisclaimer());
+  document.getElementById("pers-disclaimer").appendChild(window.bannerModule.renderPriceNotices());
 } else {
   // Favorites are registered-only (K_000).
   contentEl.replaceChildren(

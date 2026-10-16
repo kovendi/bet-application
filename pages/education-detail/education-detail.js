@@ -3,7 +3,8 @@ const t = window.i18n.t;
 
 const LIST_HREF = "../education/education.html";
 const contentEl = document.getElementById("education-detail-content");
-const item = window.storage.getEducationItem(new URLSearchParams(window.location.search).get("id"));
+const itemId = new URLSearchParams(window.location.search).get("id");
+let item = null;
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -72,6 +73,7 @@ function renderFutamAction() {
 }
 
 function renderNotFound() {
+  contentEl.removeAttribute("aria-busy");
   contentEl.replaceChildren(
     window.stateViewModule.renderStateView({
       title: t("edu.not_found_title"),
@@ -83,8 +85,9 @@ function renderNotFound() {
 }
 
 function renderItem() {
+  contentEl.removeAttribute("aria-busy");
   const body = item.type === "quiz" ? window.educationQuiz.renderQuiz(item) : item.type === "video" ? renderVideo() : renderArticle();
-  contentEl.append(renderHeader(), body);
+  contentEl.replaceChildren(renderHeader(), body);
   // The quiz offers the hand-off on its result screen instead.
   if (item.futam && item.type !== "quiz") contentEl.appendChild(renderFutamAction());
   window.motion.fadeIn(contentEl);
@@ -92,13 +95,47 @@ function renderItem() {
 
 document.getElementById("education-detail-top-appbar").appendChild(
   window.topAppbarModule.renderTopAppbar({
-    title: item ? t(`edu.type_${item.type}`) : t("nav.education"),
+    title: t("nav.education"),
     onBack: () => (document.referrer ? window.pageTransition.back() : window.pageTransition.backTo(LIST_HREF)),
   }),
 );
 
-if (item) renderItem();
-else renderNotFound();
+function showLoading() {
+  contentEl.setAttribute("aria-busy", "true");
+  contentEl.replaceChildren(
+    window.skeletonModule.renderSkeleton("education-skeleton-meta", "skeleton--text"),
+    window.skeletonModule.renderSkeleton("education-skeleton-title"),
+    window.skeletonModule.renderSkeleton("education-skeleton-body"),
+  );
+}
+
+function showError() {
+  contentEl.removeAttribute("aria-busy");
+  contentEl.replaceChildren(
+    window.stateViewModule.renderStateView({
+      variant: "error",
+      title: t("state.error_title"),
+      message: t("state.error_message"),
+      actionLabel: t("state.retry"),
+      onAction: load,
+    }),
+  );
+}
+
+function load() {
+  showLoading();
+  window.mockNetwork
+    .request("education-detail", () => window.storage.getEducationItem(itemId))
+    .then((found) => {
+      item = found;
+      if (!item) return renderNotFound();
+      document.querySelector(".top-appbar-title").textContent = t(`edu.type_${item.type}`);
+      renderItem();
+    })
+    .catch(showError);
+}
+
+load();
 
 if (!window.iphoneFrame.isRealMobileDevice()) {
   document.body.appendChild(window.iphoneFrame.renderIphoneFrame(document.getElementById("screen-content")));

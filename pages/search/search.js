@@ -77,7 +77,7 @@ document.getElementById("search-top-appbar").appendChild(
 );
 
 onSearch("");
-document.getElementById("search-disclaimer").appendChild(window.bannerModule.renderDelayedDisclaimer());
+document.getElementById("search-disclaimer").appendChild(window.bannerModule.renderPriceNotices());
 
 if (!window.iphoneFrame.isRealMobileDevice()) {
   document.body.appendChild(window.iphoneFrame.renderIphoneFrame(document.getElementById("screen-content")));

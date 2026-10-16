@@ -65,6 +65,7 @@ function renderForm() {
   updateCounter();
 
   const submit = window.buttonModule.renderButton({ label: t("feedback.submit"), type: "submit" });
+  window.buttonModule.requireFilled(submit, [textarea]);
   form.append(subtitle, field, counter, submit);
 
   form.addEventListener("submit", (event) => {

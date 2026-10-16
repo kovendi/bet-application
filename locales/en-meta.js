@@ -30,6 +30,7 @@ Object.assign(window.LOCALES.en, {
   "index.chip_slow": "Slow loading",
   "index.chip_error": "Network error",
   "index.chip_empty": "Empty state",
+  "index.chip_closed": "Market closed",
   "index.widgets": "iPhone widgets",
   "index.style_guide": "Style guide",
   "index.update_history": "Update history",

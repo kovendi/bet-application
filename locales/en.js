@@ -73,6 +73,7 @@ window.LOCALES.en = {
   "date.weekday_short_5": "Fri",
   "date.weekday_short_6": "Sat",
   "disclaimer.delayed": "Price data is delayed (except for indices) and is for information purposes only.",
+  "disclaimer.market_closed": "The market is closed; prices show the last trading day's closing price.",
   "registration_required.title": "Registration required",
   "registration_required.message": "This feature is only available to registered users. Registration is free.",
   "registration_required.register_button": "Register",

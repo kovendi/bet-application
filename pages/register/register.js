@@ -82,6 +82,7 @@ function renderForm() {
       onChange: (checked) => {
         declarations[key] = checked;
         errorSlot.replaceChildren();
+        syncSubmit();
       },
     });
   const declarationList = window.menuListModule.renderMenuList([
@@ -97,6 +98,12 @@ function renderForm() {
   const errorSlot = document.createElement("div");
   errorSlot.className = "flow-error";
   const submit = window.buttonModule.renderButton({ label: t("register.submit"), type: "submit" });
+  // The two mandatory declarations count as required too (the newsletter is optional).
+  const syncSubmit = window.buttonModule.requireFilled(
+    submit,
+    [emailInput, passwordInput, confirmInput],
+    () => declarations.terms && declarations.privacy,
+  );
 
   form.append(
     window.inputModule.renderInputStack([email, password, confirm]),

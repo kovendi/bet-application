@@ -50,6 +50,7 @@ function showEmailStep() {
   });
   const input = field.querySelector("input");
   const submit = window.buttonModule.renderButton({ label: t("forgot.submit"), type: "submit" });
+  window.buttonModule.requireFilled(submit, [input]);
   form.append(window.inputModule.renderInputStack([field]), submit);
 
   form.addEventListener("submit", (event) => {
@@ -96,6 +97,7 @@ function showPasswordStep(email) {
   });
   const [passwordInput, confirmInput] = [password, confirm].map((f) => f.querySelector("input"));
   const submit = window.buttonModule.renderButton({ label: t("forgot.new_submit"), type: "submit" });
+  window.buttonModule.requireFilled(submit, [passwordInput, confirmInput]);
   form.append(
     window.inputModule.renderInputStack([password, confirm]),
     text("p", "flow-hint", t("register.password_hint")),

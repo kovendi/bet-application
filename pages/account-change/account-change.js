@@ -85,6 +85,7 @@ function startEmail() {
   });
   const input = field.querySelector("input");
   const submit = window.buttonModule.renderButton({ label: t("account.email_submit"), type: "submit" });
+  window.buttonModule.requireFilled(submit, [input]);
   form.append(window.inputModule.renderInputStack([field]), submit);
 
   form.addEventListener("submit", (event) => {
@@ -131,6 +132,7 @@ function startPassword() {
   const confirm = passwordField("account-confirm", t("register.confirm_label"), "confirm-password", t("register.confirm_placeholder"));
   const [currentInput, nextInput, confirmInput] = [current, next, confirm].map((f) => f.querySelector("input"));
   const submit = window.buttonModule.renderButton({ label: t("forgot.new_submit"), type: "submit" });
+  window.buttonModule.requireFilled(submit, [currentInput, nextInput, confirmInput]);
   form.append(
     window.inputModule.renderInputStack([current, next, confirm]),
     text("p", "flow-hint", t("register.password_hint")),

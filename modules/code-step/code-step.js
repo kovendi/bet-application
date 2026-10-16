@@ -80,6 +80,7 @@ window.codeStepModule = (function () {
       const next = Math.min(start + digits.length, CODE_LENGTH - 1);
       inputs[next].focus();
       setError("");
+      syncSubmit();
       if (getCode().length === CODE_LENGTH) form.requestSubmit();
     };
     inputs.forEach((box, index) => {
@@ -92,6 +93,7 @@ window.codeStepModule = (function () {
         if (event.key === "Backspace" && !box.value && index > 0) {
           inputs[index - 1].value = "";
           inputs[index - 1].focus();
+          syncSubmit();
         }
         if (event.key === "ArrowLeft" && index > 0) inputs[index - 1].focus();
         if (event.key === "ArrowRight" && index < CODE_LENGTH - 1) inputs[index + 1].focus();
@@ -105,6 +107,7 @@ window.codeStepModule = (function () {
     });
 
     const submit = window.buttonModule.renderButton({ label: submitLabel, type: "submit" });
+    const syncSubmit = window.buttonModule.requireFilled(submit, inputs);
     const resendSlot = document.createElement("div");
     resendSlot.className = "code-step-resend";
     startResendCountdown(resendSlot);
@@ -125,6 +128,7 @@ window.codeStepModule = (function () {
         if (!ok) {
           setError(t("code_step.error_wrong"));
           inputs.forEach((box) => (box.value = ""));
+          syncSubmit();
           inputs[0].focus();
           return;
         }

@@ -293,3 +293,19 @@
   font-size: var(--font-size-subheadline);
   color: var(--color-text-secondary);
 }
+
+.education-skeleton-meta {
+  width: 40%;
+  height: var(--space-14);
+}
+
+.education-skeleton-title {
+  height: var(--space-32);
+  border-radius: var(--radius-md);
+}
+
+.education-skeleton-body {
+  flex: 1;
+  min-height: 40vh;
+  border-radius: var(--radius-md);
+}

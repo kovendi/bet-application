@@ -12,6 +12,8 @@
 //   <script>
 //     container.appendChild(window.marketStatusModule.renderMarketStatus());
 //     // tests/demos can pass a fixed moment: renderMarketStatus({ now: new Date(...) })
+//     // or force the state from the URL: ?market=closed | ?market=open
+//     // (or from Settings → Mockup when modules/mock-settings is loaded first)
 //   </script>
 
 window.marketStatusModule = (function () {
@@ -35,12 +37,24 @@ window.marketStatusModule = (function () {
     return h * 60 + m;
   }
 
+  // Demo override: ?market=closed | open in the URL, else the saved
+  // Settings → Mockup choice (modules/mock-settings, optional). 'auto' = real time.
+  function getMarketOverride() {
+    const fromUrl = new URLSearchParams(window.location.search).get("market");
+    if (fromUrl) return fromUrl;
+    const saved = window.mockSettings ? window.mockSettings.get("market") : "auto";
+    return saved === "auto" ? null : saved;
+  }
+
   // { open: bool, minutesLeft (when open), nextOpen: { dayOffset, time } (when closed) }
-  function getStatus(date) {
+  function getStatus(date = new Date()) {
     const hours = window.storage.getMarketHours();
     const openAt = toMinutes(hours.open);
     const closeAt = toMinutes(hours.close);
-    const { day, minutes } = budapestParts(date);
+    const parts = budapestParts(date);
+    const override = getMarketOverride();
+    const day = override === "open" ? hours.days[0] : parts.day;
+    const minutes = override === "open" ? openAt + 60 : override === "closed" ? closeAt : parts.minutes;
     const tradingDay = hours.days.includes(day);
 
     if (tradingDay && minutes >= openAt && minutes < closeAt) {
@@ -96,5 +110,5 @@ window.marketStatusModule = (function () {
     return el;
   }
 
-  return { renderMarketStatus, getStatus };
+  return { renderMarketStatus, getStatus, isClosed: () => !getStatus().open };
 })();

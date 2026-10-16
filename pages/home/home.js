@@ -351,7 +351,7 @@ function loadFeed() {
 
 loadFeed();
 
-document.getElementById("home-disclaimer").appendChild(window.bannerModule.renderDelayedDisclaimer());
+document.getElementById("home-disclaimer").appendChild(window.bannerModule.renderPriceNotices());
 
 document.getElementById("home-bottom-nav").appendChild(window.bottomNavModule.renderMainNav("home"));
 

@@ -124,7 +124,7 @@ function load() {
 
 if (user) {
   load();
-  document.getElementById("pers-disclaimer").appendChild(window.bannerModule.renderDelayedDisclaimer());
+  document.getElementById("pers-disclaimer").appendChild(window.bannerModule.renderPriceNotices());
 } else {
   // Price alerts are registered-only (ÁR_000).
   contentEl.replaceChildren(

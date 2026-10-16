@@ -379,7 +379,7 @@ document.getElementById("product-top-appbar").appendChild(
 );
 load();
 if (!instrument || instrument.delayed) {
-  els.disclaimer.appendChild(window.bannerModule.renderDelayedDisclaimer());
+  els.disclaimer.appendChild(window.bannerModule.renderPriceNotices());
 }
 document.getElementById("product-bottom-nav").appendChild(window.bottomNavModule.renderMainNav("market"));
 
