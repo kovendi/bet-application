@@ -107,3 +107,17 @@
   font-weight: 700;
   color: var(--color-text-main);
 }
+
+.top-appbar-bell {
+  position: relative;
+}
+
+.top-appbar-bell-dot {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--color-negative);
+}

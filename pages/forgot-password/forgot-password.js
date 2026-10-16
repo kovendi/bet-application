@@ -11,6 +11,7 @@ document.getElementById("flow-top-appbar").appendChild(
   window.topAppbarModule.renderTopAppbar({
     title: t("forgot.title"),
     hideMenuButton: true,
+    hideBell: true,
     onBack: () => window.pageTransition.back(),
   }),
 );

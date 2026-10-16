@@ -208,6 +208,8 @@ Main pages render the shared main menu with `bottomNavModule.renderMainNav(activ
 
 Every app page uses `top-appbar` (`modules/top-appbar/top-appbar.js`). The hamburger menu button (built into `top-appbar`, opens `pages/menu/menu.html`) must appear on every page except the login page and the menu page itself — pass `hideMenuButton: true` to omit it there.
 
+The notifications bell (with unread dot) is built into `top-appbar` too, left of the menu button, so it appears on every page; pass `hideBell: true` to omit it (notifications page, register, forgot-password).
+
 Page titles live in the **left slot** of the app bar (`title` option), never as a heading in the page body. On a sub-page (anything not a main-nav destination) a **circled back arrow** sits to the left of the title (`onBack` option). It is a round button with a visible background and ring, not a bare arrow, so it is obvious it can be tapped to go back. Main-nav destinations (Home, Piactér, Bet assist, Edukáció) have no back arrow. Back goes to where the user came from (`history.back()`) unless the page has one fixed parent. Pages with a search field in the bar (search page) keep the back arrow and put the field in the center slot instead of a title.
 
 ### iPhone frame

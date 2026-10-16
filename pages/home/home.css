@@ -452,16 +452,3 @@
   opacity: var(--press-opacity);
 }
 
-.home-bell {
-  position: relative;
-}
-
-.home-bell-dot {
-  position: absolute;
-  top: var(--space-6);
-  right: var(--space-6);
-  width: var(--space-8);
-  height: var(--space-8);
-  border-radius: var(--radius-round);
-  background: var(--color-negative);
-}

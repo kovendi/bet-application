@@ -12,24 +12,6 @@ homeEditLink.appendChild(window.iconModule.renderIcon("reorder"));
 
 const productHref = (instrument) => "../product/product.html?ticker=" + encodeURIComponent(instrument.ticker);
 
-// Bell with an unread dot, next to the menu button (K_005, ÁR_0051).
-function renderNotificationsLink() {
-  const link = document.createElement("a");
-  link.className = "top-appbar-icon-button home-bell";
-  link.href = "../notifications/notifications.html";
-  link.setAttribute("aria-label", t("notifications.bell_label"));
-  link.appendChild(window.iconModule.renderIcon("bell"));
-  const user = window.storage.getCurrentUser();
-  if (user && window.storage.getNotifications(user.id).some((n) => !n.read)) {
-    const dot = document.createElement("span");
-    dot.className = "home-bell-dot";
-    dot.setAttribute("role", "img");
-    dot.setAttribute("aria-label", t("notifications.unread"));
-    link.appendChild(dot);
-  }
-  return link;
-}
-
 // Top bar: simplified logo on the left (graphic element), menu button is built in.
 const logo = document.createElement("img");
 logo.src = "../../assets/logo-bet-simple.png";
@@ -38,7 +20,7 @@ logo.className = "home-logo";
 // The bar is navy and runs straight into the brand hero band below it.
 document
   .getElementById("home-top-appbar")
-  .appendChild(window.topAppbarModule.renderTopAppbar({ left: logo, right: renderNotificationsLink(), tone: "brand" }));
+  .appendChild(window.topAppbarModule.renderTopAppbar({ left: logo, tone: "brand" }));
 
 document.getElementById("home-market-status").appendChild(window.marketStatusModule.renderMarketStatus());
 

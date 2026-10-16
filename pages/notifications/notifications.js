@@ -88,6 +88,7 @@ document.getElementById("pers-top-appbar").appendChild(
     title: t("notifications.title"),
     onBack: () => window.pageTransition.back(),
     right: user ? renderMarkAll() : undefined,
+    hideBell: true,
   }),
 );
 

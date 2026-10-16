@@ -11,6 +11,11 @@
 // in the bar. Pass `hideMenuButton: true` to omit it — only the menu page
 // itself does this, since opening the menu from the menu makes no sense.
 //
+// A notifications bell (with an unread dot) sits left of the menu button on
+// every page too (K_005, ÁR_0051). Pass `hideBell: true` to omit it — the
+// notifications page itself and the pre-login pages (register, forgot password).
+// It reads the unread state from window.storage, loaded before this module runs.
+//
 // Page titles live in the left slot (`title`). On a sub-page, `onBack` adds a
 // circled back arrow to the left of the title; top-level pages (main nav
 // destinations) have no back arrow.
@@ -42,6 +47,23 @@ window.topAppbarModule = (function () {
     return button;
   }
 
+  function renderBell() {
+    const link = document.createElement("a");
+    link.className = "top-appbar-icon-button top-appbar-bell";
+    link.href = "../notifications/notifications.html";
+    link.setAttribute("aria-label", window.i18n.t("notifications.bell_label"));
+    link.appendChild(window.iconModule.renderIcon("bell"));
+    const user = window.storage && window.storage.getCurrentUser();
+    if (user && window.storage.getNotifications(user.id).some((n) => !n.read)) {
+      const dot = document.createElement("span");
+      dot.className = "top-appbar-bell-dot";
+      dot.setAttribute("role", "img");
+      dot.setAttribute("aria-label", window.i18n.t("notifications.unread"));
+      link.appendChild(dot);
+    }
+    return link;
+  }
+
   // Circled back arrow: the circle makes it obvious this is a button.
   function renderBackButton(onBack) {
     const button = document.createElement("button");
@@ -60,7 +82,7 @@ window.topAppbarModule = (function () {
     return title;
   }
 
-  function renderTopAppbar({ title, onBack, left, center, right, hideMenuButton, tone = "default" } = {}) {
+  function renderTopAppbar({ title, onBack, left, center, right, hideMenuButton, hideBell, tone = "default" } = {}) {
     const bar = document.createElement("header");
     bar.className = "top-appbar";
     // The brand bar is navy in both themes, so its contents use the dark tokens.
@@ -79,6 +101,7 @@ window.topAppbarModule = (function () {
     const rightSlot = document.createElement("div");
     rightSlot.className = "top-appbar-slot top-appbar-slot--right";
     if (right) rightSlot.appendChild(right);
+    if (!hideBell) rightSlot.appendChild(renderBell());
     if (!hideMenuButton) rightSlot.appendChild(renderMenuButton());
 
     bar.appendChild(leftSlot);
