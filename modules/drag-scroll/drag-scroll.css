@@ -1,0 +1,16 @@
+/* Paired with drag-scroll.js — mouse drag-to-scroll for horizontal scrollers. */
+.drag-scroll {
+  cursor: grab;
+}
+
+.drag-scroll--dragging {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+}
+
+.drag-scroll--dragging * {
+  cursor: grabbing !important;
+}

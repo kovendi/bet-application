@@ -87,7 +87,7 @@ When the user says an element is repeating and should be a "common module" (e.g.
 - Before building any element, check if a matching module already exists — if so, reuse/import it instead of recreating it.
 - Do not duplicate/reimplement an existing module's markup on a new page — import it.
 
-Current modules: action-bar, banner, bar-chart, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, mock-settings, money, motion, overlay, page-transition, price-row, progress-bar, pwa, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network, mock-settings (`pwa/pwa.js` is logic-only too; its install card has `pwa.css`).
+Current modules: action-bar, banner, bar-chart, bottom-nav, bottom-sheet, button, card, carousel, chart, chips, confirm-dialog, datepicker, drag-scroll, i18n, icon, input, iphone-frame, market-status, menu-list, mock-network, mock-settings, money, motion, overlay, page-transition, price-row, progress-bar, pwa, search-field, skeleton, sparkline, state-view, storage, tabs, tag-color, text-button, theme, toast, toggle, toplist, top-appbar. Each file's header comment documents its usage. Logic-only modules without paired CSS: i18n, storage, theme, money, tag-color, mock-network, mock-settings (`pwa/pwa.js` is logic-only too; its install card has `pwa.css`).
 
 ## Rules
 
@@ -189,6 +189,10 @@ Every form input needs a `<label>`, not just a `placeholder` — placeholders di
 ### File length
 
 Keep files short. If a file is approaching 500 lines, flag it to the user and suggest splitting it (e.g. extracting a sub-component into its own module) instead of letting it keep growing. Exception: `pages/update-history/update-history.html` has no line limit.
+
+### Horizontal scrollers on desktop
+
+A mouse can't swipe, so a horizontally scrolling row (chips, shelf, strip, carousel) would hide its off-screen items on desktop. `modules/drag-scroll` solves it globally: it is linked (css + js, right after `global.css`) on every page and makes **any element with `overflow-x: auto|scroll` that overflows** draggable with the mouse (grab cursor, click after a drag is swallowed, scroll-snap suspended while dragging). A new horizontal list needs no extra code, just its normal `overflow-x: auto` CSS. Touch is untouched (native scrolling). Every new page must link the module.
 
 ### No horizontal scroll
 
