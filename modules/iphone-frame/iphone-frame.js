@@ -9,6 +9,9 @@
 // portrait/landscape toggle for the presets. The choice is remembered across
 // pages (localStorage). Frames larger than the window are scaled down to fit,
 // so the page still lays out at the device's real CSS width.
+// The camera button in the switcher downloads a PNG of the current screen in
+// its frame (transparent corners) via the browser's tab-share API; the first
+// click asks for permission to share the tab.
 //
 // Usage in a page:
 //   <div id="screen-content">...page markup...</div>
@@ -131,6 +134,178 @@ window.iphoneFrame = (function () {
     return input;
   }
 
+  // --- Screenshot -----------------------------------------------------------
+  // Captures this tab with the browser's screen-share API (pixel-exact, no
+  // library, works on file://), crops it to the device frame and downloads a
+  // PNG with transparent corners. The share stays open, so only the first
+  // capture asks for permission.
+
+  const CAMERA_PATH =
+    "M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.5-2h5.4l1.5 2h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9ZM12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z";
+  let captureVideo = null;
+
+  function stopCapture() {
+    if (!captureVideo) return;
+    captureVideo.srcObject.getTracks().forEach(function (track) {
+      track.stop();
+    });
+    captureVideo.remove();
+    captureVideo = null;
+  }
+
+  function ensureCaptureVideo() {
+    if (captureVideo) return Promise.resolve(captureVideo);
+    return navigator.mediaDevices
+      .getDisplayMedia({
+        video: { displaySurface: "browser" },
+        audio: false,
+        preferCurrentTab: true,
+        selfBrowserSurface: "include",
+      })
+      .then(function (stream) {
+        const video = document.createElement("video");
+        video.className = "frame-capture-video";
+        video.muted = true;
+        video.playsInline = true;
+        video.srcObject = stream;
+        document.body.appendChild(video);
+        stream.getVideoTracks()[0].addEventListener("ended", stopCapture);
+        captureVideo = video;
+        return video.play().then(function () {
+          return video;
+        });
+      });
+  }
+
+  // Resolves with the first video frame captured after `since` (performance.now()).
+  function nextFrameAfter(video, since) {
+    return new Promise(function (resolve) {
+      function onFrame(now, meta) {
+        if (meta.captureTime !== undefined && meta.captureTime < since) {
+          video.requestVideoFrameCallback(onFrame);
+          return;
+        }
+        resolve();
+      }
+      video.requestVideoFrameCallback(onFrame);
+    });
+  }
+
+  function cropToFrame(video, frame) {
+    const style = getComputedStyle(frame);
+    const scale = parseFloat(style.getPropertyValue("--frame-scale")) || 1;
+    const edge = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--space-2")) || 0) * scale;
+    const ratio = video.videoWidth / window.innerWidth;
+    const rect = frame.getBoundingClientRect();
+    const x = Math.round((rect.left - edge) * ratio);
+    const y = Math.round((rect.top - edge) * ratio);
+    const w = Math.round((rect.width + 2 * edge) * ratio);
+    const h = Math.round((rect.height + 2 * edge) * ratio);
+    const radius = ((parseFloat(style.borderTopLeftRadius) || 0) * scale + edge) * ratio;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    ctx.beginPath();
+    ctx.roundRect(0, 0, w, h, radius);
+    ctx.clip();
+    ctx.drawImage(video, x, y, w, h, 0, 0, w, h);
+    return canvas;
+  }
+
+  function pad2(n) {
+    return String(n).padStart(2, "0");
+  }
+
+  // e.g. home-mock-error-mobile-portrait-20261019-1432.png
+  function captureFileName(state) {
+    const page = (location.pathname.split("/").pop() || "screen").replace(/\.html?$/, "");
+    const query = location.search.slice(1).replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "");
+    const now = new Date();
+    const stamp =
+      now.getFullYear() + pad2(now.getMonth() + 1) + pad2(now.getDate()) + "-" + pad2(now.getHours()) + pad2(now.getMinutes());
+    const orientation = state.device === "custom" ? state.customWidth + "x" + state.customHeight : state.orientation;
+    return [page, query, state.device, orientation, stamp].filter(Boolean).join("-") + ".png";
+  }
+
+  function downloadCanvas(canvas, fileName) {
+    return new Promise(function (resolve, reject) {
+      canvas.toBlob(function (blob) {
+        if (!blob) return reject(new Error("empty capture"));
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(url);
+        resolve();
+      }, "image/png");
+    });
+  }
+
+  function captureFrame(frame, state) {
+    return ensureCaptureVideo().then(function (video) {
+      document.body.classList.add("is-capturing");
+      const since = performance.now();
+      return nextFrameAfter(video, since)
+        .then(function () {
+          return downloadCanvas(cropToFrame(video, frame), captureFileName(state));
+        })
+        .finally(function () {
+          document.body.classList.remove("is-capturing");
+        });
+    });
+  }
+
+  function flashButton(btn, className) {
+    btn.classList.remove("frame-switcher-btn--done", "frame-switcher-btn--error");
+    btn.classList.add(className);
+    btn.addEventListener(
+      "animationend",
+      function () {
+        btn.classList.remove(className);
+      },
+      { once: true },
+    );
+  }
+
+  function renderCaptureButton(frame, state) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "frame-switcher-btn frame-switcher-capture";
+    btn.setAttribute("aria-label", tr("frame.screenshot"));
+    btn.title = tr("frame.screenshot");
+    btn.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' +
+      CAMERA_PATH +
+      '"/></svg>';
+
+    const supported = !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+    btn.addEventListener("click", function () {
+      if (!supported) {
+        btn.title = tr("frame.screenshot_error");
+        flashButton(btn, "frame-switcher-btn--error");
+        return;
+      }
+      btn.disabled = true;
+      captureFrame(frame, state)
+        .then(function () {
+          btn.title = tr("frame.screenshot");
+          flashButton(btn, "frame-switcher-btn--done");
+        })
+        .catch(function () {
+          btn.title = tr("frame.screenshot_error");
+          flashButton(btn, "frame-switcher-btn--error");
+        })
+        .finally(function () {
+          btn.disabled = false;
+        });
+    });
+    window.addEventListener("pagehide", stopCapture);
+    return btn;
+  }
+
   function renderControls(frame, state) {
     const bar = document.createElement("div");
     bar.className = "frame-switcher";
@@ -171,7 +346,11 @@ window.iphoneFrame = (function () {
       return btn;
     });
 
-    bar.append(select, customGroup, orientationGroup);
+    const captureGroup = document.createElement("div");
+    captureGroup.className = "frame-switcher-group";
+    captureGroup.appendChild(renderCaptureButton(frame, state));
+
+    bar.append(select, customGroup, orientationGroup, captureGroup);
 
     const controls = { select, customGroup, orientationGroup, widthInput, heightInput, orientationButtons };
 

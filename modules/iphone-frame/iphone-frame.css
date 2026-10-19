@@ -208,7 +208,8 @@ body.has-iphone-frame {
   cursor: pointer;
   transition:
     background var(--duration-base) var(--ease-ios),
-    color var(--duration-base) var(--ease-ios);
+    color var(--duration-base) var(--ease-ios),
+    transform var(--duration-fast) var(--ease-ios);
 }
 
 @media (hover: hover) {
@@ -225,4 +226,68 @@ body.has-iphone-frame {
 .frame-switcher-btn[aria-pressed="true"] {
   background: var(--frame-edge);
   color: var(--frame-control-active);
+}
+
+/* Screenshot: while capturing, the switcher is hidden and the frame doesn't
+   animate, so the grabbed video frame shows just the device. */
+body.is-capturing .frame-switcher {
+  visibility: hidden;
+}
+
+body.is-capturing .iphone-frame,
+body.is-capturing .iphone-notch,
+body.is-capturing .iphone-screen {
+  transition: none;
+}
+
+/* The tab-share stream plays here; it must be in the DOM to deliver frames. */
+.frame-capture-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.frame-switcher-btn:disabled {
+  cursor: progress;
+  opacity: var(--press-opacity);
+}
+
+.frame-switcher-btn:active:not(:disabled) {
+  transform: scale(var(--press-scale));
+}
+
+.frame-switcher-btn--done {
+  animation: frame-capture-done var(--duration-slow) var(--ease-ios);
+}
+
+.frame-switcher-btn--error {
+  animation: frame-capture-error var(--duration-slow) var(--ease-ios);
+}
+
+@keyframes frame-capture-done {
+  0% {
+    color: var(--frame-control-active);
+    background: var(--frame-edge);
+    transform: scale(var(--press-scale));
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes frame-capture-error {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(calc(-1 * var(--space-4)));
+  }
+  75% {
+    transform: translateX(var(--space-4));
+  }
 }

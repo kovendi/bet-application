@@ -16,6 +16,8 @@ window.LOCALES.hu = {
   "frame.width_short": "Sz",
   "frame.height": "Magasság (px)",
   "frame.height_short": "M",
+  "frame.screenshot": "Képernyőkép",
+  "frame.screenshot_error": "Nem sikerült képet készíteni",
   "nav.home": "Főoldal",
   "nav.search": "Keresés",
   "nav.market": "Piactér",

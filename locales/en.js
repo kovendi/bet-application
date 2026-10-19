@@ -16,6 +16,8 @@ window.LOCALES.en = {
   "frame.width_short": "W",
   "frame.height": "Height (px)",
   "frame.height_short": "H",
+  "frame.screenshot": "Screenshot",
+  "frame.screenshot_error": "Couldn't take a screenshot",
   "nav.home": "Home",
   "nav.search": "Search",
   "nav.market": "Market",
