@@ -37,7 +37,7 @@ function goHome() {
   window.location.href = "../home/home.html";
 }
 
-// Social / BÉT Portál logins are mocked: they sign in the demo user after a
+// Social / BÉT Portal logins are mocked: they sign in the demo user after a
 // short simulated round trip, with the tapped button showing progress.
 function providerLogo(provider) {
   if (provider !== "bet_portal") return window.iconModule.renderBrandLogo(provider);

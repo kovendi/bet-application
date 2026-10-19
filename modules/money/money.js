@@ -3,7 +3,7 @@
 //
 // Logic-only (no paired CSS, same exception as i18n.js/storage.js).
 //
-// Money is always stored as an integer number of forints (HUF) — the fillér
+// Money is always stored as an integer number of forints (HUF) — the subunit
 // is no longer in circulation, so there is no smaller unit to track, and an
 // integer avoids floating-point rounding errors on sums/comparisons. This
 // module is the single place that converts an amount to a display string and

@@ -27,7 +27,7 @@
 //   <script src="../../modules/top-appbar/top-appbar.js"></script>
 //   <script>
 //     container.appendChild(window.topAppbarModule.renderTopAppbar({
-//       title: 'Piactér', // left slot; add onBack: () => window.pageTransition.back() on sub-pages
+//       title: 'Market', // left slot; add onBack: () => window.pageTransition.back() on sub-pages
 //       left: someElement,
 //       right: someOtherElement,
 //       tone: 'default', // 'brand': navy bar that runs into a brand hero band (home)

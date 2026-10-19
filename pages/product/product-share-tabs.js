@@ -1,5 +1,5 @@
-// Share-only tab panels of the product page: Pénzügyi adatok (TA_0011),
-// Értékelés (TA_0012), Kibocsátó (TA_0013) and Elemzés (TA_0015).
+// Share-only tab panels of the product page: Financials (TA_0011),
+// Valuation (TA_0012), Issuer (TA_0013) and Analysis (TA_0015).
 // Classic script, attaches window.productShareTabs. Requires productShared,
 // barChartModule, chipsModule, progressBarModule, money and i18n.
 
@@ -19,7 +19,7 @@ window.productShareTabs = (function () {
     return `${value < 0 ? "−" : ""}${money.formatNumber(value, decimals)}`;
   }
 
-  // --- Pénzügyi adatok: yearly bars, the Warsaw sample's three statements ---------
+  // --- Financials: yearly bars, the Warsaw sample's three statements ---------
 
   function financialCharts(detail, group) {
     const wrap = el("div", "product-chart-stack");
@@ -59,7 +59,7 @@ window.productShareTabs = (function () {
     return fragment;
   }
 
-  // --- Értékelés: 10 year dividend and the ratios ----------------------------------
+  // --- Valuation: 10 year dividend and the ratios ----------------------------------
 
   function dividendBlock(dividends) {
     const wrap = el("div");
@@ -102,7 +102,7 @@ window.productShareTabs = (function () {
     return fragment;
   }
 
-  // --- Kibocsátó: product facts, about, shareholders, management ---------------------
+  // --- Issuer: product facts, about, shareholders, management ---------------------
 
   function issuerFactRows(facts) {
     const formatters = {
@@ -146,7 +146,7 @@ window.productShareTabs = (function () {
     return fragment;
   }
 
-  // --- Elemzés: recommendation counts and target price range --------------------------
+  // --- Analysis: recommendation counts and target price range --------------------------
 
   function recommendationBar(analysis) {
     const total = analysis.buy + analysis.hold + analysis.sell;

@@ -11,10 +11,10 @@
 //   <script src="../../modules/banner/banner.js"></script>
 //   <script>
 //     container.appendChild(window.bannerModule.renderBanner({
-//       text: 'A piac zárva.',
+//       text: 'The market is closed.',
 //       variant: 'info', // 'info' (default) | 'warning'
 //       icon: 'info', // optional, default 'info'
-//       actionLabel: 'Részletek', // optional
+//       actionLabel: 'Details', // optional
 //       onAction: () => {...},
 //     }));
 //     // the standard "prices are delayed" strip:

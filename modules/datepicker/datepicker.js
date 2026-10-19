@@ -17,7 +17,7 @@
 //   <script>
 //     const field = window.datepickerModule.renderDatePicker({
 //       id: 'search-date-from',
-//       label: 'Dátumtól',
+//       label: 'Date from',
 //       name: 'dateFrom',
 //       value: '2026-03-12', // ISO yyyy-mm-dd, optional
 //       maxDate: new Date(), // optional — days after it are disabled, and the

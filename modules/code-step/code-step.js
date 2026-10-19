@@ -14,7 +14,7 @@
 // Usage:
 //   container.appendChild(window.codeStepModule.renderCodeStep({
 //     email: 'demo@example.com',
-//     submitLabel: 'Megerősítés',
+//     submitLabel: 'Confirm',
 //     onVerified: () => {...},
 //   }));
 

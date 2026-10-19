@@ -3,10 +3,10 @@
 //
 // The "install the app" offer, shown only on a phone/tablet browser and never
 // once the app already runs installed (standalone). Browsing on in the browser
-// stays possible: "Folytatás böngészőben" hides the card and remembers it for a
+// stays possible: "Continue in browser" hides the card and remembers it for a
 // while (cooldownDays), so it is not nagging.
-//   - Android: one tap on "Telepítés" opens the native install dialog.
-//   - iOS Safari: "Telepítés" opens a bottom sheet with the three steps of
+//   - Android: one tap on "Install" opens the native install dialog.
+//   - iOS Safari: "Install" opens a bottom sheet with the three steps of
 //     Share → Add to Home Screen (iOS has no install API).
 //   - iOS in another browser / in-app browser: only Safari can install, so the
 //     card asks to open the page there and offers a copy-link button.

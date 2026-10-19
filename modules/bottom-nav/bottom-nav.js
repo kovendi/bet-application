@@ -8,8 +8,8 @@
 //
 // Requires modules/icon/icon.js to be loaded first (renders each item's icon).
 //
-// renderMainNav(activeId) renders the app's shared main menu (Home, Piactér,
-// Bet assist AI, Edukáció) — use it on every main page instead of passing items.
+// renderMainNav(activeId) renders the app's shared main menu (Home, Market,
+// Bet assist AI, Education) — use it on every main page instead of passing items.
 //
 // Usage in a page:
 //   <script src="../../modules/icon/icon.js"></script>

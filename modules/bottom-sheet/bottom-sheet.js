@@ -15,7 +15,7 @@
 //   <script src="../../modules/bottom-sheet/bottom-sheet.js"></script>
 //   <script>
 //     const sheet = window.bottomSheetModule.showBottomSheet({
-//       title: 'Bróker választása',
+//       title: 'Choose a broker',
 //       content: someNode, // Node, scrolls when tall
 //       onClose: () => {...}, // optional
 //     });

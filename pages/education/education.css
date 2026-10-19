@@ -35,7 +35,7 @@
   display: none;
 }
 
-/* Four levels incl. "Középhaladó": tighter side padding so the longest fits. */
+/* Four levels incl. "Intermediate": tighter side padding so the longest fits. */
 .education-levels .chips--segmented .chips-item {
   padding-inline: var(--space-2);
 }

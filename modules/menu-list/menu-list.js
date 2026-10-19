@@ -14,15 +14,15 @@
 //   <script>
 //     container.appendChild(window.menuListModule.renderMenuList([
 //       {
-//         title: 'Beállítások',
+//         title: 'Settings',
 //         items: [
 //           { icon: 'profile', title: 'Profil', description: '...', onSelect: () => {} },
 //           // A `right` accessory (e.g. a toggle switch) makes the row a
 //           // non-interactive container instead of a button, since a
 //           // focusable control can't nest inside one.
-//           { icon: 'bell', title: 'Esemény-emlékeztetők', right: someToggleElement },
+//           { icon: 'bell', title: 'Event reminders', right: someToggleElement },
 //           // `tone: 'danger'` recolors the icon/title (e.g. a logout row).
-//           { icon: 'logout', title: 'Kijelentkezés', tone: 'danger', onSelect: () => {} },
+//           { icon: 'logout', title: 'Log out', tone: 'danger', onSelect: () => {} },
 //         ],
 //       },
 //     ]));

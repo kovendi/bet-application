@@ -3,7 +3,7 @@
 //
 // Labeled progress bar in two layouts:
 //   'inline'  — label, thin track and value share one row (e.g. a budget
-//               progress row: "Címke [====] 142 000").
+//               progress row: "Label [====] 142 000").
 //   'stacked' — a header row (label + value) with a full-width track below
 //               (e.g. a savings goal).
 //
@@ -11,7 +11,7 @@
 //   <script src="../../modules/progress-bar/progress-bar.js"></script>
 //   <script>
 //     container.appendChild(window.progressBarModule.renderProgressBar({
-//       label: 'Címke',
+//       label: 'Label',
 //       valueText: '142 000',
 //       percent: 62,
 //       layout: 'inline', // 'inline' | 'stacked'

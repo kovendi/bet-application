@@ -62,7 +62,7 @@ The system (`modules/i18n/i18n.js`, `t()`, `window.LOCALES`) is built to support
 - `t(key)` — returns the translated string for the current language
 - `setLanguage(code)` / `getLanguage()` — switch/read current language, persisted in `localStorage`. `initI18n()` also sets `<html lang>` and the page `<title>` (`<title data-i18n="key">`)
 
-Mock content (seeds) stays Hungarian in `modules/storage/seed-*.js`. `modules/storage/seed-en.js` holds its English text (an exact-string dictionary plus a few pattern rules) and `storage.js` passes everything it returns through `window.SEED_EN.localize()`; a new mock string in a seed needs an entry there. The Bet assist answers have their own English file, `seed-assist-en.js` (merged by `pages/assist/assist-reply.js`, with English keywords). Number formatting follows the language in `modules/money`.
+Hungarian text is allowed only in `locales/hu*.js` (the language files) and in the mock content (seeds), which is shown to the user. Everything else — code, comments, JSDoc examples, `<title>` fallbacks, docs, this file — is English. Mock content (seeds) stays Hungarian in `modules/storage/seed-*.js`. `modules/storage/seed-en.js` holds its English text (an exact-string dictionary plus a few pattern rules) and `storage.js` passes everything it returns through `window.SEED_EN.localize()`; a new mock string in a seed needs an entry there. The Bet assist answers have their own English file, `seed-assist-en.js` (merged by `pages/assist/assist-reply.js`, with English keywords). Number formatting follows the language in `modules/money`.
 
 Pages/modules must render text via `t('some.key')`, never hardcoded strings. This module has no paired CSS (logic-only, exception to the module js+css pairing rule).
 
@@ -107,7 +107,7 @@ When starting a new page/element, do the module-existence check (`modules/`) and
 
 The mockup should feel like a native iOS app. We follow the Apple Human Interface Guidelines (Clarity, Deference, Depth) in their web form. The SwiftUI specifics (NavigationStack, `@Observable`, SF Symbols, SensoryFeedback) don't apply: this is plain HTML/CSS/JS.
 
-- **Priority:** the BÉT brand (Brand / Arculat, Color Palette) and the tender requirements win over the HIG whenever they conflict. Colors always come from the tokens, never from iOS system colors.
+- **Priority:** the BÉT brand (Brand section, Color Palette) and the tender requirements win over the HIG whenever they conflict. Colors always come from the tokens, never from iOS system colors.
 - **Clarity:** the content is the star, not the chrome. Prefer lists and grouped rows over bordered boxes (also see "box in a box"). Never rely on color alone (icon, sign or text too).
 - **Depth:** layers via `--color-background` → `--color-card-background`, bottom sheets for secondary tasks, subtle shadows only.
 - **Typography:** system font stack only, iOS type scale through the `--font-size-*` tokens (see Design system first).
@@ -149,7 +149,7 @@ The UI must feel premium: a static mockup that behaves like a real, polished app
 - Mock the error state for important screens too: `modules/state-view` with `variant: 'error'` and a Retry action.
 - Never leave a blank area: an empty state (`state-view`, default variant) has a short explanation and the primary action that fills it.
 - Demo scenarios can also be saved from Settings → Mockup (`modules/mock-settings`, localStorage `mockSettings`: market auto/open/closed, network normal/slow/error/empty); the URL parameter wins over the saved value. Pages using `market-status` or `mock-network` load `mock-settings.js` before them.
-- Demo any state from the URL: `?mock=slow` (skeletons), `?mock=error` (first request fails, Retry recovers), `?mock=empty` (pages call `mockNetwork.isEmptyMock()`). `index.html` lists them in its "Állapotok" section (one row per screen, chips for slow/error/empty).
+- Demo any state from the URL: `?mock=slow` (skeletons), `?mock=error` (first request fails, Retry recovers), `?mock=empty` (pages call `mockNetwork.isEmptyMock()`). `index.html` lists them in its "States" section (one row per screen, chips for slow/error/empty).
 
 **Submitting & validation**
 
@@ -210,7 +210,7 @@ Every app page uses `top-appbar` (`modules/top-appbar/top-appbar.js`). The hambu
 
 The notifications bell (with unread dot) is built into `top-appbar` too, left of the menu button, so it appears on every page; pass `hideBell: true` to omit it (notifications page, register, forgot-password).
 
-Page titles live in the **left slot** of the app bar (`title` option), never as a heading in the page body. On a sub-page (anything not a main-nav destination) a **circled back arrow** sits to the left of the title (`onBack` option). It is a round button with a visible background and ring, not a bare arrow, so it is obvious it can be tapped to go back. Main-nav destinations (Home, Piactér, Bet assist, Edukáció) have no back arrow. Back goes to where the user came from (`history.back()`) unless the page has one fixed parent. Pages with a search field in the bar (search page) keep the back arrow and put the field in the center slot instead of a title.
+Page titles live in the **left slot** of the app bar (`title` option), never as a heading in the page body. On a sub-page (anything not a main-nav destination) a **circled back arrow** sits to the left of the title (`onBack` option). It is a round button with a visible background and ring, not a bare arrow, so it is obvious it can be tapped to go back. Main-nav destinations (Home, Market, Bet assist, Education) have no back arrow. Back goes to where the user came from (`history.back()`) unless the page has one fixed parent. Pages with a search field in the bar (search page) keep the back arrow and put the field in the center slot instead of a title.
 
 ### iPhone frame
 
@@ -270,14 +270,14 @@ The app is a PWA, built generically so the same files can be copied into another
 
 - **Every page** loads `modules/pwa/pwa.js` in `<head>` (right after `theme.js`) and calls `window.pwaModule.init()`. It injects the manifest / theme-color / iOS meta tags / apple-touch-icon (so the app can be added from any screen) and registers `sw.js` (https or localhost only, silently skipped on `file://`; the manifest and worker are loaded by the browser, not `fetch`, so the file:// rules are untouched). The paths resolve from the script's own URL, so the app also works under a sub-path (GitHub Pages).
 - **Service worker** is network-first: online always serves the fresh deploy, the cache is only the offline fallback. No version-bumping needed for updates.
-- **Install offer:** `index.html` calls `pwaInstallModule.renderInstallCard(...)`. Shown only on a phone/tablet browser, not when already installed (standalone), and not for 7 days after "Folytatás böngészőben". Android: one-tap native install (`beforeinstallprompt`). iOS Safari: bottom sheet with the Share → Home Screen steps. Other iOS browsers: asks to open the page in Safari (copy-link button). To offer it on another screen, add a container and call the same function (load the CSS/JS listed in the file header). `resetDismissal()` brings the card back.
+- **Install offer:** `index.html` calls `pwaInstallModule.renderInstallCard(...)`. Shown only on a phone/tablet browser, not when already installed (standalone), and not for 7 days after "Continue in browser". Android: one-tap native install (`beforeinstallprompt`). iOS Safari: bottom sheet with the Share → Home Screen steps. Other iOS browsers: asks to open the page in Safari (copy-link button). To offer it on another screen, add a container and call the same function (load the CSS/JS listed in the file header). `resetDismissal()` brings the card back.
 - **Status bar:** `apple-mobile-web-app-status-bar-style` is `default`, never `black-translucent`: on iOS 26 that one measures the viewport short by the top inset (the sticky bottom nav floats with a gap under it) and lays a frosted band over the page top. The page starts below an opaque status bar; `pwa.js` sets `theme-color` to the `.top-appbar` background (else the body's) after load and on theme change, so the bar matches the page top. Call `pwaModule.syncThemeColor()` if a page changes its top color later.
 
 ## Charts / TradingView
 
 Every price chart in the real app will be a **TradingView** chart (Lightweight Charts or the TradingView widget/Charting Library). The mockup must therefore only show what TradingView can actually do, so we never design something that cannot be built. The `chart` module imitates the Lightweight Charts look.
 
-- **Supported, design freely:** line, area, candlestick, bar (OHLC) and baseline series; histogram (volume, usually as an overlay under the price); crosshair with price/time tooltip; time-range switching (1N, 1H, 1Hó, 1É, ...); price scale on the right, time scale at the bottom; last-price line and label; markers on the time axis (usable for split/dividend marks, TA_001); themes (dark/light) with custom colors.
+- **Supported, design freely:** line, area, candlestick, bar (OHLC) and baseline series; histogram (volume, usually as an overlay under the price); crosshair with price/time tooltip; time-range switching (1D, 1W, 1M, 1Y, ...); price scale on the right, time scale at the bottom; last-price line and label; markers on the time axis (usable for split/dividend marks, TA_001); themes (dark/light) with custom colors.
 - **Not supported, do not design:** donut/pie, radar, treemap, bubble, gauge or any other non-time-series chart; free-form decorations inside the plot; custom animated transitions between chart types. Anything that is not a time series (financial bars per year, valuation ratios, analyst buy/sell counts, target price range, index composition) is **not a TradingView chart**: build it as a plain CSS/HTML visual (bars, progress, table) or a separate non-chart module, and name it that way, not "chart".
 - Multi-series comparison is only time series on the same axes (overlay lines). A year-by-year column chart (e.g. the 5-year financials, TA_0011) is a histogram-style series at best: keep it simple, one value per period, no stacked or grouped bars.
 - When a requirement asks for a visual that TradingView cannot do, flag it to the user before building and propose a TradingView-compatible alternative.
@@ -289,7 +289,7 @@ Every price chart in the real app will be a **TradingView** chart (Lightweight C
 
 The app's currency is **HUF** (Hungarian forint), displayed as `Ft`. Never use any other currency symbol/code.
 
-Money is always stored as an integer number of **forints** (the fillér is no longer in circulation), never as a float — this avoids floating-point rounding errors on sums/comparisons. `modules/money/money.js` is the single place that converts an amount to a display string and back:
+Money is always stored as an integer number of **forints** (the subunit is no longer in circulation), never as a float — this avoids floating-point rounding errors on sums/comparisons. `modules/money/money.js` is the single place that converts an amount to a display string and back:
 
 - `formatMoney(huf, options)` — forints → `<grouped number> Ft` (e.g. `1 234 Ft`). `options.sign` overrides the +/− prefix (use when the sign comes from context, e.g. win/loss, rather than the stored value); `options.withCurrency: false` omits the trailing ` Ft`.
 - `toHuf(value)` — converts a number or numeric string (e.g. from a form input) to an integer number of forints.
@@ -298,12 +298,12 @@ Any page/module that stores, formats, or compares a money amount must go through
 
 ## Brand / Arculat
 
-The app follows the Budapesti Értéktőzsde (BÉT) brand identity. Source material lives in `../docs/arculat/`: `Arcluati_kezikony1.pdf` (main brand manual, 2016), `Arculati_kezikonyv_elektronikus_feluletek.pdf` (electronic surfaces, incl. the chart color set) and the two logo PNGs. BÉT confirmed no newer or digital-specific brand material / design system / Figma exists, so these are the reference.
+The app follows the Budapest Stock Exchange (BÉT) brand identity. Source material lives in `../docs/arculat/`: `Arcluati_kezikony1.pdf` (main brand manual, 2016), `Arculati_kezikonyv_elektronikus_feluletek.pdf` (electronic surfaces, incl. the chart color set) and the two logo PNGs. BÉT confirmed no newer or digital-specific brand material / design system / Figma exists, so these are the reference.
 
 - **Logos:** `01 - BET-egyszerusitett logo-RGB-640px.png` (simplified: navy "BÉT" + gold ring; graphic element only, never replaces the full logo) and `02 - BET logo-RGB-640px.png` (full emblem, "BUDAPESTI BÉT ÉRTÉKTŐZSDE"; use whenever the logo identifies the Exchange). Don't rotate, distort, recolor, outline, crop to another shape or place on a busy background; keep clear space of 1/5 of the emblem width on every side; minimum size 12 mm / 72 px (full) and 8 mm / 24 px (simplified). On the dark navy background the emblem is used as-is.
 - **Typeface:** the manual prescribes Myriad Pro and allows Arial / platform system fonts as a substitute. BÉT has not decided on a Myriad Pro license, so the mockup uses the system font stack from `global.css`. Do not embed or reference Myriad Pro.
 - **Brand colors** (from the manual, `RGB`):
-  - MNB kék (navy): `#232157` (35 33 87), tints 70/50/30/10/5 %
+  - MNB blue (navy): `#232157` (35 33 87), tints 70/50/30/10/5 %
   - MNB arany (gold): `#BA8C5D` (186 140 93), tints 70/50/30/10/5 %
 - **Chart color set** (electronic-surfaces manual p. 35–37, "Diagramok, grafikonok"): 3 groups (primary / secondary / supplementary) × 7 steps from dark to light, with exact RGB/CMYK on p. 36. Use it for every chart/diagram instead of inventing colors. Single-series / monochrome: the blue ramp `#00142A`, `#002955`, `#003D80`, `#0051AA`, `#3374BB`, `#6697CC`, `#99B9DD`. Multi-series: `#0051AA` (blue), `#232151` (navy), `#BA8C5D` (gold), `#0F809A` (teal), `#ED6B6A` (coral), `#BBC761` (lime), `#00B1B9` (cyan), `#A04863` (plum), `#3A956C` (green). These live in `global.css` as `--chart-1…9` and `--chart-grid`; dark mode uses lighter blue steps for `--chart-1`/`--chart-2`, because the darkest blues fail contrast against `--color-card-background`. Need another one? Add it as a `--chart-*` token in both themes.
 - **Presentation-style accents:** the manual's 1.5 pt gold line between a title and its content may be echoed sparingly (`--color-accent`). Headings use `--color-text-main`, not navy (navy text is unreadable in dark mode, see Color Palette).

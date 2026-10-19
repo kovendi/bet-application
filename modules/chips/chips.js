@@ -19,11 +19,11 @@
 //   <script src="../../modules/chips/chips.js"></script>
 //   <script>
 //     container.appendChild(window.chipsModule.renderChips({
-//       items: [{ id: 'share', label: 'Részvény' }, { id: 'etf', label: 'ETF' }],
+//       items: [{ id: 'share', label: 'Share' }, { id: 'etf', label: 'ETF' }],
 //       variant: 'chips', // 'chips' | 'segmented' | 'bubble'
 //       activeId: 'share', // single select
 //       // multi: true, activeIds: ['share'], // multi select
-//       ariaLabel: 'Kategória',
+//       ariaLabel: 'Category',
 //       onChange: (value) => {...}, // id (single) or array of ids (multi)
 //     }));
 //   </script>

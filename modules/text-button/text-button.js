@@ -10,7 +10,7 @@
 //   <script src="../../modules/text-button/text-button.js"></script>
 //   <script>
 //     container.appendChild(window.textButtonModule.renderTextButton({
-//       label: 'Szűrők törlése',
+//       label: 'Clear filters',
 //       icon: 'refresh',
 //       onClick: () => {...},
 //     }));

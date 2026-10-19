@@ -9,8 +9,8 @@
 //   <script>
 //     container.appendChild(window.inputModule.renderInput({
 //       id: 'login-username',
-//       label: 'Felhasználónév',
-//       placeholder: 'Add meg a felhasználóneved',
+//       label: 'Username',
+//       placeholder: 'Enter your username',
 //       type: 'text',
 //       name: 'username',
 //       required: true,

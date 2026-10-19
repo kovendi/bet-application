@@ -1,7 +1,7 @@
 {
   "name": "BÉT",
   "short_name": "BÉT",
-  "description": "Budapesti Értéktőzsde mobilapp",
+  "description": "Budapest Stock Exchange mobile app",
   "lang": "hu",
   "id": "./index.html",
   "start_url": "./index.html",

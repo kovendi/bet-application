@@ -14,8 +14,8 @@
 //   <script>
 //     container.appendChild(window.tabsModule.renderTabs({
 //       tabs: [
-//         { id: 'first', label: 'Első', icon: 'home' },
-//         { id: 'second', label: 'Második', icon: 'search' },
+//         { id: 'first', label: 'First', icon: 'home' },
+//         { id: 'second', label: 'Second', icon: 'search' },
 //       ],
 //       activeId: 'first',
 //       onChange: (id) => {...},

@@ -37,6 +37,7 @@ window.pwaModule = (function () {
   const MANIFEST_PATH = "manifest.webmanifest";
   const SERVICE_WORKER_PATH = "sw.js";
   const TOUCH_ICON_PATH = "assets/apple-touch-icon.png";
+  const FAVICON_PATH = "assets/icon-192.png"; // browser tab icon
   const THEME_COLOR = "#232157"; // keep in sync with theme_color in the manifest (start value)
   const TOP_BAR_SELECTOR = ".top-appbar"; // element whose background the status bar matches
   const APP_TITLE = "BÉT"; // home screen label on iOS; keep in sync with short_name in the manifest
@@ -72,6 +73,7 @@ window.pwaModule = (function () {
 
   function injectHeadTags() {
     addHeadTag("link", { rel: "manifest", href: ROOT_URL + MANIFEST_PATH });
+    addHeadTag("link", { rel: "icon", type: "image/png", href: ROOT_URL + FAVICON_PATH });
     addHeadTag("link", { rel: "apple-touch-icon", href: ROOT_URL + TOUCH_ICON_PATH });
     addHeadTag("meta", { name: "theme-color", content: THEME_COLOR });
     addHeadTag("meta", { name: "mobile-web-app-capable", content: "yes" });

@@ -10,7 +10,7 @@
 //   <script>
 //     container.appendChild(window.cardModule.renderCard({
 //       icon: 'home',
-//       title: 'ÁTTEKINTÉS',
+//       title: 'OVERVIEW',
 //       headerRight: someLinkElement,
 //       content: someContentElement,
 //     }));

@@ -5,7 +5,7 @@
 //   <script src="../../modules/button/button.js"></script>
 //   <script>
 //     container.appendChild(window.buttonModule.renderButton({
-//       label: 'Bejelentkezés',
+//       label: 'Log in',
 //       variant: 'primary', // 'primary' | 'secondary' | 'outline'
 //       type: 'submit',
 //       iconNode: someElement, // optional leading icon/logo element

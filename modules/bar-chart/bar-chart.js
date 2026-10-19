@@ -16,7 +16,7 @@
 //   <script src="../../modules/bar-chart/bar-chart.js"></script>
 //   <script>
 //     container.appendChild(window.barChartModule.renderBarChart({
-//       title: 'Árbevétel (Mrd Ft)',
+//       title: 'Revenue (HUF bn)',
 //       labels: [2021, 2022, 2023, 2024, 2025],
 //       values: [120.4, 131.0, null, -4.2, 150.8],
 //       formatValue: (value) => String(value), // optional

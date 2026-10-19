@@ -13,8 +13,8 @@
 //   <script>
 //     container.appendChild(window.toggleModule.renderToggle({
 //       id: 'profile-notif-events',
-//       label: 'Esemény-emlékeztetők',
-//       description: 'Push-értesítés a közelgő eseményekről',
+//       label: 'Event reminders',
+//       description: 'Push notification about upcoming events',
 //       checked: true,
 //       onChange: (checked) => {...},
 //     }));

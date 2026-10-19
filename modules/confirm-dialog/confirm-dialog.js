@@ -15,17 +15,17 @@
 //   <script src="../../modules/confirm-dialog/confirm-dialog.js"></script>
 //   <script>
 //     window.confirmDialogModule.showConfirmDialog({
-//       title: 'Címke törlése',
-//       message: 'Biztosan törlöd ezt az elemet?',
-//       confirmLabel: 'Törlés',
-//       cancelLabel: 'Mégse', // optional, defaults to t('confirm_dialog.cancel_button')
+//       title: 'Delete label',
+//       message: 'Are you sure you want to delete this item?',
+//       confirmLabel: 'Delete',
+//       cancelLabel: 'Cancel', // optional, defaults to t('confirm_dialog.cancel_button')
 //       variant: 'danger', // optional: 'danger' (default) | 'default'
 //       onConfirm: () => {...},
 //       onCancel: () => {...}, // optional
-//       // optional third choice (e.g. "Csak törlés" next to
-//       // "Archiválás") — when given, the buttons stack vertically,
+//       // optional third choice (e.g. "Delete only" next to
+//       // "Archive") — when given, the buttons stack vertically,
 //       // primary on top, cancel at the bottom
-//       secondaryLabel: 'Csak törlés',
+//       secondaryLabel: 'Delete only',
 //       secondaryVariant: 'danger', // optional, defaults to 'danger'
 //       onSecondary: () => {...},
 //     });

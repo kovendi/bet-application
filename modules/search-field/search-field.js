@@ -14,8 +14,8 @@
 //   <script>
 //     container.appendChild(window.searchFieldModule.renderSearchField({
 //       id: 'market-search',
-//       label: 'Keresés',
-//       placeholder: 'Név vagy ticker',
+//       label: 'Search',
+//       placeholder: 'Name or ticker',
 //       minChars: 2, // optional, default 2
 //       onSearch: (query) => {...},
 //     }));

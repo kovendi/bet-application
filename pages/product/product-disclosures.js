@@ -1,4 +1,4 @@
-// Közzétételek tab (TA_0014, TA_0021, TA_0032, TA_0052) and the in-app document
+// Disclosures tab (TA_0014, TA_0021, TA_0032, TA_0052) and the in-app document
 // viewer. Classic script, attaches window.productDisclosures. Requires
 // productShared, chipsModule, searchFieldModule, stateViewModule, bottomSheetModule,
 // buttonModule, toastModule, motion and i18n.
