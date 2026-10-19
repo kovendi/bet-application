@@ -141,7 +141,7 @@ Az eddig elkészült részek átnézésén talált eltérések és ellenőrizend
 - [x] `index.html`: minden oldal elérhető (keresés és edukáció keresés hozzáadva), a piactér, termékadatlap és edukáció `?mock=slow` állapota is linkelve
 - [x] Hardcode-olt színek, méretek és időtartamok: színből nincs, az assist animációk időtartamai új tokenek (`--duration-pulse|loop|shimmer|glow`), a `linear` kikerült
 - [x] Inline `style=""`, `onclick` és `setTimeout` nincs (a bottom-nav `transitionend`-et használ)
-- [x] Fájlméret: `assist.js` 467 sor (előzmények az `assist-history.js`-ben), `assist-message.css` 380 sor (rich blokkok az `assist-rich.css`-ben)
+- [x] Fájlméret: `assist.js` (az előzmények kikerültek, AI_003), `assist-message.css` 380 sor (rich blokkok az `assist-rich.css`-ben)
 
 ## A tender javaslatkérései
 

@@ -392,11 +392,14 @@ window.storage = (function () {
     saveDb(db);
   }
 
-  // Bet assist AI chat state per registered user: accepted disclaimer, the
-  // conversations and the daily question counter (AI_000–AI_007).
+  // Bet assist AI chat state per registered user: accepted disclaimer and
+  // the daily question counter (AI_000–AI_007).
   function getAssist(userId) {
     const assist = (getDb().assist || {})[userId];
-    return assist || { accepted: false, activeChatId: null, chats: [], usage: { date: "", count: 0 } };
+    // Conversations are never stored (AI_003); only the disclaimer and the daily counter are.
+    return assist
+      ? { accepted: assist.accepted, usage: assist.usage }
+      : { accepted: false, usage: { date: "", count: 0 } };
   }
 
   function saveAssist(userId, state) {

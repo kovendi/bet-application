@@ -25,8 +25,8 @@ Mind a hat pontot ellenőriztük a kiírás és a Q&A szövegével, valamint a m
 
 Ellentmondás a mockup és a pályázati szöveg között. A BÉT kifejezetten azt válaszolta, hogy nem elvárás. Javaslat: a funkciót kivenni a mockupból, mert a pályázat is azt állítja, hogy nincs.
 
-- [ ] **Chatbot-előzmények (AI_003).** BÉT válaszai (18. o.): „Elvárás-e, hogy a felhasználó a korábbi chatbot-beszélgetéseit későbbi munkamenetekben is elérje? – Nem elvárás.” Pályázat: „Korábbi beszélgetéseket a felhasználó számára nem tárolunk; ezt a BÉT nem várja el.” Mockup: a beszélgetések mentődnek, és a „Korábbi beszélgetések” gombbal újranyithatók (`pages/assist/assist-history.js`, `assist.history*` kulcsok hu + en).
-  - Javaslat: előzménylista, mentés és gomb kivétele. A beszélgetés csak a munkamenet végéig él, „Új beszélgetés” marad.
+- [x] **Chatbot-előzmények (AI_003).** BÉT válaszai (18. o.): „Elvárás-e, hogy a felhasználó a korábbi chatbot-beszélgetéseit későbbi munkamenetekben is elérje? – Nem elvárás.” Pályázat: „Korábbi beszélgetéseket a felhasználó számára nem tárolunk; ezt a BÉT nem várja el.” Mockup: a beszélgetések mentődnek, és a „Korábbi beszélgetések” gombbal újranyithatók (`pages/assist/assist-history.js`, `assist.history*` kulcsok hu + en).
+  - Megoldva: az előzménylista, a gomb és a tárolás kikerült (`assist-history.js` törölve, a hu/en kulcsok is). A beszélgetés csak a munkamenet (`sessionStorage`) végéig él, az „Új beszélgetés” marad. A tárolt `assist` rekordban csak az elfogadás és a napi számláló maradt.
   - Alternatíva: a pályázati szöveg átírása. Kockázatos, mert a BÉT azt mondta, nem kell.
 - [ ] **Kvíz eredménymentése (EF_004).** Kiírás (18. o.): „interaktív, feleletválasztós tudáskvíz, amely a kitöltést követően visszajelzést ad a felhasználó válaszairól.” BÉT válaszai (46. o.): „Kell-e időkorlát, eredmények mentése …? – Nem szükséges időkorlát, sem mentés.” Visszajelzés: magyarázat kérdésenként, pontszám a végén. Pályázat: „Időkorlát és eredménymentés nincs, mert a BÉT ezt nem igényli.” Mockup: menti és mutatja a legjobb eredményt („Legjobb eredmény”, „Új legjobb eredmény”, `pages/education-detail/education-quiz.js`, `edu.quiz_*` kulcsok).
   - Javaslat: a legjobb eredmény mentése és kijelzése kikerül, a végén a pontszám és a kérdésenkénti magyarázat marad.
@@ -35,7 +35,7 @@ Ellentmondás a mockup és a pályázati szöveg között. A BÉT kifejezetten a
 ### Kapcsolódó teendők (minden javításnál)
 
 - [ ] Új vagy módosított szöveg hu + en kulccsal (CLAUDE.md i18n szabály).
-- [ ] Ha a kulcsok kikerülnek (előzmények, legjobb eredmény), a hu/en fájlokból is törölni.
+- [ ] Ha a kulcsok kikerülnek (legjobb eredmény), a hu/en fájlokból is törölni. (Az előzmények kulcsai már törölve.)
 - [ ] Style guide frissítése, ha modul változik.
-- [ ] `követelmenyek-osszefoglalo.md`: jelezni, hogy a chatbot-előzmény és a kvízmentés nem kell (a BÉT válasza már benne van, a mockup-döntés még nem).
+- [ ] `követelmenyek-osszefoglalo.md`: a chatbot-előzmény jelzése kész, a kvízmentésé még hátra van.
 - [ ] Push előtt `APP_VERSION` emelése és egy sor az `update-history.html`-ben (CLAUDE.md).

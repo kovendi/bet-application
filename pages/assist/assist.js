@@ -7,8 +7,11 @@ const MAX_LENGTH = 300;
 const SCROLL_STICK_PX = 120;
 
 const user = window.storage.getCurrentUser();
-let data = user ? window.storage.getAssist(user.id) : { accepted: false, activeChatId: null, chats: [], usage: { date: "", count: 0 } };
-let chat = data.chats.find((c) => c.id === data.activeChatId) || null;
+let data = user ? window.storage.getAssist(user.id) : { accepted: false, usage: { date: "", count: 0 } };
+// AI_003: conversations are not stored for later sessions (BÉT: not required). The open
+// conversation only lives in sessionStorage, so it survives tab switches but not the session.
+const CHAT_KEY = "assistSessionChat";
+let chat = loadSessionChat();
 let runId = 0; // bumped on every new reply / stop, so late results can be ignored
 let active = null; // { message, row, streaming } while an answer is typed out
 let idCounter = 0;
@@ -24,8 +27,32 @@ const newId = (prefix) => prefix + Date.now().toString(36) + (idCounter += 1);
 const todayKey = () => new Date().toISOString().slice(0, 10);
 const toast = (message, icon) => window.toastModule.showToast({ message, icon });
 
+function loadSessionChat() {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(CHAT_KEY) || "null");
+    return saved && saved.userId === (user ? user.id : null) ? saved.chat : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 function persist() {
   if (user) window.storage.saveAssist(user.id, data);
+  try {
+    if (chat) sessionStorage.setItem(CHAT_KEY, JSON.stringify({ userId: user ? user.id : null, chat }));
+    else sessionStorage.removeItem(CHAT_KEY);
+  } catch (e) {
+    // sessionStorage unavailable: the conversation just ends with the page.
+  }
+}
+
+function newChat() {
+  if (active) stopReply();
+  chat = null;
+  persist();
+  renderAll();
+  scrollToEnd(false);
+  composer.focus();
 }
 
 function usageToday() {
@@ -226,8 +253,6 @@ function ensureChat(firstQuestion) {
   if (chat) return;
   const title = firstQuestion.length > 40 ? firstQuestion.slice(0, 40).trim() + "…" : firstQuestion;
   chat = { id: newId("c"), title, created: Date.now(), updated: Date.now(), messages: [] };
-  data.chats.push(chat);
-  data.activeChatId = chat.id;
 }
 
 function sendQuestion(text) {
@@ -430,7 +455,6 @@ function renderBarActions() {
   wrap.className = "assist-bar-actions";
   wrap.append(
     renderBarButton("edit", t("assist.new_chat"), newChat),
-    renderBarButton("clock", t("assist.history"), openHistory),
   );
   return wrap;
 }
