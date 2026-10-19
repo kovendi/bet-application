@@ -47,12 +47,28 @@ window.SEED_INSTRUMENTS = (function () {
     ["BUXC12", "BUX vételi opció 112 000 2026. dec.", "other", "pt", 1180, 1150, 1140, 1210, 640000000, 0],
   ];
 
+  // Mock ISIN, searchable (TK_006, ÁR_0051). Same value as the product page shows.
+  function fnv(str) {
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  function makeIsin(ticker) {
+    if (ticker === "BUX") return "HU0005060210";
+    return "HU000" + String(fnv("isin" + ticker)).padStart(10, "0").slice(0, 7) + String(fnv(ticker) % 10);
+  }
+
   return ROWS.map(function (r) {
     const price = r[4];
     const spread = r[3] === "HUF" ? Math.max(1, Math.round(price * 0.0008)) : price * 0.0004;
     const hasBook = r[2] !== "index";
     return {
       ticker: r[0],
+      isin: makeIsin(r[0]),
       name: r[1],
       category: r[2],
       unit: r[3],

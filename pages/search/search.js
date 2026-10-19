@@ -20,12 +20,19 @@ function isFavorite(ticker) {
   return user ? window.storage.isFavorite(user.id, ticker) : false;
 }
 
+const byTicker = (a, b) => a.ticker.localeCompare(b.ticker, "hu");
+
 function findMatches(query) {
   const needle = query.toLowerCase();
   return window.storage
     .getInstruments()
-    .filter((i) => i.ticker.toLowerCase().includes(needle) || i.name.toLowerCase().includes(needle))
-    .sort((a, b) => a.name.localeCompare(b.name, "hu"));
+    .filter(
+      (i) =>
+        i.ticker.toLowerCase().includes(needle) ||
+        i.name.toLowerCase().includes(needle) ||
+        i.isin.toLowerCase().includes(needle),
+    )
+    .sort(byTicker);
 }
 
 // The list narrows with every keystroke. Under 2 characters (TK_006) the

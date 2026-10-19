@@ -39,7 +39,7 @@ Object.assign(window.LOCALES.hu, {
   "alerts.hint": "A teljesült riasztás magától eltűnik, módosítani nem lehet, csak törölni.",
   "alert_new.title": "Új riasztás",
   "alert_new.instrument_label": "Instrumentum",
-  "alert_new.instrument_hint": "Írd be a ticker vagy a név legalább 2 karakterét.",
+  "alert_new.instrument_hint": "Írd be a ticker, a név vagy az ISIN legalább 2 karakterét.",
   "alert_new.change_instrument": "Másik instrumentum",
   "alert_new.current_price": "Jelenlegi (késleltetett) árfolyam",
   "alert_new.direction_label": "Irány",

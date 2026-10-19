@@ -6,7 +6,8 @@
 // NYT_007: segmented control, no page reload.
 //
 // Requires modules/chips, modules/price-row (and the modules they need:
-// icon, money, i18n) and modules/storage to be loaded first.
+// icon, money, i18n), modules/storage and modules/bottom-sheet (guest
+// favorite prompt) to be loaded first.
 //
 // Usage in a page:
 //   <script src="../../modules/toplist/toplist.js"></script>
@@ -26,6 +27,21 @@ window.toplistModule = (function () {
     turnover: (a, b) => b.turnover - a.turnover,
   };
 
+  function toggleFavorite(instrument) {
+    const user = window.storage.getCurrentUser();
+    if (!user) {
+      window.bottomSheetModule.showRegistrationRequired();
+      return false;
+    }
+    window.storage.toggleFavorite(user.id, instrument.ticker);
+    return true;
+  }
+
+  function isFavorite(ticker) {
+    const user = window.storage.getCurrentUser();
+    return user ? window.storage.isFavorite(user.id, ticker) : false;
+  }
+
   function renderToplist({ instruments = [], limit = 5, hrefFor, sparkline = false } = {}) {
     const t = window.i18n.t;
     const root = document.createElement("div");
@@ -43,6 +59,8 @@ window.toplistModule = (function () {
           const row = window.priceRowModule.renderPriceRow({
             instrument,
             href: hrefFor ? hrefFor(instrument) : undefined,
+            favorite: isFavorite(instrument.ticker),
+            onFavoriteToggle: toggleFavorite,
             meta: id === "turnover" ? "turnover" : "name",
             sparkline,
             rank: index + 1,

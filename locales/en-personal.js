@@ -39,7 +39,7 @@ Object.assign(window.LOCALES.en, {
   "alerts.hint": "A triggered alert disappears on its own. Alerts can't be edited, only deleted.",
   "alert_new.title": "New alert",
   "alert_new.instrument_label": "Instrument",
-  "alert_new.instrument_hint": "Enter at least 2 characters of the ticker or name.",
+  "alert_new.instrument_hint": "Enter at least 2 characters of the ticker, name or ISIN.",
   "alert_new.change_instrument": "Another instrument",
   "alert_new.current_price": "Current (delayed) price",
   "alert_new.direction_label": "Direction",

@@ -9,10 +9,13 @@ document.querySelectorAll("[data-i18n]").forEach((el) => {
 const PAGE_SIZE = 20;
 const CATEGORY_IDS = ["all", "share", "index", "etf", "bond", "certificate", "other"];
 
+// TK_003: ABC sorts by ticker; ties (equal turnover / change) fall back to ABC.
+const byTicker = (a, b) => a.ticker.localeCompare(b.ticker, "hu");
+
 const SORTERS = {
-  abc: (a, b) => a.name.localeCompare(b.name, "hu"),
-  turnover: (a, b) => b.turnover - a.turnover,
-  change: (a, b) => window.storage.getChangePercent(b) - window.storage.getChangePercent(a),
+  abc: byTicker,
+  turnover: (a, b) => b.turnover - a.turnover || byTicker(a, b),
+  change: (a, b) => window.storage.getChangePercent(b) - window.storage.getChangePercent(a) || byTicker(a, b),
 };
 
 const CHANGE_FILTERS = {
@@ -184,7 +187,8 @@ function renderSortFilterSheet() {
   }
 
   content.append(
-    group("market.sort", ["abc", "turnover", "change"], state.sort, (id) => {
+    // Indexes have no turnover, so "Forgalom" is not offered for them (TK_003).
+    group("market.sort", state.category === "index" ? ["abc", "change"] : ["abc", "turnover", "change"], state.sort, (id) => {
       state.sort = id;
       paintList();
     }),
@@ -221,6 +225,8 @@ function renderControls() {
       ariaLabel: t("market.categories"),
       onChange: (id) => {
         state.category = id;
+        // Indexes have no turnover: fall back to ABC (TK_003).
+        if (id === "index" && state.sort === "turnover") state.sort = "abc";
         paintList();
       },
     }),

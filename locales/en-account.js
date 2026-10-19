@@ -164,7 +164,7 @@ Object.assign(window.LOCALES.en, {
   "about.group_legal": "Legal content",
   "about.group_documents": "Documents on bet.hu",
   "about.imprint_title": "Imprint",
-  "about.imprint_body": "Publisher: Budapest Stock Exchange Ltd. Address: Szabadság tér 7, 1054 Budapest. Phone and contact details: bet.hu. (Placeholder text, the final content is provided by the BSE.)",
+  "about.imprint_body": "Publisher: Budapest Stock Exchange Plc. Address: Szabadság tér 7, 1054 Budapest. Phone and contact details: bet.hu. (Placeholder text, the final content is provided by the BSE.)",
   "about.legal_title": "Legal notice",
   "about.legal_body": "The data shown in the app is for information purposes only and does not constitute investment advice. (Placeholder text, the final content is provided by the BSE.)",
   "about.disclaimer_title": "Disclaimer",

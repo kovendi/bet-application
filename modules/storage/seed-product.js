@@ -37,6 +37,8 @@ window.SEED_PRODUCT = (function () {
   }
 
   function makeIsin(ticker) {
+    const known = (window.SEED_INSTRUMENTS || []).find((i) => i.ticker === ticker);
+    if (known) return known.isin;
     const digits = String(hash("isin" + ticker)).padStart(10, "0").slice(0, 7);
     return "HU000" + digits + String(hash(ticker) % 10);
   }

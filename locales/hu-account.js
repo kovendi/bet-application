@@ -164,7 +164,7 @@ Object.assign(window.LOCALES.hu, {
   "about.group_legal": "Jogi tartalmak",
   "about.group_documents": "Dokumentumok a bet.hu oldalán",
   "about.imprint_title": "Impresszum",
-  "about.imprint_body": "Kiadó: Budapesti Értéktőzsde Zrt. Cím: 1054 Budapest, Szabadság tér 7. Telefon és elérhetőségek: bet.hu. (Helykitöltő szöveg, a végleges tartalmat a BÉT adja.)",
+  "about.imprint_body": "Kiadó: Budapesti Értéktőzsde Nyrt. Cím: 1054 Budapest, Szabadság tér 7. Telefon és elérhetőségek: bet.hu. (Helykitöltő szöveg, a végleges tartalmat a BÉT adja.)",
   "about.legal_title": "Jogi nyilatkozat",
   "about.legal_body": "Az alkalmazásban megjelenő adatok tájékoztató jellegűek, nem minősülnek befektetési tanácsadásnak. (Helykitöltő szöveg, a végleges tartalmat a BÉT adja.)",
   "about.disclaimer_title": "Felelősségkizárás",

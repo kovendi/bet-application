@@ -12,12 +12,19 @@ document.getElementById("pers-top-appbar").appendChild(
 
 // --- Step 1: pick the instrument (search from 2 characters, ÁR_0053) -----------------
 
+const byTicker = (a, b) => a.ticker.localeCompare(b.ticker, "hu");
+
 function findMatches(query) {
   const needle = query.toLowerCase();
   return window.storage
     .getInstruments()
-    .filter((i) => i.ticker.toLowerCase().includes(needle) || i.name.toLowerCase().includes(needle))
-    .sort((a, b) => a.name.localeCompare(b.name, "hu"));
+    .filter(
+      (i) =>
+        i.ticker.toLowerCase().includes(needle) ||
+        i.name.toLowerCase().includes(needle) ||
+        i.isin.toLowerCase().includes(needle),
+    )
+    .sort(byTicker);
 }
 
 function renderPicker(onPick) {
