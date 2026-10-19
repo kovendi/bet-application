@@ -35,6 +35,7 @@ window.iphoneFrame = (function () {
   const CUSTOM_MAX = 3840;
   const FIT_MARGIN_X = 24;
   const FIT_MARGIN_Y = 64; // keeps the frame clear of the switcher on small windows
+  const FIT_MARGIN_CAPTURE = 4; // screenshot: switcher hidden, only the 2px edge ring needs room
 
   const STORAGE_KEY = "iphoneFrameState";
   const DEFAULT_STATE = { device: "mobile", orientation: "portrait", customWidth: 1024, customHeight: 768 };
@@ -85,7 +86,10 @@ window.iphoneFrame = (function () {
     const pad = parseFloat(style.getPropertyValue("--frame-padding")) || 0;
     const w = parseFloat(style.getPropertyValue("--frame-screen-width")) + 2 * pad;
     const h = parseFloat(style.getPropertyValue("--frame-screen-height")) + 2 * pad;
-    const scale = Math.min(1, (window.innerWidth - 2 * FIT_MARGIN_X) / w, (window.innerHeight - 2 * FIT_MARGIN_Y) / h);
+    const capturing = document.body.classList.contains("is-capturing");
+    const marginX = capturing ? FIT_MARGIN_CAPTURE : FIT_MARGIN_X;
+    const marginY = capturing ? FIT_MARGIN_CAPTURE : FIT_MARGIN_Y;
+    const scale = Math.min(1, (window.innerWidth - 2 * marginX) / w, (window.innerHeight - 2 * marginY) / h);
     if (!isFinite(scale)) return; // detached frame: computed style not available yet
     frame.style.setProperty("--frame-scale", String(Math.max(0.1, scale)));
   }
@@ -137,8 +141,9 @@ window.iphoneFrame = (function () {
   // --- Screenshot -----------------------------------------------------------
   // Captures this tab with the browser's screen-share API (pixel-exact, no
   // library, works on file://), crops it to the device frame and downloads a
-  // PNG with transparent corners. The share stays open, so only the first
-  // capture asks for permission.
+  // PNG with transparent corners. The share is stopped right after each
+  // capture, so Chrome's "Sharing this tab" bar doesn't stay on screen (the
+  // price: every click asks for permission again).
 
   const CAMERA_PATH =
     "M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.5-2h5.4l1.5 2h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9ZM12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z";
@@ -177,40 +182,89 @@ window.iphoneFrame = (function () {
       });
   }
 
-  // Resolves with the first video frame captured after `since` (performance.now()).
+  // When the viewport last changed size. Starting a share shows Chrome's
+  // "Sharing this tab" bar, which shrinks the viewport; frames captured
+  // before that show the old layout and must not be used.
+  let lastViewportChange = 0;
+  window.addEventListener("resize", function () {
+    lastViewportChange = performance.now();
+  });
+
+  // Resolves once the video shows a frame captured after `since` and after the
+  // last viewport resize. A static tab may send no new frame at all, so after
+  // CAPTURE_WAIT_FRAMES animation frames the current frame is used anyway.
+  const CAPTURE_WAIT_FRAMES = 60;
+
   function nextFrameAfter(video, since) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
+      let done = false;
+      let waited = 0;
+
+      function finish() {
+        if (done) return;
+        done = true;
+        if (video.videoWidth) resolve();
+        else reject(new Error("no video frame from the tab share"));
+      }
+
       function onFrame(now, meta) {
-        if (meta.captureTime !== undefined && meta.captureTime < since) {
+        if (done) return;
+        const captured = meta.captureTime !== undefined ? meta.captureTime : now;
+        if (captured < Math.max(since, lastViewportChange)) {
           video.requestVideoFrameCallback(onFrame);
           return;
         }
-        resolve();
+        finish();
       }
+
+      function onTick() {
+        if (done) return;
+        waited += 1;
+        if (waited >= CAPTURE_WAIT_FRAMES) finish();
+        else requestAnimationFrame(onTick);
+      }
+
       video.requestVideoFrameCallback(onFrame);
+      requestAnimationFrame(onTick);
     });
   }
 
+  // Every screenshot has the same size: the frame's real CSS size (plus its
+  // edge ring) at CAPTURE_OUTPUT_SCALE, whatever the window size, fit scale
+  // or screen pixel density. The grabbed pixels are resampled to that size.
+  const CAPTURE_OUTPUT_SCALE = 2;
+
+  // Chrome may keep the share's first resolution after the viewport resizes,
+  // letterboxing the tab inside it, so map viewport px to video px with a
+  // uniform scale plus the centering offset.
   function cropToFrame(video, frame) {
     const style = getComputedStyle(frame);
     const scale = parseFloat(style.getPropertyValue("--frame-scale")) || 1;
-    const edge = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--space-2")) || 0) * scale;
-    const ratio = video.videoWidth / window.innerWidth;
+    const edge = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--space-2")) || 0;
+    const ratio = Math.min(video.videoWidth / window.innerWidth, video.videoHeight / window.innerHeight);
+    const offsetX = (video.videoWidth - window.innerWidth * ratio) / 2;
+    const offsetY = (video.videoHeight - window.innerHeight * ratio) / 2;
     const rect = frame.getBoundingClientRect();
-    const x = Math.round((rect.left - edge) * ratio);
-    const y = Math.round((rect.top - edge) * ratio);
-    const w = Math.round((rect.width + 2 * edge) * ratio);
-    const h = Math.round((rect.height + 2 * edge) * ratio);
-    const radius = ((parseFloat(style.borderTopLeftRadius) || 0) * scale + edge) * ratio;
+    const sourceEdge = edge * scale;
+    const sx = offsetX + (rect.left - sourceEdge) * ratio;
+    const sy = offsetY + (rect.top - sourceEdge) * ratio;
+    const sw = (rect.width + 2 * sourceEdge) * ratio;
+    const sh = (rect.height + 2 * sourceEdge) * ratio;
+
+    // offsetWidth/Height are the untransformed layout size (ignore --frame-scale).
+    const width = Math.round((frame.offsetWidth + 2 * edge) * CAPTURE_OUTPUT_SCALE);
+    const height = Math.round((frame.offsetHeight + 2 * edge) * CAPTURE_OUTPUT_SCALE);
+    const radius = ((parseFloat(style.borderTopLeftRadius) || 0) + edge) * CAPTURE_OUTPUT_SCALE;
 
     const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingQuality = "high";
     ctx.beginPath();
-    ctx.roundRect(0, 0, w, h, radius);
+    ctx.roundRect(0, 0, width, height, radius);
     ctx.clip();
-    ctx.drawImage(video, x, y, w, h, 0, 0, w, h);
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, width, height);
     return canvas;
   }
 
@@ -245,17 +299,21 @@ window.iphoneFrame = (function () {
   }
 
   function captureFrame(frame, state) {
-    return ensureCaptureVideo().then(function (video) {
-      document.body.classList.add("is-capturing");
-      const since = performance.now();
-      return nextFrameAfter(video, since)
-        .then(function () {
+    // Cleanup sits on the whole chain, so any failure still restores the
+    // switcher and ends the share (no stuck "Sharing this tab" bar).
+    return ensureCaptureVideo()
+      .then(function (video) {
+        document.body.classList.add("is-capturing");
+        fit(frame); // as large as the window allows while the switcher is hidden
+        return nextFrameAfter(video, performance.now()).then(function () {
           return downloadCanvas(cropToFrame(video, frame), captureFileName(state));
-        })
-        .finally(function () {
-          document.body.classList.remove("is-capturing");
         });
-    });
+      })
+      .finally(function () {
+        document.body.classList.remove("is-capturing");
+        fit(frame);
+        stopCapture();
+      });
   }
 
   function flashButton(btn, className) {
@@ -294,7 +352,8 @@ window.iphoneFrame = (function () {
           btn.title = tr("frame.screenshot");
           flashButton(btn, "frame-switcher-btn--done");
         })
-        .catch(function () {
+        .catch(function (error) {
+          console.warn("[iphone-frame] screenshot failed:", error);
           btn.title = tr("frame.screenshot_error");
           flashButton(btn, "frame-switcher-btn--error");
         })

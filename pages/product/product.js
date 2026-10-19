@@ -193,7 +193,7 @@ function periodChange(range) {
   return ((series[series.length - 1].c - series[0].o) / series[0].o) * 100;
 }
 
-function performance() {
+function performanceGrid() {
   const grid = el("div", "product-performance");
   PERFORMANCE_RANGES.forEach((range) => {
     const value = periodChange(range);
@@ -228,7 +228,7 @@ function tradingPanel() {
     fragment.appendChild(window.productTypes.derivativeSection(detail));
     return fragment;
   }
-  fragment.append(shared.section(t("product.section_key"), keyFacts()), shared.section(t("product.section_performance"), performance()));
+  fragment.append(shared.section(t("product.section_key"), keyFacts()), shared.section(t("product.section_performance"), performanceGrid()));
   if (markers.length) fragment.appendChild(corporateEvents());
   return fragment;
 }
