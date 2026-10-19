@@ -73,16 +73,6 @@ window.educationShared = (function () {
     return poster;
   }
 
-  // Quiz status pill: "New" (gold) or the best score with a check.
-  function renderQuizStatus(item) {
-    const best = window.storage.getQuizBest(item.id);
-    if (!best) return element("span", "education-quiz-status education-quiz-status--new", t("edu.quiz_status_new"));
-    const pill = element("span", "education-quiz-status education-quiz-status--done");
-    pill.setAttribute("aria-label", t("edu.quiz_status_best").replace("{score}", best.score).replace("{total}", best.total));
-    pill.append(window.iconModule.renderIcon("check"), document.createTextNode(`${best.score}/${best.total}`));
-    return pill;
-  }
-
   // List row. options.showType: false inside a section that already names the format.
   function renderRow(item, options) {
     const showType = !options || options.showType !== false;
@@ -96,7 +86,6 @@ window.educationShared = (function () {
     const chevron = window.iconModule.renderIcon("chevron-right");
     chevron.classList.add("education-row-chevron");
     row.append(leading, body);
-    if (item.type === "quiz") row.appendChild(renderQuizStatus(item));
     row.appendChild(chevron);
     return row;
   }
@@ -113,12 +102,12 @@ window.educationShared = (function () {
     return card;
   }
 
-  // Shelf card for quizzes: tile + status on top, title, meta.
+  // Shelf card for quizzes: tile on top, title, meta.
   function renderQuizCard(item) {
     const card = element("a", "education-quiz-card");
     card.href = detailHref(item);
     const top = element("span", "education-quiz-card-top");
-    top.append(renderTypeTile("quiz"), renderQuizStatus(item));
+    top.append(renderTypeTile("quiz"));
     card.append(top, element("span", "education-card-title", item.title), element("span", "education-row-meta", rowMeta(item, false)));
     return card;
   }

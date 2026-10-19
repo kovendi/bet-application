@@ -181,22 +181,6 @@ window.storage = (function () {
     return item ? Object.assign({}, item, window.SEED_EDUCATION[id]) : null;
   }
 
-  // Best quiz score on this device (works for guests too): { score, total } or null.
-  function getQuizBest(quizId) {
-    return (getDb().quizBest || {})[quizId] || null;
-  }
-
-  // Keeps the higher score; returns true when this run set a new best.
-  function saveQuizScore(quizId, score, total) {
-    const db = getDb();
-    db.quizBest = db.quizBest || {};
-    const best = db.quizBest[quizId];
-    if (best && best.score >= score) return false;
-    db.quizBest[quizId] = { score, total };
-    saveDb(db);
-    return true;
-  }
-
   function getBrokers() {
     return window.SEED_CONTENT.brokers.slice();
   }
@@ -464,8 +448,6 @@ window.storage = (function () {
     getCarouselItems: () => localize(getCarouselItems()),
     getEducation: () => localize(getEducation()),
     getEducationItem: (id) => localize(getEducationItem(id)),
-    getQuizBest,
-    saveQuizScore,
     getBrokers,
     getMarketHours,
     getFavorites,

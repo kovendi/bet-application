@@ -174,39 +174,6 @@
   font-size: var(--font-size-caption1);
 }
 
-/* --- Quiz status pill ----------------------------------------------------------------- */
-
-.education-quiz-status {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-8);
-  border-radius: var(--radius-pill);
-  font-size: var(--font-size-caption1);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-.education-quiz-status .icon {
-  width: var(--icon-xs);
-  height: var(--icon-xs);
-}
-
-.education-quiz-status--new {
-  background: color-mix(in srgb, var(--color-accent) 18%, transparent);
-  color: var(--color-highlight);
-}
-
-.education-quiz-status--done {
-  background: color-mix(in srgb, var(--chart-4) 16%, transparent);
-  color: var(--color-text-main);
-}
-
-.education-quiz-status--done .icon {
-  color: var(--color-positive);
-}
-
 /* --- Shelf cards (education hub) ------------------------------------------------------- */
 
 .education-video-card,

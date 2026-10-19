@@ -261,25 +261,6 @@
   color: var(--color-primary);
 }
 
-.education-quiz-best {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-6);
-  margin: 0;
-  font-size: var(--font-size-subheadline);
-  font-weight: 600;
-  color: var(--color-text-secondary);
-}
-
-.education-quiz-best .icon {
-  width: var(--icon-md);
-  height: var(--icon-md);
-}
-
-.education-quiz-best--new {
-  color: var(--color-highlight);
-}
-
 /* --- Részvényfutam hand-off ------------------------------------------------------------ */
 
 .education-futam {

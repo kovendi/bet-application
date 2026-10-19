@@ -28,14 +28,14 @@ Ellentmondás a mockup és a pályázati szöveg között. A BÉT kifejezetten a
 - [x] **Chatbot-előzmények (AI_003).** BÉT válaszai (18. o.): „Elvárás-e, hogy a felhasználó a korábbi chatbot-beszélgetéseit későbbi munkamenetekben is elérje? – Nem elvárás.” Pályázat: „Korábbi beszélgetéseket a felhasználó számára nem tárolunk; ezt a BÉT nem várja el.” Mockup: a beszélgetések mentődnek, és a „Korábbi beszélgetések” gombbal újranyithatók (`pages/assist/assist-history.js`, `assist.history*` kulcsok hu + en).
   - Megoldva: az előzménylista, a gomb és a tárolás kikerült (`assist-history.js` törölve, a hu/en kulcsok is). A beszélgetés csak a munkamenet (`sessionStorage`) végéig él, az „Új beszélgetés” marad. A tárolt `assist` rekordban csak az elfogadás és a napi számláló maradt.
   - Alternatíva: a pályázati szöveg átírása. Kockázatos, mert a BÉT azt mondta, nem kell.
-- [ ] **Kvíz eredménymentése (EF_004).** Kiírás (18. o.): „interaktív, feleletválasztós tudáskvíz, amely a kitöltést követően visszajelzést ad a felhasználó válaszairól.” BÉT válaszai (46. o.): „Kell-e időkorlát, eredmények mentése …? – Nem szükséges időkorlát, sem mentés.” Visszajelzés: magyarázat kérdésenként, pontszám a végén. Pályázat: „Időkorlát és eredménymentés nincs, mert a BÉT ezt nem igényli.” Mockup: menti és mutatja a legjobb eredményt („Legjobb eredmény”, „Új legjobb eredmény”, `pages/education-detail/education-quiz.js`, `edu.quiz_*` kulcsok).
-  - Javaslat: a legjobb eredmény mentése és kijelzése kikerül, a végén a pontszám és a kérdésenkénti magyarázat marad.
-  - A kvíz állapota (kitöltés közben) csak a munkamenetben él, a localStorage-ba nem kerül.
+- [x] **Kvíz eredménymentése (EF_004).** Kiírás (18. o.): „interaktív, feleletválasztós tudáskvíz, amely a kitöltést követően visszajelzést ad a felhasználó válaszairól.” BÉT válaszai (46. o.): „Kell-e időkorlát, eredmények mentése …? – Nem szükséges időkorlát, sem mentés.” Visszajelzés: magyarázat kérdésenként, pontszám a végén. Pályázat: „Időkorlát és eredménymentés nincs, mert a BÉT ezt nem igényli.” Mockup: menti és mutatja a legjobb eredményt („Legjobb eredmény”, „Új legjobb eredmény”, `pages/education-detail/education-quiz.js`, `edu.quiz_*` kulcsok).
+  - Megoldva: a legjobb eredmény mentése és kijelzése kikerült (`getQuizBest` / `saveQuizScore`, eredményoldali sor, `edu.quiz_*best*` kulcsok, CSS). A kvízlista „Új” és „✓ 4/5” jelzője is kikerült (`edu.quiz_status_*` kulcsok), mert mentett eredményre épült. A végén a pontszám marad, kérdésenként a magyarázat.
+  - A kvíz állapota (kitöltés közben) csak memóriában él, nem kerül a localStorage-ba. A régi `appDb.quizBest` bejegyzés a már használt böngészőkben ottmaradhat, de semmi nem olvassa.
 
 ### Kapcsolódó teendők (minden javításnál)
 
 - [ ] Új vagy módosított szöveg hu + en kulccsal (CLAUDE.md i18n szabály).
-- [ ] Ha a kulcsok kikerülnek (legjobb eredmény), a hu/en fájlokból is törölni. (Az előzmények kulcsai már törölve.)
+- [x] Ha a kulcsok kikerülnek (legjobb eredmény), a hu/en fájlokból is törölni. (Az előzmények és a kvíz kulcsai törölve.)
 - [ ] Style guide frissítése, ha modul változik.
-- [ ] `követelmenyek-osszefoglalo.md`: a chatbot-előzmény jelzése kész, a kvízmentésé még hátra van.
+- [x] `követelmenyek-osszefoglalo.md`: a chatbot-előzmény és a kvízmentés jelzése kész.
 - [ ] Push előtt `APP_VERSION` emelése és egy sor az `update-history.html`-ben (CLAUDE.md).
